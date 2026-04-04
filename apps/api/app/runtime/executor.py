@@ -36,6 +36,7 @@ class RuntimeExecutor:
 
         responder = self._agent_by_role(record.definition, "responder")
         analyzer = self._agent_by_role(record.definition, "analyzer") or self._first_agent(record.definition)
+        analyzer_wallet = record.wallets.get(analyzer.id) if analyzer else None
         connected_tools = self._connected_tool_nodes(record.definition, analyzer.id if analyzer else None)
         allowed_tools = analyzer.data.enabledTools if analyzer and analyzer.data.enabledTools else []
 
@@ -149,12 +150,18 @@ class RuntimeExecutor:
             if service_node is None or service_node.type not in {"service", "api"}:
                 continue
 
+            uses_upstream_x402 = bool(
+                service_node.data.upstreamX402
+                or ((service_node.data.priceAlgo or 0) > 0 and self.tools.payment_mode == "x402")
+            )
+            uses_algo_payment = bool((service_node.data.priceAlgo or 0) > 0 and not uses_upstream_x402)
+
             if service_node.data.upstreamX402:
                 call_phrase = "Calling {label} as an upstream x402 API.".format(
                     label=service_node.data.label
                 )
-            elif (service_node.data.priceAlgo or 0) > 0:
-                call_phrase = "Calling {label} over x402 for {price:.3f} ALGO.".format(
+            elif uses_algo_payment:
+                call_phrase = "Calling {label} with native ALGO payment of {price:.3f} ALGO.".format(
                     label=service_node.data.label,
                     price=service_node.data.priceAlgo or 0,
                 )
@@ -163,7 +170,26 @@ class RuntimeExecutor:
             self._append_log(logs, level="start", message=call_phrase, node_id=service_node.id)
 
             try:
-                result = self.tools.call_api_node(service_node, query)
+                if uses_upstream_x402:
+                    if analyzer_wallet is None:
+                        raise RuntimeError("Analyzer agent has no wallet available to sign x402 payments.")
+                    result = self.tools.call_api_node_paid(
+                        record=record,
+                        payer_wallet=analyzer_wallet,
+                        node=service_node,
+                        query=query,
+                    )
+                elif uses_algo_payment:
+                    if analyzer_wallet is None:
+                        raise RuntimeError("Analyzer agent has no wallet available to pay for tool execution.")
+                    result = self.tools.call_api_node_algo_paid(
+                        record=record,
+                        payer_wallet=analyzer_wallet,
+                        node=service_node,
+                        query=query,
+                    )
+                else:
+                    result = self.tools.call_api_node_direct(service_node, query)
                 tool_results.append(result)
                 self._append_log(
                     logs,
@@ -177,6 +203,17 @@ class RuntimeExecutor:
                     level="done",
                     message="{label} completed successfully.".format(label=service_node.data.label),
                     node_id=service_node.id,
+                    tx_id=result.payment_tx_id,
+                    output=(
+                        "Payment settled on {network} with transaction {txid}."
+                        if result.payment_tx_id
+                        else None
+                    ).format(
+                        network=result.payment_network or "Algorand",
+                        txid=result.payment_tx_id or "",
+                    )
+                    if result.payment_tx_id
+                    else None,
                 )
             except Exception as error:
                 self._append_log(
@@ -252,6 +289,7 @@ class RuntimeExecutor:
         message: str,
         node_id: Optional[str] = None,
         output: Optional[str] = None,
+        tx_id: Optional[str] = None,
     ) -> None:
         event_type_map = {
             "start": "start",
@@ -280,8 +318,15 @@ class RuntimeExecutor:
                 nodeId=node_id,
                 eventType=event_type_map[level],
                 output=output,
+                txId=tx_id,
             )
         )
+
+    def invoke_tool(self, record: PipelineRecord, node_id: str, query: str) -> ToolResult:
+        node = self._node_by_id(record.definition, node_id)
+        if node is None or node.type not in {"service", "api"}:
+            raise KeyError("Node {node_id} is not an API or service node".format(node_id=node_id))
+        return self.tools.call_api_node_direct(node, query)
 
     def _topological_nodes(self, definition: DeployPipelineRequest) -> List[PipelineNode]:
         node_map: Dict[str, PipelineNode] = {node.id: node for node in definition.nodes}

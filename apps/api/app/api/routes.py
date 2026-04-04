@@ -8,6 +8,7 @@ from app.models.pipeline import (
     DeployPipelineRequest,
     DeployPipelineResponse,
     FundIntentResponse,
+    InternalToolInvokeResponse,
     RunPipelineRequest,
     RunPipelineResponse,
 )
@@ -53,6 +54,22 @@ def fund_node(
         raise HTTPException(status_code=404, detail=str(error))
 
 
+@router.get(
+    "/internal/x402/{pipeline_id}/{node_id}/invoke",
+    response_model=InternalToolInvokeResponse,
+)
+def invoke_internal_tool(
+    pipeline_id: str,
+    node_id: str,
+    query: str,
+    orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
+) -> InternalToolInvokeResponse:
+    try:
+        return orchestrator.invoke_internal_tool(pipeline_id, node_id, query)
+    except KeyError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+
+
 @router.post("/{pipeline_id}/run", response_model=RunPipelineResponse)
 def run_pipeline(
     pipeline_id: str,
@@ -76,4 +93,3 @@ def run_pipeline(
         query=payload.query,
         settlement_mode=settlement_mode,
     )
-

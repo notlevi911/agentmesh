@@ -16,6 +16,24 @@
 
 - `GOPLAUSIBLE_FACILITATOR_URL`
   Backend base URL for the GoPlausible x402 facilitator integration.
+  Use `https://facilitator.goplausible.xyz`, not the docs portal host.
+
+- `AGENTMESH_INTERNAL_API_BASE_URL`
+  Internal backend URL used when an agent pays a protected tool/API route over x402.
+
+- `AGENTMESH_X402_ASSET_ID`
+  Algorand ASA used by the AVM exact payment mechanism.
+  Right now that is testnet USDC `10458941`.
+
+- `AGENTMESH_X402_SERVICE_BOOTSTRAP_ALGO`
+  Small ALGO top-up used to prepare paid service/API wallets for their first USDC opt-in.
+
+- `AGENTMESH_PAYMENT_MODE`
+  Controls how priced internal tool nodes settle.
+  Use `algo` for native testnet ALGO transfers or `x402` for the AVM exact USDC path.
+
+- `AGENTMESH_REPOSITORY_PATH`
+  Local backend JSON file for persisting deployed pipelines, wallet keys, and run history across restarts.
 
 - `AGENTMESH_LLM_PROVIDER`
   Default AI provider selection for agent reasoning.
@@ -23,11 +41,8 @@
 - `AGENTMESH_LLM_MODEL`
   Default model used for reasoning if the caller or node config does not override it.
 
-- `OPENAI_API_KEY`
-  Shared backend API key for OpenAI-powered agents.
-
-- `ANTHROPIC_API_KEY`
-  Shared backend API key for Claude-powered agents.
+- `GEMINI_API_KEY`
+  Shared backend API key for Gemini-powered agents.
 
 ## Should AI Keys Be In Env Or Entered At Runtime?
 
@@ -52,7 +67,7 @@ Why:
 ## Current Persistence
 
 - Workflow graph: browser `localStorage`
-- Deployment/runtime registry: backend memory only
+- Deployment/runtime registry: local backend JSON file
 - Auth: none
 - User accounts: none
 

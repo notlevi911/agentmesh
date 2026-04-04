@@ -1,4 +1,7 @@
+import json
+import os
 from dataclasses import dataclass, field
+from pathlib import Path
 from threading import Lock
 from typing import Dict, Optional
 
@@ -23,14 +26,20 @@ class PipelineRecord:
     runs: Dict[str, RunPipelineResponse] = field(default_factory=dict)
 
 
-class InMemoryPipelineRepository:
-    def __init__(self) -> None:
-        self._pipelines: Dict[str, PipelineRecord] = {}
+class LocalPipelineRepository:
+    def __init__(self, storage_path: Optional[str] = None) -> None:
+        default_path = Path.cwd() / ".data" / "pipelines.json"
+        self._storage_path = Path(
+            storage_path or os.getenv("AGENTMESH_REPOSITORY_PATH") or str(default_path)
+        )
         self._lock = Lock()
+        self._pipelines: Dict[str, PipelineRecord] = {}
+        self._load()
 
     def save_pipeline(self, record: PipelineRecord) -> PipelineRecord:
         with self._lock:
             self._pipelines[record.pipeline_id] = record
+            self._flush()
             return record
 
     def get_pipeline(self, pipeline_id: str) -> Optional[PipelineRecord]:
@@ -40,5 +49,66 @@ class InMemoryPipelineRepository:
         with self._lock:
             pipeline = self._pipelines[pipeline_id]
             pipeline.runs[run.runId] = run
+            self._flush()
             return run
 
+    def list_pipelines(self) -> Dict[str, PipelineRecord]:
+        return dict(self._pipelines)
+
+    def _load(self) -> None:
+        if not self._storage_path.exists():
+            return
+
+        raw = json.loads(self._storage_path.read_text())
+        self._pipelines = {
+            pipeline_id: self._record_from_dict(payload)
+            for pipeline_id, payload in raw.get("pipelines", {}).items()
+        }
+
+    def _flush(self) -> None:
+        self._storage_path.parent.mkdir(parents=True, exist_ok=True)
+        payload = {
+            "pipelines": {
+                pipeline_id: self._record_to_dict(record)
+                for pipeline_id, record in self._pipelines.items()
+            }
+        }
+        self._storage_path.write_text(json.dumps(payload, indent=2, sort_keys=True))
+
+    def _record_to_dict(self, record: PipelineRecord) -> Dict:
+        return {
+            "pipeline_id": record.pipeline_id,
+            "definition": record.definition.model_dump(mode="json"),
+            "endpoint": record.endpoint,
+            "price_algo": record.price_algo,
+            "payment_wallet": record.payment_wallet,
+            "wallets": {
+                node_id: {
+                    "node_id": wallet.node_id,
+                    "address": wallet.address,
+                    "private_key": wallet.private_key,
+                }
+                for node_id, wallet in record.wallets.items()
+            },
+            "runs": {
+                run_id: run.model_dump(mode="json")
+                for run_id, run in record.runs.items()
+            },
+        }
+
+    def _record_from_dict(self, payload: Dict) -> PipelineRecord:
+        return PipelineRecord(
+            pipeline_id=payload["pipeline_id"],
+            definition=DeployPipelineRequest.model_validate(payload["definition"]),
+            endpoint=payload["endpoint"],
+            price_algo=payload["price_algo"],
+            payment_wallet=payload.get("payment_wallet"),
+            wallets={
+                node_id: WalletRecord(**wallet_payload)
+                for node_id, wallet_payload in payload.get("wallets", {}).items()
+            },
+            runs={
+                run_id: RunPipelineResponse.model_validate(run_payload)
+                for run_id, run_payload in payload.get("runs", {}).items()
+            },
+        )

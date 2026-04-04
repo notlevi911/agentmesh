@@ -3,14 +3,14 @@ from functools import lru_cache
 from app.algorand.client import AlgorandService
 from app.orchestrator.service import PipelineOrchestrator
 from app.runtime.executor import RuntimeExecutor
-from app.storage.repository import InMemoryPipelineRepository
+from app.storage.repository import LocalPipelineRepository
 from app.wallets.service import WalletService
 from app.x402.service import X402Service
 
 
 @lru_cache
-def get_repository() -> InMemoryPipelineRepository:
-    return InMemoryPipelineRepository()
+def get_repository() -> LocalPipelineRepository:
+    return LocalPipelineRepository()
 
 
 @lru_cache
@@ -40,5 +40,7 @@ def get_orchestrator() -> PipelineOrchestrator:
 
 @lru_cache
 def get_x402_service() -> X402Service:
-    return X402Service()
-
+    return X402Service(
+        repository=get_repository(),
+        algorand_service=get_algorand_service(),
+    )

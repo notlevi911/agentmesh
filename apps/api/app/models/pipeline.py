@@ -120,3 +120,10 @@ class PaymentRequiredResponse(BaseModel):
     facilitator: str
     endpoint: str
     message: str
+
+
+class InternalToolInvokeResponse(BaseModel):
+    tool: str
+    title: str
+    summary: str
+    raw: Dict[str, Any] = Field(default_factory=dict)

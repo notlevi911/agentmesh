@@ -1,0 +1,621 @@
+{
+  "pipelines": {
+    "pm_ddb1e472": {
+      "definition": {
+        "edges": [
+          {
+            "id": "e1",
+            "label": null,
+            "source": "trigger_1",
+            "target": "agent_1",
+            "wireType": "a2a"
+          },
+          {
+            "id": "e2",
+            "label": null,
+            "source": "agent_1",
+            "target": "service_1",
+            "wireType": "x402"
+          },
+          {
+            "id": "e3",
+            "label": null,
+            "source": "service_1",
+            "target": "agent_2",
+            "wireType": "a2a"
+          },
+          {
+            "id": "e4",
+            "label": null,
+            "source": "agent_2",
+            "target": "end_1",
+            "wireType": "a2a"
+          }
+        ],
+        "name": "x402 weather test",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "description": "start",
+              "enabledTools": [],
+              "label": "HTTP Trigger",
+              "priceAlgo": 0.0,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger_1",
+            "position": {
+              "x": 0.0,
+              "y": 0.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "description": null,
+              "enabledTools": [],
+              "label": "Analyzer",
+              "priceAlgo": 0.0,
+              "role": "analyzer",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Use the connected tool.",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent_1",
+            "position": {
+              "x": 200.0,
+              "y": 0.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": null,
+              "enabledTools": [],
+              "label": "Weather API",
+              "priceAlgo": 0.01,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service_1",
+            "position": {
+              "x": 400.0,
+              "y": 0.0
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": null,
+              "enabledTools": [],
+              "label": "Responder",
+              "priceAlgo": 0.0,
+              "role": "responder",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Respond clearly.",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent_2",
+            "position": {
+              "x": 600.0,
+              "y": 0.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": null,
+              "enabledTools": [],
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end_1",
+            "position": {
+              "x": 800.0,
+              "y": 0.0
+            },
+            "type": "end"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_ddb1e472/run",
+      "payment_wallet": "EB6IG5JODZPWWWEPMIDTWOE7RAW7EHVRFA7VQWTWOMP6HM37HFOY75WQL4",
+      "pipeline_id": "pm_ddb1e472",
+      "price_algo": 0.0,
+      "runs": {
+        "run_2049c774c2": {
+          "logs": [
+            {
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T12:01:53.776933",
+              "txId": null
+            },
+            {
+              "eventType": "start",
+              "level": "info",
+              "message": "Analyzer received the workflow task.",
+              "nodeId": "agent_1",
+              "output": "what is the weather in Africa",
+              "timestamp": "2026-04-04T12:01:53.776992",
+              "txId": null
+            },
+            {
+              "eventType": "output",
+              "level": "info",
+              "message": "Analyzer planned the workflow path.",
+              "nodeId": "agent_1",
+              "output": "The user is asking for weather information, and a Weather API is available to fulfill this request.",
+              "timestamp": "2026-04-04T12:01:56.376519",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger_1",
+              "output": null,
+              "timestamp": "2026-04-04T12:01:56.376530",
+              "txId": null
+            },
+            {
+              "eventType": "progress",
+              "level": "info",
+              "message": "API Weather API is wired as the weather tool.",
+              "nodeId": "service_1",
+              "output": null,
+              "timestamp": "2026-04-04T12:01:56.376536",
+              "txId": null
+            },
+            {
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Weather API with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "service_1",
+              "output": null,
+              "timestamp": "2026-04-04T12:01:56.376551",
+              "txId": null
+            },
+            {
+              "eventType": "output",
+              "level": "info",
+              "message": "Weather API returned output.",
+              "nodeId": "service_1",
+              "output": "Africa: 32.3\u00b0C, feels like 35.7\u00b0C, wind 8.3 km/h, weather code 3.",
+              "timestamp": "2026-04-04T12:02:08.630614",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Weather API completed successfully.",
+              "nodeId": "service_1",
+              "output": "Payment settled on algorand-testnet with transaction UTP72RQSYDYYCSP67QJS2K7HFCFYRAKYBOZLPLF4KEE4USP5E5YA.",
+              "timestamp": "2026-04-04T12:02:08.630634",
+              "txId": "UTP72RQSYDYYCSP67QJS2K7HFCFYRAKYBOZLPLF4KEE4USP5E5YA"
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Analyzer finished analysis.",
+              "nodeId": "agent_1",
+              "output": "The user is asking for weather information, and a Weather API is available to fulfill this request.\n\nCalling the Weather API to retrieve weather data for Africa.",
+              "timestamp": "2026-04-04T12:02:08.630642",
+              "txId": null
+            },
+            {
+              "eventType": "start",
+              "level": "info",
+              "message": "Responder is preparing the final response.",
+              "nodeId": "agent_2",
+              "output": null,
+              "timestamp": "2026-04-04T12:02:12.167440",
+              "txId": null
+            },
+            {
+              "eventType": "output",
+              "level": "info",
+              "message": "Responder produced the final response.",
+              "nodeId": "agent_2",
+              "output": "The weather in Africa is 32.3\u00b0C, feels like 35.7\u00b0C, with winds at 8.3 km/h.",
+              "timestamp": "2026-04-04T12:02:12.167451",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Responder delivered the response back to the caller.",
+              "nodeId": "agent_2",
+              "output": null,
+              "timestamp": "2026-04-04T12:02:12.167455",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end_1",
+              "output": "The weather in Africa is 32.3\u00b0C, feels like 35.7\u00b0C, with winds at 8.3 km/h.",
+              "timestamp": "2026-04-04T12:02:12.167460",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_ddb1e472",
+          "result": "The weather in Africa is 32.3\u00b0C, feels like 35.7\u00b0C, with winds at 8.3 km/h.",
+          "runId": "run_2049c774c2",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent_1": {
+          "address": "EB6IG5JODZPWWWEPMIDTWOE7RAW7EHVRFA7VQWTWOMP6HM37HFOY75WQL4",
+          "node_id": "agent_1",
+          "private_key": "1toQQ1hZnGMX3bviRSSp4Z1lSwOD70S2ehb7l27MJZogfIN1Lh5fa1iPYgc7OJ+ILfIesSg/WFp2cx/js385XQ=="
+        },
+        "agent_2": {
+          "address": "WENLY3LGKYELR3O7KUXYY5EP7LW6DWRZV3DJTG5WYAPOZ4U6P7LS52OMTI",
+          "node_id": "agent_2",
+          "private_key": "AfSxZ9QPNMTcWjXzwNVOl/GW8yO56l5E0QQjBqa3EGKxGrxtZlYIuO3fVS+MdI/67eHaOa7GmZu2wB7s8p5/1w=="
+        },
+        "service_1": {
+          "address": "KMNJA3DPE2R2LB3LXYSHZCSBZANK5PD2XJWMHB2A5EAZV4UNGNI7T72CCA",
+          "node_id": "service_1",
+          "private_key": "jPD16//h4fVb+N2QGl3+FMyiP62cYLv9NHgoupy3SYVTGpBsbyajpYdrviR8ikHIGq68erpsw4dA6QGa8o0zUQ=="
+        }
+      }
+    },
+    "pm_ecf03f88": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trigger-analyzer",
+            "label": "Start",
+            "source": "trigger-1",
+            "target": "agent-analyzer",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-analyzer-weather",
+            "label": "Weather tool",
+            "source": "agent-analyzer",
+            "target": "service-weather",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-search",
+            "label": "Search tool",
+            "source": "agent-analyzer",
+            "target": "service-search",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-responder",
+            "label": "Analysis context",
+            "source": "agent-analyzer",
+            "target": "agent-responder",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-responder-end",
+            "label": "Final output",
+            "source": "agent-responder",
+            "target": "end-1",
+            "wireType": "a2a"
+          }
+        ],
+        "name": "Market Analyzer",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "description": "Incoming HTTP request kicks off the workflow.",
+              "enabledTools": [],
+              "label": "HTTP Trigger",
+              "priceAlgo": 0.0,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1",
+            "position": {
+              "x": 40.0,
+              "y": 200.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "description": "Chooses the right connected API tool for the incoming prompt.",
+              "enabledTools": [
+                "weather",
+                "search",
+                "custom"
+              ],
+              "label": "Routing Agent",
+              "priceAlgo": 0.01,
+              "role": "analyzer",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "You are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-analyzer",
+            "position": {
+              "x": 320.0,
+              "y": 120.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.01,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-weather",
+            "position": {
+              "x": 650.0,
+              "y": 70.0
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.01,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-search",
+            "position": {
+              "x": 660.0,
+              "y": 369.94977168949777
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Formats the final HTTP response for the caller.",
+              "enabledTools": [],
+              "label": "Response Agent",
+              "priceAlgo": 0.0,
+              "role": "responder",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Take the upstream tool result and produce a crisp HTTP response body.",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-responder",
+            "position": {
+              "x": 960.0,
+              "y": 170.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Shows and returns the final API output to the caller.",
+              "enabledTools": [],
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1240.0,
+              "y": 200.0
+            },
+            "type": "end"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_ecf03f88/run",
+      "payment_wallet": "453YYZPUIMGIUEOJOMZJOT6XSRT7CN77CWD3BUSIL7RD5U7DVG4CMRGNNQ",
+      "pipeline_id": "pm_ecf03f88",
+      "price_algo": 0.01,
+      "runs": {
+        "run_66f9844d85": {
+          "logs": [
+            {
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T12:05:04.914345",
+              "txId": null
+            },
+            {
+              "eventType": "start",
+              "level": "info",
+              "message": "Routing Agent received the workflow task.",
+              "nodeId": "agent-analyzer",
+              "output": "Who made coca cola and when?",
+              "timestamp": "2026-04-04T12:05:04.914424",
+              "txId": null
+            },
+            {
+              "eventType": "output",
+              "level": "info",
+              "message": "Routing Agent planned the workflow path.",
+              "nodeId": "agent-analyzer",
+              "output": "The user is asking a factual question about the origin of Coca-Cola, which requires a web search.",
+              "timestamp": "2026-04-04T12:05:07.142530",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-04-04T12:05:07.142563",
+              "txId": null
+            },
+            {
+              "eventType": "progress",
+              "level": "info",
+              "message": "API Open-Meteo Weather is wired as the weather tool.",
+              "nodeId": "service-weather",
+              "output": null,
+              "timestamp": "2026-04-04T12:05:07.142735",
+              "txId": null
+            },
+            {
+              "eventType": "progress",
+              "level": "info",
+              "message": "API DuckDuckGo Search is wired as the search tool.",
+              "nodeId": "service-search",
+              "output": null,
+              "timestamp": "2026-04-04T12:05:07.142773",
+              "txId": null
+            },
+            {
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling DuckDuckGo Search with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "service-search",
+              "output": null,
+              "timestamp": "2026-04-04T12:05:07.142827",
+              "txId": null
+            },
+            {
+              "eventType": "output",
+              "level": "info",
+              "message": "DuckDuckGo Search returned output.",
+              "nodeId": "service-search",
+              "output": "DuckDuckGo returned no direct instant answer, but the search request completed.",
+              "timestamp": "2026-04-04T12:05:17.675826",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "DuckDuckGo Search completed successfully.",
+              "nodeId": "service-search",
+              "output": "Payment settled on algorand-testnet with transaction DKQCYPZADJV5QNLRWDQ3GV3T2EHUQ3OL362MQNYZ4MST45VHXZDQ.",
+              "timestamp": "2026-04-04T12:05:17.675850",
+              "txId": "DKQCYPZADJV5QNLRWDQ3GV3T2EHUQ3OL362MQNYZ4MST45VHXZDQ"
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Routing Agent finished analysis.",
+              "nodeId": "agent-analyzer",
+              "output": "The user is asking a factual question about the origin of Coca-Cola, which requires a web search.\n\nSearching for information on 'Who made Coca-Cola and when?'",
+              "timestamp": "2026-04-04T12:05:17.675871",
+              "txId": null
+            },
+            {
+              "eventType": "start",
+              "level": "info",
+              "message": "Response Agent is preparing the final response.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T12:05:22.160921",
+              "txId": null
+            },
+            {
+              "eventType": "output",
+              "level": "info",
+              "message": "Response Agent produced the final response.",
+              "nodeId": "agent-responder",
+              "output": "I could not find a direct answer to your question about who made Coca-Cola and when.",
+              "timestamp": "2026-04-04T12:05:22.160956",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Response Agent delivered the response back to the caller.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T12:05:22.160969",
+              "txId": null
+            },
+            {
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "I could not find a direct answer to your question about who made Coca-Cola and when.",
+              "timestamp": "2026-04-04T12:05:22.160989",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_ecf03f88",
+          "result": "I could not find a direct answer to your question about who made Coca-Cola and when.",
+          "runId": "run_66f9844d85",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-analyzer": {
+          "address": "453YYZPUIMGIUEOJOMZJOT6XSRT7CN77CWD3BUSIL7RD5U7DVG4CMRGNNQ",
+          "node_id": "agent-analyzer",
+          "private_key": "FqXKGaOAsZ6DE7xcvF2xsmkifpJRqfGkc3kKdORGW1Hnd4xl9EMMihHJczKXT9eUZ/E3/xWHsNJIX+I+0+OpuA=="
+        },
+        "agent-responder": {
+          "address": "EYL4YWYBCOADDXOEMQIW74Q2TO5FWI4HTRNIAKFHWF5LMP46NXLI7MTB2Y",
+          "node_id": "agent-responder",
+          "private_key": "o51KyoVFfHDg8HKpn+3Lbl/zdRzAsgvtiVpvCtaLi8smF8xbAROAMd3EZBFv8hqbulsjh5xagCinsXq2P55t1g=="
+        },
+        "service-search": {
+          "address": "Z3GAUZQJRKEFU44XL2OSLHJBEUR3BWS5IEHZGZXFEIWDOMR263Y774NPQM",
+          "node_id": "service-search",
+          "private_key": "h4DNOe8pV7dL/YKbxqbpCV050GE+wNgJaT8hIURNizbOzApmCYqIWnOXXp0lnSElI7DaXUEPk2blIiw3Mjr28Q=="
+        },
+        "service-weather": {
+          "address": "75LQD5DEFB7Z4JZ6AMHLSN7K3YPY7UX6ADZO3Y6S4PQNEYTJFC4FKGIN3Y",
+          "node_id": "service-weather",
+          "private_key": "FMdXBw/QW3MkVJCbXcFWRMIUfVyf4aaE9d9D4IAqg6T/VwH0ZCh/nic+Aw65N+reH4/S/gDy7ePS4+DSYmkouA=="
+        }
+      }
+    }
+  }
+}

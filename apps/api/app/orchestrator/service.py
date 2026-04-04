@@ -9,19 +9,20 @@ from app.models.pipeline import (
     DeployPipelineResponse,
     DeployedNode,
     FundIntentResponse,
+    InternalToolInvokeResponse,
     RunPipelineResponse,
     RuntimeLog,
     WalletBalance,
 )
 from app.runtime.executor import RuntimeExecutor
-from app.storage.repository import InMemoryPipelineRepository, PipelineRecord
+from app.storage.repository import LocalPipelineRepository, PipelineRecord
 from app.wallets.service import WalletService
 
 
 class PipelineOrchestrator:
     def __init__(
         self,
-        repository: InMemoryPipelineRepository,
+        repository: LocalPipelineRepository,
         wallet_service: WalletService,
         algorand_service: AlgorandService,
         runtime: RuntimeExecutor,
@@ -50,7 +51,11 @@ class PipelineOrchestrator:
         ]
 
         for node in definition.nodes:
-            if node.type == "agent":
+            needs_wallet = node.type == "agent" or (
+                node.type in {"service", "api"} and (node.data.priceAlgo > 0 or node.data.upstreamX402)
+            )
+
+            if needs_wallet:
                 wallet = self.wallet_service.create_agent_wallet(node.id)
                 wallets[node.id] = wallet
                 balance = self.algorand_service.get_balance_algo(wallet.address)
@@ -156,6 +161,16 @@ class PipelineOrchestrator:
 
     def get_record(self, pipeline_id: str) -> PipelineRecord:
         return self._get_record(pipeline_id)
+
+    def invoke_internal_tool(self, pipeline_id: str, node_id: str, query: str) -> InternalToolInvokeResponse:
+        record = self._get_record(pipeline_id)
+        result = self.runtime.invoke_tool(record, node_id=node_id, query=query)
+        return InternalToolInvokeResponse(
+            tool=result.tool,
+            title=result.title,
+            summary=result.summary,
+            raw=result.raw,
+        )
 
     def _get_record(self, pipeline_id: str) -> PipelineRecord:
         record = self.repository.get_pipeline(pipeline_id)

@@ -1,3 +1,4 @@
+import os
 import re
 from dataclasses import dataclass
 from typing import Dict, List, Optional, Tuple
@@ -6,6 +7,9 @@ from urllib.parse import urlencode
 import httpx
 
 from app.models.pipeline import PipelineNode
+from app.storage.repository import PipelineRecord, WalletRecord
+from app.x402.avm import create_x402_session, decode_settlement_header
+from app.algorand.client import AlgorandService
 
 
 @dataclass
@@ -14,9 +18,23 @@ class ToolResult:
     title: str
     summary: str
     raw: Dict
+    payment_tx_id: Optional[str] = None
+    payment_payer: Optional[str] = None
+    payment_network: Optional[str] = None
+    paid_via_x402: bool = False
 
 
 class ToolRuntime:
+    def __init__(self) -> None:
+        self.algorand = AlgorandService()
+        self.internal_base_url = os.getenv(
+            "AGENTMESH_INTERNAL_API_BASE_URL",
+            os.getenv("AGENTMESH_PUBLIC_BASE_URL", "http://127.0.0.1:8000"),
+        ).rstrip("/")
+        self.service_bootstrap_algo = float(os.getenv("AGENTMESH_X402_SERVICE_BOOTSTRAP_ALGO", "0.1"))
+        self.asset_id = int(os.getenv("AGENTMESH_X402_ASSET_ID", "10458941"))
+        self.payment_mode = os.getenv("AGENTMESH_PAYMENT_MODE", "algo").strip().lower()
+
     def search_duckduckgo(self, query: str) -> ToolResult:
         payload = self._get_json(
             "https://api.duckduckgo.com/",
@@ -128,7 +146,7 @@ class ToolRuntime:
 
         return list(dict.fromkeys(chosen))
 
-    def call_api_node(self, node: PipelineNode, query: str) -> ToolResult:
+    def call_api_node_direct(self, node: PipelineNode, query: str) -> ToolResult:
         url = node.data.serviceUrl or ""
         kind = node.data.serviceKind or "custom"
 
@@ -148,6 +166,82 @@ class ToolRuntime:
             summary=summary,
             raw=payload,
         )
+
+    def call_api_node_paid(
+        self,
+        record: PipelineRecord,
+        payer_wallet: WalletRecord,
+        node: PipelineNode,
+        query: str,
+    ) -> ToolResult:
+        payee_wallet = record.wallets.get(node.id)
+        if payee_wallet is None:
+            raise RuntimeError(
+                "Node '{label}' does not have a payment wallet yet. Redeploy after enabling x402.".format(
+                    label=node.data.label
+                )
+            )
+
+        self._prepare_x402_wallets(payer_wallet=payer_wallet, payee_wallet=payee_wallet)
+
+        endpoint = "{base}/internal/x402/{pipeline_id}/{node_id}/invoke".format(
+            base=self.internal_base_url,
+            pipeline_id=record.pipeline_id,
+            node_id=node.id,
+        )
+
+        session = create_x402_session(payer_wallet, algod_url=self.algorand.algod_address)
+        try:
+            response = session.get(endpoint, params={"query": query}, timeout=30)
+            response.raise_for_status()
+            settlement = decode_settlement_header(response.headers.get("PAYMENT-RESPONSE"))
+            payload = response.json()
+        finally:
+            session.close()
+        result = ToolResult(
+            tool=payload.get("tool", node.data.serviceKind or "custom"),
+            title=payload.get("title", node.data.label),
+            summary=payload.get("summary", "x402 API call completed."),
+            raw=payload.get("raw", {}),
+            paid_via_x402=settlement is not None,
+        )
+
+        if settlement:
+            result.payment_tx_id = settlement.transaction
+            result.payment_payer = settlement.payer
+            result.payment_network = settlement.network
+
+        return result
+
+    def call_api_node_algo_paid(
+        self,
+        record: PipelineRecord,
+        payer_wallet: WalletRecord,
+        node: PipelineNode,
+        query: str,
+    ) -> ToolResult:
+        payee_wallet = record.wallets.get(node.id)
+        if payee_wallet is None:
+            raise RuntimeError(
+                "Node '{label}' does not have a payment wallet yet. Redeploy after enabling paid execution.".format(
+                    label=node.data.label
+                )
+            )
+
+        self._prepare_algo_service_wallet(payer_wallet=payer_wallet, payee_wallet=payee_wallet)
+
+        amount_algo = float(node.data.priceAlgo or 0)
+        txid = self.algorand.transfer_algo(
+            sender_wallet=payer_wallet,
+            receiver=payee_wallet.address,
+            amount_algo=amount_algo,
+            note="AgentMesh paid API call",
+        )
+        result = self.call_api_node_direct(node, query)
+        result.payment_tx_id = txid
+        result.payment_payer = payer_wallet.address
+        result.payment_network = "algorand-testnet"
+        return result
 
     def _build_api_request(self, url: str, query: str, kind: str) -> Tuple[str, Dict]:
         if "{{query}}" in url:
@@ -204,6 +298,65 @@ class ToolRuntime:
             response = client.get(url, params=params)
             response.raise_for_status()
             return response.json()
+
+    def _prepare_x402_wallets(
+        self,
+        payer_wallet: WalletRecord,
+        payee_wallet: WalletRecord,
+    ) -> None:
+        self._ensure_opted_in_with_algo(wallet=payer_wallet)
+
+        if self.algorand.get_asset_balance(payer_wallet.address, self.asset_id) <= 0:
+            raise RuntimeError(
+                "Agent wallet {address} is opted in but has no testnet USDC for x402. "
+                "Fund it from https://dispenser.testnet.aws.algodev.network/ and try again.".format(
+                    address=payer_wallet.address
+                )
+            )
+
+        if self.algorand.get_balance_algo(payee_wallet.address) < 0.002:
+            self.algorand.transfer_algo(
+                sender_wallet=payer_wallet,
+                receiver=payee_wallet.address,
+                amount_algo=self.service_bootstrap_algo,
+                note="AgentMesh x402 service bootstrap",
+            )
+
+        self._ensure_opted_in_with_algo(wallet=payee_wallet)
+
+    def _ensure_opted_in_with_algo(self, wallet: WalletRecord) -> None:
+        if self.algorand.is_asset_opted_in(wallet.address, self.asset_id):
+            return
+
+        if self.algorand.get_balance_algo(wallet.address) < 0.002:
+            raise RuntimeError(
+                "Wallet {address} needs a little testnet ALGO before it can opt into USDC for x402.".format(
+                    address=wallet.address
+                )
+            )
+
+        self.algorand.ensure_asset_opt_in(wallet, self.asset_id)
+
+    def _prepare_algo_service_wallet(
+        self,
+        payer_wallet: WalletRecord,
+        payee_wallet: WalletRecord,
+    ) -> None:
+        current_balance = self.algorand.get_balance_algo(payee_wallet.address)
+        required_balance = max(self.service_bootstrap_algo, 0.1)
+        if current_balance >= required_balance:
+            return
+
+        top_up = round(required_balance - current_balance, 6)
+        if top_up <= 0:
+            return
+
+        self.algorand.transfer_algo(
+            sender_wallet=payer_wallet,
+            receiver=payee_wallet.address,
+            amount_algo=top_up,
+            note="AgentMesh service min balance bootstrap",
+        )
 
     def _flatten_related_topics(self, related_topics: List[Dict]) -> List[str]:
         items: List[str] = []
