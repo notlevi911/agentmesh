@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentmesh.xyz/schemas/pipeline.schema.json",
+  "title": "AgentMesh Pipeline Definition",
+  "type": "object",
+  "required": [
+    "name",
+    "network",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "network": {
+      "type": "string",
+      "enum": [
+        "algorand-testnet"
+      ]
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/node"
+      }
+    },
+    "edges": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/edge"
+      }
+    }
+  },
+  "$defs": {
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "type",
+        "position",
+        "data"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string",
+          "enum": [
+            "agent",
+            "service",
+            "trigger",
+            "end"
+          ]
+        },
+        "position": {
+          "type": "object",
+          "required": [
+            "x",
+            "y"
+          ],
+          "properties": {
+            "x": {
+              "type": "number"
+            },
+            "y": {
+              "type": "number"
+            }
+          }
+        },
+        "data": {
+          "type": "object",
+          "required": [
+            "label"
+          ],
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "role": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            },
+            "systemPrompt": {
+              "type": "string"
+            },
+            "enabledTools": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "priceAlgo": {
+              "type": "number",
+              "minimum": 0
+            },
+            "serviceUrl": {
+              "type": "string"
+            },
+            "serviceKind": {
+              "type": "string",
+              "enum": [
+                "weather",
+                "search",
+                "custom"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "edge": {
+      "type": "object",
+      "required": [
+        "id",
+        "source",
+        "target",
+        "wireType"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "source": {
+          "type": "string"
+        },
+        "target": {
+          "type": "string"
+        },
+        "wireType": {
+          "type": "string",
+          "enum": [
+            "a2a",
+            "x402",
+            "algo_transfer"
+          ]
+        },
+        "label": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

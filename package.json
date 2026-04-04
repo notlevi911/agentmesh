@@ -1,0 +1,15 @@
+{
+  "name": "agentmesh",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/web"
+  ],
+  "scripts": {
+    "dev:web": "npm --workspace @agentmesh/web run dev",
+    "build:web": "npm --workspace @agentmesh/web run build",
+    "lint:web": "npm --workspace @agentmesh/web run lint",
+    "dev:api": "cd apps/api && .venv/bin/python -m uvicorn app.main:app --reload",
+    "check": "npm run build:web"
+  }
+}

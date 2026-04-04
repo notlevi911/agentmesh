@@ -1,0 +1,189 @@
+import type { DeployResponse } from "../types/pipeline";
+import type { BuilderNode, PipelineNodeData } from "../types/pipeline";
+
+interface InspectorPanelProps {
+  selectedNode: BuilderNode | null;
+  deployment: DeployResponse | null;
+  onCopyEndpoint: () => void;
+  onNodeChange: (nodeId: string, updates: Partial<PipelineNodeData>) => void;
+}
+
+function toolChecked(node: BuilderNode, tool: string) {
+  return (node.data.enabledTools ?? []).includes(tool);
+}
+
+export function InspectorPanel({
+  selectedNode,
+  deployment,
+  onCopyEndpoint,
+  onNodeChange,
+}: InspectorPanelProps) {
+  return (
+    <aside className="inspector-panel">
+      <div className="sidebar-header">
+        <span className="eyebrow">Inspector</span>
+        <h2>Properties</h2>
+      </div>
+
+      {selectedNode ? (
+        <div className="inspector-form">
+          <label className="field">
+            <span>Name</span>
+            <input
+              className="prop-input"
+              onChange={(event) => onNodeChange(selectedNode.id, { label: event.target.value })}
+              value={selectedNode.data.label}
+            />
+          </label>
+
+          <label className="field">
+            <span>Description</span>
+            <textarea
+              className="prop-input prop-textarea"
+              onChange={(event) =>
+                onNodeChange(selectedNode.id, { description: event.target.value })
+              }
+              value={selectedNode.data.description ?? ""}
+            />
+          </label>
+
+          {selectedNode.type === "agent" ? (
+            <>
+              <label className="field">
+                <span>Role</span>
+                <input
+                  className="prop-input"
+                  onChange={(event) => onNodeChange(selectedNode.id, { role: event.target.value })}
+                  value={selectedNode.data.role ?? ""}
+                />
+              </label>
+              <label className="field">
+                <span>Prompt</span>
+                <textarea
+                  className="prop-input prop-textarea tall-textarea"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, { systemPrompt: event.target.value })
+                  }
+                  value={selectedNode.data.systemPrompt ?? ""}
+                />
+              </label>
+              <label className="field">
+                <span>Price per call (ALGO)</span>
+                <input
+                  className="prop-input"
+                  min="0"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, { priceAlgo: Number(event.target.value) || 0 })
+                  }
+                  step="0.001"
+                  type="number"
+                  value={selectedNode.data.priceAlgo ?? 0}
+                />
+              </label>
+              <div className="field">
+                <span>Tools</span>
+                <div className="checkbox-grid">
+                  {["weather", "search"].map((tool) => (
+                    <label key={tool} className="checkbox-pill">
+                      <input
+                        checked={toolChecked(selectedNode, tool)}
+                        onChange={(event) => {
+                          const current = selectedNode.data.enabledTools ?? [];
+                          const next = event.target.checked
+                            ? [...new Set([...current, tool])]
+                            : current.filter((item) => item !== tool);
+                          onNodeChange(selectedNode.id, { enabledTools: next });
+                        }}
+                        type="checkbox"
+                      />
+                      <span>{tool}</span>
+                    </label>
+                  ))}
+                </div>
+              </div>
+              <div className="wallet-summary">
+                <span>Wallet</span>
+                <strong>{selectedNode.data.walletAddress ?? "Deploy to create wallet"}</strong>
+                <span>Balance</span>
+                <strong>{(selectedNode.data.balanceAlgo ?? 0).toFixed(3)} ALGO</strong>
+              </div>
+            </>
+          ) : null}
+
+          {selectedNode.type === "service" ? (
+            <>
+              <label className="field">
+                <span>Service kind</span>
+                <select
+                  className="prop-input"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, {
+                      serviceKind: event.target.value as PipelineNodeData["serviceKind"],
+                    })
+                  }
+                  value={selectedNode.data.serviceKind ?? "custom"}
+                >
+                  <option value="weather">Weather</option>
+                  <option value="search">Search</option>
+                  <option value="custom">Custom</option>
+                </select>
+              </label>
+              <label className="field">
+                <span>Service URL</span>
+                <input
+                  className="prop-input"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, { serviceUrl: event.target.value })
+                  }
+                  value={selectedNode.data.serviceUrl ?? ""}
+                />
+              </label>
+              <label className="field">
+                <span>Price per call (ALGO)</span>
+                <input
+                  className="prop-input"
+                  min="0"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, { priceAlgo: Number(event.target.value) || 0 })
+                  }
+                  step="0.001"
+                  type="number"
+                  value={selectedNode.data.priceAlgo ?? 0}
+                />
+              </label>
+            </>
+          ) : null}
+        </div>
+      ) : (
+        <p className="empty-state">Select a node to edit its prompt, tools, pricing, and service settings.</p>
+      )}
+
+      <div className="deploy-card">
+        <span className="eyebrow">Deploy</span>
+        {deployment ? (
+          <>
+            <strong>{deployment.pipelineId}</strong>
+            <p>{deployment.endpoint}</p>
+            <div className="deploy-meta">
+              <span>{deployment.priceAlgo.toFixed(3)} ALGO per call</span>
+              <span>{deployment.paymentWallet ?? "No paid entry wallet yet"}</span>
+            </div>
+            <div className="deploy-actions">
+              <button className="secondary-button" onClick={onCopyEndpoint} type="button">
+                Copy endpoint
+              </button>
+              {deployment.loraUrl ? (
+                <a className="secondary-button link-button" href={deployment.loraUrl} rel="noreferrer" target="_blank">
+                  View on Lora
+                </a>
+              ) : null}
+            </div>
+          </>
+        ) : (
+          <p>The deploy panel will appear here after you publish the workflow.</p>
+        )}
+      </div>
+    </aside>
+  );
+}
+

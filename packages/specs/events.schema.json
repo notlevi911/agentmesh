@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://agentmesh.xyz/schemas/events.schema.json",
+  "title": "AgentMesh Runtime Event",
+  "type": "object",
+  "required": [
+    "timestamp",
+    "level",
+    "message"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "level": {
+      "type": "string",
+      "enum": [
+        "info",
+        "success",
+        "warning",
+        "error"
+      ]
+    },
+    "message": {
+      "type": "string"
+    },
+    "nodeId": {
+      "type": "string"
+    },
+    "txId": {
+      "type": "string"
+    }
+  }
+}
+
