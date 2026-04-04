@@ -48,7 +48,7 @@ import type {
   WireKind,
 } from "./types/pipeline";
 
-const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v3";
+const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v5";
 
 interface StoredWorkflowDraft {
   pipelineName: string;
@@ -80,17 +80,17 @@ function sleep(ms: number) {
 function extractRuntimeQuery(raw: string | undefined, method?: string): string {
   const text = (raw ?? "").trim();
   if (!text) {
-    return "What is the weather of Africa?";
+    return "ALGO";
   }
 
   if ((method ?? "POST") === "GET") {
     const params = new URLSearchParams(text.startsWith("?") ? text.slice(1) : text);
-    return params.get("prompt") ?? params.get("query") ?? params.get("q") ?? text;
+    return params.get("token") ?? params.get("prompt") ?? params.get("query") ?? params.get("q") ?? text;
   }
 
   try {
     const parsed = JSON.parse(text) as Record<string, unknown>;
-    for (const key of ["prompt", "query", "message", "input"]) {
+    for (const key of ["token", "prompt", "query", "message", "input"]) {
       const value = parsed[key];
       if (typeof value === "string" && value.trim()) {
         return value.trim();
@@ -116,6 +116,25 @@ function loadStoredWorkflow(): StoredWorkflowDraft | null {
   try {
     const parsed = JSON.parse(raw) as StoredWorkflowDraft;
     if (!Array.isArray(parsed.nodes) || !Array.isArray(parsed.edges)) {
+      return null;
+    }
+
+    const nodeIds = new Set(parsed.nodes.map((node) => node.id));
+    const hasLegacyMarketAnalyzerShape =
+      parsed.pipelineName === "Market Analyzer" &&
+      nodeIds.has("trigger-1") &&
+      nodeIds.has("agent-analyzer") &&
+      nodeIds.has("service-weather") &&
+      nodeIds.has("service-search") &&
+      !parsed.nodes.some(
+        (node) =>
+          node.id === "service-gmail" ||
+          node.id === "service-crypto" ||
+          node.data.serviceKind === "gmail" ||
+          node.data.serviceKind === "crypto",
+      );
+
+    if (hasLegacyMarketAnalyzerShape) {
       return null;
     }
 
@@ -161,6 +180,71 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
     };
   }
 
+  if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("gmail")) {
+    return {
+      id: `${kind}-${Date.now()}-${index}`,
+      type: kind,
+      position: { x: 320 + index * 40, y: 220 + index * 40 },
+      data: {
+        ...data,
+        label: "Gmail",
+        description: "Compose and optionally send an email from the agent workflow.",
+        serviceKind: "gmail",
+        gmailTo: "",
+        priceAlgo: 0.02,
+      },
+    };
+  }
+
+  if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("crypto")) {
+    return {
+      id: `${kind}-${Date.now()}-${index}`,
+      type: kind,
+      position: { x: 320 + index * 40, y: 220 + index * 40 },
+      data: {
+        ...data,
+        label: "Crypto Prices",
+        description: "Live crypto price lookup via CoinGecko.",
+        serviceKind: "crypto",
+        serviceUrl: "https://api.coingecko.com/api/v3/simple/price",
+        cryptoSymbols: "BTC,ETH,ALGO",
+        priceAlgo: 0.01,
+      },
+    };
+  }
+
+  if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("chart")) {
+    return {
+      id: `${kind}-${Date.now()}-${index}`,
+      type: kind,
+      position: { x: 320 + index * 40, y: 220 + index * 40 },
+      data: {
+        ...data,
+        label: "Chart Signal",
+        description: "Technical bias from recent market data.",
+        serviceKind: "chart",
+        cryptoSymbols: "BTC,ETH,ALGO",
+        priceAlgo: 0.01,
+      },
+    };
+  }
+
+  if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("risk")) {
+    return {
+      id: `${kind}-${Date.now()}-${index}`,
+      type: kind,
+      position: { x: 320 + index * 40, y: 220 + index * 40 },
+      data: {
+        ...data,
+        label: "Risk Model",
+        description: "Volatility-aware trade sizing and risk assessment.",
+        serviceKind: "risk",
+        cryptoSymbols: "BTC,ETH,ALGO",
+        priceAlgo: 0.01,
+      },
+    };
+  }
+
   if (kind === "api") {
     return {
       id: `${kind}-${Date.now()}-${index}`,
@@ -185,7 +269,7 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
       data: {
         ...data,
         label: presetTitle,
-        enabledTools: ["weather", "search", "custom"],
+        enabledTools: ["crypto", "chart", "risk", "search", "gmail", "custom"],
       },
     };
   }
@@ -214,9 +298,9 @@ function BuilderApp() {
   const [edges, setEdges, onEdgesChange] = useEdgesState<BuilderEdge>(
     storedWorkflow?.edges ?? initialEdges,
   );
-  const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? "AgentMesh Canvas");
+  const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? "Trade Signal Desk");
   const [runtimeQuery, setRuntimeQuery] = useState(
-    storedWorkflow?.runtimeQuery ?? "What is the weather of Africa?",
+    storedWorkflow?.runtimeQuery ?? "Email me the latest ALGO price and weather in Bengaluru at founder@example.com",
   );
   const [deployment, setDeployment] = useState<DeployResponse | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -257,7 +341,7 @@ function BuilderApp() {
       return firstAgentPrompt;
     }
 
-    return "Analyze BTC sentiment and summarize it clearly.";
+    return "Generate a structured trade signal using the connected specialist agents and tools.";
   }, [nodes, selectedNode]);
 
   const resetExecutionState = useCallback(() => {
@@ -463,6 +547,8 @@ function BuilderApp() {
           serviceKind: node.data.serviceKind,
           upstreamX402: node.data.upstreamX402,
           treasuryAddress: node.data.treasuryAddress,
+          gmailTo: node.data.gmailTo,
+          cryptoSymbols: node.data.cryptoSymbols,
         },
       })),
       edges: edges.map((edge) => ({
@@ -514,8 +600,8 @@ function BuilderApp() {
   const handleLoadExample = useCallback(() => {
     setNodes(initialNodes);
     setEdges(initialEdges);
-    setPipelineName("Market Analyzer");
-    setRuntimeQuery("What is the weather of Africa?");
+    setPipelineName("Trade Signal Desk");
+    setRuntimeQuery('{ "token": "ALGO" }');
     setSelectedNodeId(initialNodes[1]?.id ?? null);
     setSelectedEdgeId(null);
     setDeployment(null);
@@ -594,7 +680,10 @@ function BuilderApp() {
           logs: [],
         });
         const triggerNode = hydratedNodes.find((node) => node.type === "trigger");
-        setRuntimeQuery(triggerNode?.data.testRequestBody ?? "What is the weather of Africa?");
+        setRuntimeQuery(
+          triggerNode?.data.testRequestBody ??
+            "Email me the latest ALGO price and weather in Bengaluru at founder@example.com",
+        );
         setSelectedNodeId(hydratedNodes.find((node) => node.type === "agent")?.id ?? hydratedNodes[0]?.id ?? null);
         setSelectedEdgeId(null);
         setLogs([]);
@@ -948,7 +1037,7 @@ function BuilderApp() {
             <div className="hero-visual-card">
               <div className="visual-header">
                 <span className="eyebrow">Live Flow</span>
-                <strong>Market Analyzer</strong>
+                <strong>Signal Ops Router</strong>
               </div>
               <div className="visual-flow">
                 <div className="visual-node">

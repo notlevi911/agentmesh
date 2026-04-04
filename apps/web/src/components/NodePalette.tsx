@@ -54,6 +54,30 @@ const sections: PaletteSection[] = [
         subtitle: "DuckDuckGo instant answers preset.",
         dotClass: "dot-service",
       },
+      {
+        kind: "api",
+        title: "Crypto Prices API",
+        subtitle: "CoinGecko price lookup preset.",
+        dotClass: "dot-service",
+      },
+      {
+        kind: "api",
+        title: "Chart Signal API",
+        subtitle: "Technical bias from recent market data.",
+        dotClass: "dot-service",
+      },
+      {
+        kind: "api",
+        title: "Risk Model API",
+        subtitle: "Volatility, sizing, and risk preset.",
+        dotClass: "dot-service",
+      },
+      {
+        kind: "api",
+        title: "Gmail API",
+        subtitle: "Draft or send email updates preset.",
+        dotClass: "dot-service",
+      },
     ],
   },
   {

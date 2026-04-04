@@ -23,9 +23,11 @@ class NodeData(BaseModel):
     enabledTools: List[str] = Field(default_factory=list)
     priceAlgo: float = 0
     serviceUrl: Optional[str] = None
-    serviceKind: Optional[Literal["weather", "search", "custom"]] = None
+    serviceKind: Optional[Literal["weather", "search", "custom", "gmail", "crypto", "chart", "risk"]] = None
     upstreamX402: bool = False
     treasuryAddress: Optional[str] = None
+    gmailTo: Optional[str] = None
+    cryptoSymbols: Optional[str] = None
 
 
 class PipelineNode(BaseModel):

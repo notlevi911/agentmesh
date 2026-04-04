@@ -94,7 +94,7 @@ export function InspectorPanel({
               <div className="field">
                 <span>Tools</span>
                 <div className="checkbox-grid">
-                  {["weather", "search", "custom"].map((tool) => (
+                  {["crypto", "chart", "risk", "search", "gmail", "custom"].map((tool) => (
                     <label key={tool} className="checkbox-pill">
                       <input
                         checked={toolChecked(selectedNode, tool)}
@@ -169,6 +169,10 @@ export function InspectorPanel({
                 >
                   <option value="weather">Weather</option>
                   <option value="search">Search</option>
+                  <option value="crypto">Crypto</option>
+                  <option value="chart">Chart</option>
+                  <option value="risk">Risk</option>
+                  <option value="gmail">Gmail</option>
                   <option value="custom">Custom</option>
                 </select>
               </label>
@@ -195,6 +199,34 @@ export function InspectorPanel({
                   value={selectedNode.data.priceAlgo ?? 0}
                 />
               </label>
+              {selectedNode.data.serviceKind === "gmail" ? (
+                <label className="field">
+                  <span>Fallback Gmail to</span>
+                  <input
+                    className="prop-input"
+                    onChange={(event) =>
+                      onNodeChange(selectedNode.id, { gmailTo: event.target.value })
+                    }
+                    placeholder="Optional fallback if prompt has no email address"
+                    value={selectedNode.data.gmailTo ?? ""}
+                  />
+                </label>
+              ) : null}
+              {selectedNode.data.serviceKind === "crypto" ||
+              selectedNode.data.serviceKind === "chart" ||
+              selectedNode.data.serviceKind === "risk" ? (
+                <label className="field">
+                  <span>Symbols</span>
+                  <input
+                    className="prop-input"
+                    onChange={(event) =>
+                      onNodeChange(selectedNode.id, { cryptoSymbols: event.target.value })
+                    }
+                    placeholder="BTC,ETH,ALGO"
+                    value={selectedNode.data.cryptoSymbols ?? ""}
+                  />
+                </label>
+              ) : null}
               <label className="field">
                 <span className="checkbox-label">
                   <input

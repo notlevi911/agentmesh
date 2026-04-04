@@ -36,7 +36,7 @@ export function TriggerNode({ data, id }: NodeProps) {
       <textarea
         className="node-request-input"
         onChange={(event) => payload.onTriggerTestChange?.(id, event.target.value)}
-        placeholder='{"prompt":"What is the weather of Africa?"}'
+        placeholder='{"prompt":"Email me the latest ALGO price at founder@example.com"}'
         value={payload.testRequestBody ?? ""}
       />
       {payload.executionNote ? <div className="node-output-preview">{payload.executionNote}</div> : null}

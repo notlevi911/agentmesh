@@ -15,9 +15,11 @@ export interface PipelineNodeData extends Record<string, unknown> {
   enabledTools?: string[];
   priceAlgo?: number;
   serviceUrl?: string;
-  serviceKind?: "weather" | "search" | "custom";
+  serviceKind?: "weather" | "search" | "custom" | "gmail" | "crypto" | "chart" | "risk";
   upstreamX402?: boolean;
   treasuryAddress?: string;
+  gmailTo?: string;
+  cryptoSymbols?: string;
   walletAddress?: string;
   balanceAlgo?: number;
   runUrl?: string;

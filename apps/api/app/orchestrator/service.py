@@ -2,6 +2,8 @@ import os
 import secrets
 from typing import List, Optional
 
+from app.a2a.orchestrator import MultiAgentOrchestrator
+from app.a2a.protocol import build_runtime_config
 from app.algorand.client import AlgorandService
 from app.models.pipeline import (
     BalanceResponse,
@@ -28,11 +30,13 @@ class PipelineOrchestrator:
         wallet_service: WalletService,
         algorand_service: AlgorandService,
         runtime: RuntimeExecutor,
+        multi_agent: MultiAgentOrchestrator,
     ) -> None:
         self.repository = repository
         self.wallet_service = wallet_service
         self.algorand_service = algorand_service
         self.runtime = runtime
+        self.multi_agent = multi_agent
         self.public_base_url = os.getenv("AGENTMESH_PUBLIC_BASE_URL", "http://localhost:8000").rstrip(
             "/"
         )
@@ -53,9 +57,7 @@ class PipelineOrchestrator:
         ]
 
         for node in definition.nodes:
-            needs_wallet = node.type == "agent" or (
-                node.type in {"service", "api"} and (node.data.priceAlgo > 0 or node.data.upstreamX402)
-            )
+            needs_wallet = node.type == "agent"
 
             if needs_wallet:
                 wallet = self.wallet_service.create_agent_wallet(node.id)
@@ -205,13 +207,30 @@ class PipelineOrchestrator:
 
     def execute(self, pipeline_id: str, query: Optional[str], settlement_mode: str) -> RunPipelineResponse:
         record = self._get_record(pipeline_id)
-        response = self.runtime.execute(
-            record=record,
-            query=query or "analyze BTC sentiment",
-            settlement_mode=settlement_mode,
-        )
+        if self.multi_agent.supports(record):
+            response = self.multi_agent.execute(
+                pipeline_id=pipeline_id,
+                query=query or "analyze BTC sentiment",
+                settlement_mode=settlement_mode,
+            )
+        else:
+            response = self.runtime.execute(
+                record=record,
+                query=query or "analyze BTC sentiment",
+                settlement_mode=settlement_mode,
+            )
         self.repository.save_run(pipeline_id, response)
         return response
+
+    def boot_multi_agent(self, pipeline_id: str):
+        return self.multi_agent.boot_pipeline_agents(pipeline_id)
+
+    def multi_agent_statuses(self, pipeline_id: str):
+        return self.multi_agent.agent_statuses_sync(pipeline_id)
+
+    def runtime_config(self, pipeline_id: str):
+        record = self._get_record(pipeline_id)
+        return build_runtime_config(record)
 
     def get_record(self, pipeline_id: str) -> PipelineRecord:
         return self._get_record(pipeline_id)

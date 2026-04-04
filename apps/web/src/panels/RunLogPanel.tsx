@@ -103,7 +103,7 @@ export function RunLogPanel({
           <textarea
             className="prop-input terminal-query-input"
             onChange={(event) => onQueryChange(event.target.value)}
-            placeholder='{"prompt":"What is the weather of Africa?"}'
+            placeholder='{"prompt":"Email me the latest ALGO price at founder@example.com"}'
             value={query}
           />
         </label>
@@ -121,7 +121,10 @@ export function RunLogPanel({
         <div className="terminal-session-meta">
           <div className="terminal-command-line">
             <span className="terminal-prompt">agentmesh@studio</span>
-            <span className="terminal-command">run --query "{query || "What is the weather of Africa?"}"</span>
+            <span className="terminal-command">
+              run --query "
+              {query || "Email me the latest ALGO price at founder@example.com"}"
+            </span>
           </div>
           <div className="terminal-command-line terminal-command-line-muted">
             <span className="terminal-prompt">planner</span>

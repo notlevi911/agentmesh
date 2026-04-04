@@ -25,6 +25,7 @@ class X402Service:
             os.getenv("GOPLAUSIBLE_FACILITATOR_URL", "https://facilitator.goplausible.xyz")
         )
         self.asset_id = str(os.getenv("AGENTMESH_X402_ASSET_ID", "10458941"))
+        self.global_tool_payout_address = os.getenv("AGENTMESH_TOOL_PAYOUT_ADDRESS", "").strip()
         facilitator = HTTPFacilitatorClient(FacilitatorConfig(url=self.facilitator_url))
         self.server = x402ResourceServer(facilitator)
         register_exact_avm_server(self.server, ALGORAND_TESTNET_CAIP2)
@@ -76,6 +77,9 @@ class X402Service:
         node = next((candidate for candidate in record.definition.nodes if candidate.id == node_id), None)
         if node is None:
             raise KeyError("Unable to resolve x402 payee for {path}".format(path=context.path))
+
+        if self.global_tool_payout_address:
+            return self.global_tool_payout_address
 
         if node.data.treasuryAddress:
             return node.data.treasuryAddress

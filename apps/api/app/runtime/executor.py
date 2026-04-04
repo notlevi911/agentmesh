@@ -135,6 +135,8 @@ class RuntimeExecutor:
                     output=analyzer_analysis,
                 )
 
+        selected_tools = self._sort_tools_for_execution(record.definition, selected_tools)
+
         for node in ordered_nodes:
             if node.type == "trigger":
                 self._append_log(
@@ -152,6 +154,22 @@ class RuntimeExecutor:
             service_node = self._node_by_id(record.definition, tool_id)
             if service_node is None or service_node.type not in {"service", "api"}:
                 continue
+
+            tool_query = query
+            if service_node.data.serviceKind == "gmail" and tool_results:
+                prior_context = " | ".join(
+                    [f"{result.tool}: {result.summary}" for result in tool_results[-3:]]
+                )
+                tool_query = (
+                    "Agent instructions: {prompt}\n"
+                    "Original request: {query}\n"
+                    "Relevant tool outputs: {context}\n"
+                    "Generate the email message using this context."
+                ).format(
+                    prompt=(analyzer.data.systemPrompt if analyzer else "") or "",
+                    query=query,
+                    context=prior_context,
+                )
 
             uses_upstream_x402 = bool(
                 service_node.data.upstreamX402
@@ -180,7 +198,7 @@ class RuntimeExecutor:
                         record=record,
                         payer_wallet=analyzer_wallet,
                         node=service_node,
-                        query=query,
+                        query=tool_query,
                     )
                     if result.payment_requirement:
                         self._append_log(
@@ -199,7 +217,7 @@ class RuntimeExecutor:
                         record=record,
                         payer_wallet=analyzer_wallet,
                         node=service_node,
-                        query=query,
+                        query=tool_query,
                     )
                     self._append_log(
                         logs,
@@ -217,7 +235,7 @@ class RuntimeExecutor:
                         },
                     )
                 else:
-                    result = self.tools.call_api_node_direct(service_node, query)
+                    result = self.tools.call_api_node_direct(service_node, tool_query)
                 tool_results.append(result)
                 self._append_log(
                     logs,
@@ -443,6 +461,20 @@ class RuntimeExecutor:
 
     def _tool_nodes(self, definition: DeployPipelineRequest) -> List[PipelineNode]:
         return [node for node in definition.nodes if node.type in {"service", "api"}]
+
+    def _sort_tools_for_execution(
+        self,
+        definition: DeployPipelineRequest,
+        selected_tools: List[str],
+    ) -> List[str]:
+        node_map = {node.id: node for node in definition.nodes}
+
+        return sorted(
+            selected_tools,
+            key=lambda tool_id: 1
+            if node_map.get(tool_id) and node_map[tool_id].data.serviceKind == "gmail"
+            else 0,
+        )
 
     def _node_by_id(self, definition: DeployPipelineRequest, node_id: str) -> Optional[PipelineNode]:
         for node in definition.nodes:

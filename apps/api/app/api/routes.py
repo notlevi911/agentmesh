@@ -3,6 +3,7 @@ from typing import Optional
 from fastapi import APIRouter, Depends, Header, HTTPException
 
 from app.api.deps import get_orchestrator, get_x402_service
+from app.models.a2a import MultiAgentBootResponse
 from app.models.pipeline import (
     BalanceResponse,
     DeployPipelineRequest,
@@ -31,6 +32,39 @@ def deploy_pipeline(
     orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
 ) -> DeployPipelineResponse:
     return orchestrator.deploy(payload)
+
+
+@router.post("/api/pipelines/{pipeline_id}/agents/boot", response_model=MultiAgentBootResponse)
+def boot_pipeline_agents(
+    pipeline_id: str,
+    orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
+) -> MultiAgentBootResponse:
+    try:
+        return orchestrator.boot_multi_agent(pipeline_id)
+    except KeyError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+
+
+@router.get("/api/pipelines/{pipeline_id}/agents/status")
+def pipeline_agent_statuses(
+    pipeline_id: str,
+    orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
+):
+    try:
+        return orchestrator.multi_agent_statuses(pipeline_id)
+    except KeyError as error:
+        raise HTTPException(status_code=404, detail=str(error))
+
+
+@router.get("/api/pipelines/{pipeline_id}/runtime-config")
+def pipeline_runtime_config(
+    pipeline_id: str,
+    orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
+):
+    try:
+        return orchestrator.runtime_config(pipeline_id)
+    except KeyError as error:
+        raise HTTPException(status_code=404, detail=str(error))
 
 
 @router.get("/api/pipelines", response_model=list[PipelineSummaryResponse])

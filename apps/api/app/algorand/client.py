@@ -1,3 +1,4 @@
+import json
 import os
 from typing import Optional
 
@@ -88,6 +89,20 @@ class AlgorandService:
             note=b"AgentMesh x402 opt-in",
         )
         signed = txn.sign(wallet.private_key)
+        txid = self._client.send_transaction(signed)
+        transaction.wait_for_confirmation(self._client, txid, 4)
+        return txid
+
+    def anchor_note_transaction(self, sender_wallet: WalletRecord, note: dict) -> str:
+        params = self._client.suggested_params()
+        txn = transaction.PaymentTxn(
+            sender=sender_wallet.address,
+            sp=params,
+            receiver=sender_wallet.address,
+            amt=0,
+            note=json.dumps(note, sort_keys=True).encode(),
+        )
+        signed = txn.sign(sender_wallet.private_key)
         txid = self._client.send_transaction(signed)
         transaction.wait_for_confirmation(self._client, txid, 4)
         return txid
