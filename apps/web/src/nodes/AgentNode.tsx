@@ -28,17 +28,18 @@ function statusSymbol(state?: PipelineNodeData["executionState"]) {
 
 export function AgentNode({ id, data }: NodeProps) {
   const payload = data as unknown as PipelineNodeData;
+  const executionState = payload.executionState ?? "idle";
 
   return (
-    <div className="node-shell node-agent">
+    <div className={`node-shell node-agent node-state-${executionState}`}>
       <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
       <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">Agent</div>
         <div className="node-chip-row">
           <span className="node-chip">{payload.role ?? "operator"}</span>
-          <span className={`node-status node-status-${payload.executionState ?? "idle"}`}>
-            {statusSymbol(payload.executionState)}
+          <span className={`node-status node-status-${executionState}`}>
+            {statusSymbol(executionState)}
           </span>
         </div>
       </div>

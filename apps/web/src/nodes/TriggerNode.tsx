@@ -16,16 +16,17 @@ function statusSymbol(state?: PipelineNodeData["executionState"]) {
 
 export function TriggerNode({ data, id }: NodeProps) {
   const payload = data as unknown as PipelineNodeData;
+  const executionState = payload.executionState ?? "idle";
 
   return (
-    <div className="node-shell node-trigger">
+    <div className={`node-shell node-trigger node-state-${executionState}`}>
       <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">Trigger</div>
         <div className="node-chip-row">
           <span className="node-chip">{payload.requestMethod ?? "POST"}</span>
-          <span className={`node-status node-status-${payload.executionState ?? "idle"}`}>
-            {statusSymbol(payload.executionState)}
+          <span className={`node-status node-status-${executionState}`}>
+            {statusSymbol(executionState)}
           </span>
         </div>
       </div>

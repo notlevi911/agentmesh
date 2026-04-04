@@ -16,14 +16,15 @@ function statusSymbol(state?: PipelineNodeData["executionState"]) {
 
 export function EndNode({ data }: NodeProps) {
   const payload = data as unknown as PipelineNodeData;
+  const executionState = payload.executionState ?? "idle";
 
   return (
-    <div className="node-shell node-end">
+    <div className={`node-shell node-end node-state-${executionState}`}>
       <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
       <div className="node-header-row">
         <div className="node-badge">End</div>
-        <span className={`node-status node-status-${payload.executionState ?? "idle"}`}>
-          {statusSymbol(payload.executionState)}
+        <span className={`node-status node-status-${executionState}`}>
+          {statusSymbol(executionState)}
         </span>
       </div>
       <h3>{payload.label}</h3>

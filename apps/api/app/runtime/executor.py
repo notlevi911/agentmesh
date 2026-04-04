@@ -1,5 +1,5 @@
 from collections import defaultdict, deque
-from typing import Dict, List, Optional
+from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
 from app.llm.gemini import GeminiPlanner
@@ -21,8 +21,14 @@ class RuntimeExecutor:
             logs.append(
                 RuntimeLog(
                     level="warning",
-                    message="Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
+                    message="Studio test mode bypassed the outer payment gate after a 402 preflight.",
                     eventType="progress",
+                    details={
+                        "mode": "demo",
+                        "entrypoint": "pipeline run endpoint",
+                        "x402_bypassed": True,
+                        "studio_test": True,
+                    },
                 )
             )
         else:
@@ -31,6 +37,11 @@ class RuntimeExecutor:
                     level="success",
                     message="Payment response header received. Pipeline execution has started.",
                     eventType="progress",
+                    details={
+                        "mode": "payment_response",
+                        "entrypoint": "pipeline run endpoint",
+                        "x402_verified": True,
+                    },
                 )
             )
 
@@ -131,17 +142,9 @@ class RuntimeExecutor:
                     level="done",
                     message="Trigger node activated from incoming API request.",
                     node_id=node.id,
-                )
-            elif node.type in {"service", "api"}:
-                self._append_log(
-                    logs,
-                    level="progress",
-                    message="{kind_label} {label} is wired as the {kind} tool.".format(
-                        kind_label="API" if node.type == "api" else "Service",
-                        label=node.data.label,
-                        kind=node.data.serviceKind or "custom",
-                    ),
-                    node_id=node.id,
+                    details={
+                        "request_query": query,
+                    },
                 )
 
         tool_results: List[ToolResult] = []
@@ -179,6 +182,16 @@ class RuntimeExecutor:
                         node=service_node,
                         query=query,
                     )
+                    if result.payment_requirement:
+                        self._append_log(
+                            logs,
+                            level="progress",
+                            message="{label} returned x402 payment requirements.".format(
+                                label=service_node.data.label
+                            ),
+                            node_id=service_node.id,
+                            details=result.payment_requirement,
+                        )
                 elif uses_algo_payment:
                     if analyzer_wallet is None:
                         raise RuntimeError("Analyzer agent has no wallet available to pay for tool execution.")
@@ -187,6 +200,21 @@ class RuntimeExecutor:
                         payer_wallet=analyzer_wallet,
                         node=service_node,
                         query=query,
+                    )
+                    self._append_log(
+                        logs,
+                        level="progress",
+                        message="{label} requested native ALGO settlement before execution.".format(
+                            label=service_node.data.label
+                        ),
+                        node_id=service_node.id,
+                        details={
+                            "scheme": "native_algo",
+                            "network": "algorand-testnet",
+                            "payer": result.payment_payer,
+                            "pay_to": result.payment_payee,
+                            "amount_algo": "{:.6f}".format(result.payment_amount_algo or 0),
+                        },
                     )
                 else:
                     result = self.tools.call_api_node_direct(service_node, query)
@@ -214,6 +242,26 @@ class RuntimeExecutor:
                     )
                     if result.payment_tx_id
                     else None,
+                    details={
+                        key: value
+                        for key, value in {
+                            "scheme": "x402_exact" if result.paid_via_x402 else "native_algo"
+                            if result.payment_tx_id
+                            else "free",
+                            "network": result.payment_network,
+                            "payer": result.payment_payer,
+                            "pay_to": result.payment_payee,
+                            "amount_algo": "{:.6f}".format(result.payment_amount_algo)
+                            if result.payment_amount_algo is not None
+                            else None,
+                            "amount_asset": result.payment_amount_asset,
+                            "asset": result.payment_asset,
+                            "tx_id": result.payment_tx_id,
+                        }.items()
+                        if value is not None
+                    }
+                    if (result.payment_tx_id or result.paid_via_x402)
+                    else {},
                 )
             except Exception as error:
                 self._append_log(
@@ -290,6 +338,7 @@ class RuntimeExecutor:
         node_id: Optional[str] = None,
         output: Optional[str] = None,
         tx_id: Optional[str] = None,
+        details: Optional[Dict[str, Any]] = None,
     ) -> None:
         event_type_map = {
             "start": "start",
@@ -319,6 +368,7 @@ class RuntimeExecutor:
                 eventType=event_type_map[level],
                 output=output,
                 txId=tx_id,
+                details=details or {},
             )
         )
 

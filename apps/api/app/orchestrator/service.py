@@ -10,6 +10,8 @@ from app.models.pipeline import (
     DeployedNode,
     FundIntentResponse,
     InternalToolInvokeResponse,
+    PipelineDetailResponse,
+    PipelineSummaryResponse,
     RunPipelineResponse,
     RuntimeLog,
     WalletBalance,
@@ -133,6 +135,58 @@ class PipelineOrchestrator:
             )
 
         return BalanceResponse(pipelineId=pipeline_id, balances=balances)
+
+    def list_pipelines(self) -> List[PipelineSummaryResponse]:
+        records = sorted(
+            self.repository.list_pipelines().values(),
+            key=lambda record: record.pipeline_id,
+            reverse=True,
+        )
+        return [
+            PipelineSummaryResponse(
+                pipelineId=record.pipeline_id,
+                name=record.definition.name,
+                endpoint=record.endpoint,
+                network=record.definition.network,
+                priceAlgo=record.price_algo,
+                paymentWallet=record.payment_wallet,
+                nodeCount=len(record.definition.nodes),
+                wireCount=len(record.definition.edges),
+                runCount=len(record.runs),
+            )
+            for record in records
+        ]
+
+    def pipeline_detail(self, pipeline_id: str) -> PipelineDetailResponse:
+        record = self._get_record(pipeline_id)
+        deployed_nodes: List[DeployedNode] = []
+
+        for node in record.definition.nodes:
+            wallet = record.wallets.get(node.id)
+            if wallet is None:
+                deployed_nodes.append(DeployedNode(id=node.id, type=node.type))
+                continue
+
+            deployed_nodes.append(
+                DeployedNode(
+                    id=node.id,
+                    type=node.type,
+                    walletAddress=wallet.address,
+                    balanceAlgo=self.algorand_service.get_balance_algo(wallet.address),
+                    explorerUrl=self.algorand_service.lora_account_url(wallet.address),
+                )
+            )
+
+        return PipelineDetailResponse(
+            pipelineId=record.pipeline_id,
+            definition=record.definition,
+            endpoint=record.endpoint,
+            priceAlgo=record.price_algo,
+            network=record.definition.network,
+            paymentWallet=record.payment_wallet,
+            loraUrl=self.algorand_service.lora_account_url(record.payment_wallet),
+            nodes=deployed_nodes,
+        )
 
     def fund_intent(self, pipeline_id: str, node_id: str) -> FundIntentResponse:
         record = self._get_record(pipeline_id)

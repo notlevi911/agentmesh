@@ -15,6 +15,8 @@ class Position(BaseModel):
 
 class NodeData(BaseModel):
     label: str
+    requestMethod: Optional[Literal["GET", "POST", "PUT"]] = None
+    testRequestBody: Optional[str] = None
     role: Optional[str] = None
     description: Optional[str] = None
     systemPrompt: Optional[str] = None
@@ -56,6 +58,7 @@ class RuntimeLog(BaseModel):
     eventType: Optional[Literal["start", "progress", "output", "done", "error"]] = None
     output: Optional[str] = None
     txId: Optional[str] = None
+    details: Dict[str, Any] = Field(default_factory=dict)
 
 
 class DeployedNode(BaseModel):
@@ -97,6 +100,29 @@ class FundIntentResponse(BaseModel):
     faucetUrl: str
     loraUrl: Optional[str] = None
     qrValue: str
+
+
+class PipelineSummaryResponse(BaseModel):
+    pipelineId: str
+    name: str
+    endpoint: str
+    network: str
+    priceAlgo: float
+    paymentWallet: Optional[str] = None
+    nodeCount: int
+    wireCount: int
+    runCount: int
+
+
+class PipelineDetailResponse(BaseModel):
+    pipelineId: str
+    definition: DeployPipelineRequest
+    endpoint: str
+    priceAlgo: float
+    network: str
+    paymentWallet: Optional[str] = None
+    loraUrl: Optional[str] = None
+    nodes: List[DeployedNode]
 
 
 class RunPipelineRequest(BaseModel):

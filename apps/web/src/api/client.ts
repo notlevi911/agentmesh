@@ -3,6 +3,9 @@ import type {
   DeployRequest,
   DeployResponse,
   FundIntentResponse,
+  PaymentPreflightResponse,
+  PipelineDetail,
+  PipelineSummary,
   RunResponse,
 } from "../types/pipeline";
 
@@ -34,6 +37,16 @@ export async function getBalances(pipelineId: string): Promise<BalanceResponse> 
   return parseJson<BalanceResponse>(response);
 }
 
+export async function listPipelines(): Promise<PipelineSummary[]> {
+  const response = await fetch(`${API_BASE_URL}/api/pipelines`);
+  return parseJson<PipelineSummary[]>(response);
+}
+
+export async function getPipelineDetail(pipelineId: string): Promise<PipelineDetail> {
+  const response = await fetch(`${API_BASE_URL}/api/pipelines/${pipelineId}`);
+  return parseJson<PipelineDetail>(response);
+}
+
 export async function getFundIntent(
   pipelineId: string,
   nodeId: string,
@@ -58,3 +71,27 @@ export async function runPipeline(
   return parseJson<RunResponse>(response);
 }
 
+export async function preflightPipelinePayment(
+  pipelineId: string,
+  payload: Record<string, unknown>,
+): Promise<PaymentPreflightResponse> {
+  const response = await fetch(`${API_BASE_URL}/${pipelineId}/run`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const rawBody = (await response.json()) as PaymentPreflightResponse["body"];
+
+  return {
+    status: response.status,
+    paymentRequired: response.status === 402,
+    facilitator:
+      response.headers.get("Payment-Facilitator") ??
+      response.headers.get("PAYMENT-FACILITATOR") ??
+      rawBody.facilitator,
+    body: rawBody,
+  };
+}

@@ -75,6 +75,7 @@ export interface LogEntry {
   eventType?: "start" | "progress" | "output" | "done" | "error";
   output?: string;
   txId?: string;
+  details?: Record<string, string | number | boolean | null>;
 }
 
 export interface DeployedNodeState {
@@ -95,6 +96,29 @@ export interface DeployResponse {
   loraUrl?: string;
   nodes: DeployedNodeState[];
   logs: LogEntry[];
+}
+
+export interface PipelineSummary {
+  pipelineId: string;
+  name: string;
+  endpoint: string;
+  network: string;
+  priceAlgo: number;
+  paymentWallet?: string;
+  nodeCount: number;
+  wireCount: number;
+  runCount: number;
+}
+
+export interface PipelineDetail {
+  pipelineId: string;
+  definition: DeployRequest;
+  endpoint: string;
+  priceAlgo: number;
+  network: string;
+  paymentWallet?: string;
+  loraUrl?: string;
+  nodes: DeployedNodeState[];
 }
 
 export interface BalanceRecord {
@@ -124,4 +148,19 @@ export interface RunResponse {
   result: string;
   settlementMode: "demo" | "payment_response";
   logs: LogEntry[];
+}
+
+export interface PaymentPreflightResponse {
+  status: number;
+  paymentRequired: boolean;
+  facilitator?: string;
+  body: {
+    pipelineId: string;
+    amountAlgo: number;
+    wallet: string;
+    network: string;
+    facilitator: string;
+    endpoint: string;
+    message: string;
+  };
 }

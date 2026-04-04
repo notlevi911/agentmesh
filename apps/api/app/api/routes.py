@@ -9,6 +9,8 @@ from app.models.pipeline import (
     DeployPipelineResponse,
     FundIntentResponse,
     InternalToolInvokeResponse,
+    PipelineDetailResponse,
+    PipelineSummaryResponse,
     RunPipelineRequest,
     RunPipelineResponse,
 )
@@ -29,6 +31,24 @@ def deploy_pipeline(
     orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
 ) -> DeployPipelineResponse:
     return orchestrator.deploy(payload)
+
+
+@router.get("/api/pipelines", response_model=list[PipelineSummaryResponse])
+def list_pipelines(
+    orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
+) -> list[PipelineSummaryResponse]:
+    return orchestrator.list_pipelines()
+
+
+@router.get("/api/pipelines/{pipeline_id}", response_model=PipelineDetailResponse)
+def pipeline_detail(
+    pipeline_id: str,
+    orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
+) -> PipelineDetailResponse:
+    try:
+        return orchestrator.pipeline_detail(pipeline_id)
+    except KeyError as error:
+        raise HTTPException(status_code=404, detail=str(error))
 
 
 @router.get("/api/pipelines/{pipeline_id}/balances", response_model=BalanceResponse)

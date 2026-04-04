@@ -1,5 +1,421 @@
 {
   "pipelines": {
+    "pm_9c2338a9": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trigger-analyzer",
+            "label": "Start",
+            "source": "trigger-1",
+            "target": "agent-analyzer",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-analyzer-weather",
+            "label": "Weather tool",
+            "source": "agent-analyzer",
+            "target": "service-weather",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-search",
+            "label": "Search tool",
+            "source": "agent-analyzer",
+            "target": "service-search",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-responder",
+            "label": "Analysis context",
+            "source": "agent-analyzer",
+            "target": "agent-responder",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-responder-end",
+            "label": "Final output",
+            "source": "agent-responder",
+            "target": "end-1",
+            "wireType": "a2a"
+          }
+        ],
+        "name": "Market Analyzer",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "description": "Incoming HTTP request kicks off the workflow.",
+              "enabledTools": [],
+              "label": "HTTP Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1",
+            "position": {
+              "x": 6.986301369863014,
+              "y": 168.08675799086757
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "description": "Chooses the right connected API tool for the incoming prompt.",
+              "enabledTools": [
+                "weather",
+                "search",
+                "custom"
+              ],
+              "label": "Routing Agent",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": "analyzer",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "You are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-analyzer",
+            "position": {
+              "x": 320.0,
+              "y": 53.97260273972603
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-weather",
+            "position": {
+              "x": 678.6118721461188,
+              "y": -100.57077625570776
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-search",
+            "position": {
+              "x": 620.3835616438356,
+              "y": 390.8584474885845
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Formats the final HTTP response for the caller.",
+              "enabledTools": [],
+              "label": "Response Agent",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": "responder",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Take the upstream tool result and produce a crisp HTTP response body.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-responder",
+            "position": {
+              "x": 952.296803652968,
+              "y": 37.94520547945204
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Shows and returns the final API output to the caller.",
+              "enabledTools": [],
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1236.6986301369864,
+              "y": 218.70776255707756
+            },
+            "type": "end"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_9c2338a9/run",
+      "payment_wallet": "ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI",
+      "pipeline_id": "pm_9c2338a9",
+      "price_algo": 0.01,
+      "runs": {},
+      "wallets": {
+        "agent-analyzer": {
+          "address": "ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI",
+          "node_id": "agent-analyzer",
+          "private_key": "Q1gJw2nIs0mDZHVP0Gr2LKrts5m9J9lvQSMgJj0U2eaLiqmrqSog5H3eeR6oKOE8E2Q+Jb0Itsygtflaa7zOjg=="
+        },
+        "agent-responder": {
+          "address": "RROBMMQO63NISCPS46DIZH4V2JC4M6DKPA5HHLYWIUJ5RSDQY6MGDJ7B44",
+          "node_id": "agent-responder",
+          "private_key": "NBqzowbtf0WFpkFC5jbX0xIwnYZzxF8ar+aB7aEdMt+MXBYyDvbaiQny54aMn5XSRcZ4ang6c68WRRPYyHDHmA=="
+        },
+        "service-search": {
+          "address": "LQ3CX73J2PZEDKOU2NJW3BRR2Z4WMZWFHP54N47WF5WISECTOVO3AQVPSU",
+          "node_id": "service-search",
+          "private_key": "aIW3ejasHPxljC/wRxyxJBWeNWGm6ykrX7SoND8KYlNcNiv/adPyQanU01NthjHWeWZmxTv7xvP2L2yJEFN1XQ=="
+        },
+        "service-weather": {
+          "address": "7DVDGSZ2GFGNLBCILLNE4STZHMAFDSUZ2ZGIHVP3FASJ4MKHTNE2IO7UXU",
+          "node_id": "service-weather",
+          "private_key": "KhXIOYnASDwFJY7ff9YLiaoa1XdnVdOV53T8i16Ugu346jNLOjFM1YRIWtpOSnk7AFHKmdZMg9X7KCSeMUebSQ=="
+        }
+      }
+    },
+    "pm_d7013349": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trigger-analyzer",
+            "label": "Start",
+            "source": "trigger-1",
+            "target": "agent-analyzer",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-analyzer-weather",
+            "label": "Weather tool",
+            "source": "agent-analyzer",
+            "target": "service-weather",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-search",
+            "label": "Search tool",
+            "source": "agent-analyzer",
+            "target": "service-search",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-responder",
+            "label": "Analysis context",
+            "source": "agent-analyzer",
+            "target": "agent-responder",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-responder-end",
+            "label": "Final output",
+            "source": "agent-responder",
+            "target": "end-1",
+            "wireType": "a2a"
+          }
+        ],
+        "name": "Market Analyzer",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "description": "Incoming HTTP request kicks off the workflow.",
+              "enabledTools": [],
+              "label": "HTTP Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1",
+            "position": {
+              "x": 40.0,
+              "y": 200.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "description": "Chooses the right connected API tool for the incoming prompt.",
+              "enabledTools": [
+                "weather",
+                "search",
+                "custom"
+              ],
+              "label": "Routing Agent",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": "analyzer",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "You are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-analyzer",
+            "position": {
+              "x": 320.0,
+              "y": 120.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-weather",
+            "position": {
+              "x": 650.0,
+              "y": 70.0
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-search",
+            "position": {
+              "x": 660.0,
+              "y": 369.94977168949777
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Formats the final HTTP response for the caller.",
+              "enabledTools": [],
+              "label": "Response Agent",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": "responder",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Take the upstream tool result and produce a crisp HTTP response body.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-responder",
+            "position": {
+              "x": 960.0,
+              "y": 170.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Shows and returns the final API output to the caller.",
+              "enabledTools": [],
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1240.0,
+              "y": 200.0
+            },
+            "type": "end"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_d7013349/run",
+      "payment_wallet": "QWYF36YTEQHXAFSUUK3ZKFS5ECSL6L2F5HUB7JRQ4UAEFIDD4CFIEF7LTQ",
+      "pipeline_id": "pm_d7013349",
+      "price_algo": 0.01,
+      "runs": {},
+      "wallets": {
+        "agent-analyzer": {
+          "address": "QWYF36YTEQHXAFSUUK3ZKFS5ECSL6L2F5HUB7JRQ4UAEFIDD4CFIEF7LTQ",
+          "node_id": "agent-analyzer",
+          "private_key": "R6tv2lW1j6lf6K7GTVaVZqCEHp5e/RDXinQLkh5sxKKFsF37EyQPcBZUoreVFl0gpL8vRenoH6Yw5QBCoGPgig=="
+        },
+        "agent-responder": {
+          "address": "SOU7AYF6QED4IDFMIMCY5LUVZVWQKVF2KGTATMVXZIRZTBUNTU32UJKG4U",
+          "node_id": "agent-responder",
+          "private_key": "h0Wo7kbwRZ0YcJ7gX/ra/Gg479DpTI0sEUbWTo3pO9aTqfBgvoEHxAysQwWOrpXNbQVUulGmCbK3yiOZho2dNw=="
+        },
+        "service-search": {
+          "address": "KK4JFGIUZACJTLO5SN3FTTQEYOSQW5IE24GKEM4OYGFLQ3ZOWZXSLPXQBE",
+          "node_id": "service-search",
+          "private_key": "sCB9KbvPk+LyNp/15dN3wIe8JKpcBx+eTQI5VF3QdQlSuJKZFMgEma3dk3ZZzgTDpQt1BNcMojOOwYq4by62bw=="
+        },
+        "service-weather": {
+          "address": "IBN3SWEPPOPHISW2GAI7EOE3L4XQLLKK6WROGEADDN76OR2BYZXGDKFCII",
+          "node_id": "service-weather",
+          "private_key": "hXhLWJQtuVaMGzwoZJpJ9snP/cY6RME137xehmzMoo5AW7lYj3uedEraMBHyOJtfLwWtSvWi4xADG3/nR0HGbg=="
+        }
+      }
+    },
     "pm_ddb1e472": {
       "definition": {
         "edges": [
@@ -41,10 +457,12 @@
               "enabledTools": [],
               "label": "HTTP Trigger",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": null,
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -61,10 +479,12 @@
               "enabledTools": [],
               "label": "Analyzer",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": "analyzer",
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": "Use the connected tool.",
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -81,10 +501,12 @@
               "enabledTools": [],
               "label": "Weather API",
               "priceAlgo": 0.01,
+              "requestMethod": null,
               "role": null,
               "serviceKind": "weather",
               "serviceUrl": "https://api.open-meteo.com/v1/forecast",
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -101,10 +523,12 @@
               "enabledTools": [],
               "label": "Responder",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": "responder",
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": "Respond clearly.",
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -121,10 +545,12 @@
               "enabledTools": [],
               "label": "HTTP Response",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": null,
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -145,6 +571,7 @@
         "run_2049c774c2": {
           "logs": [
             {
+              "details": {},
               "eventType": "progress",
               "level": "warning",
               "message": "Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
@@ -154,6 +581,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "start",
               "level": "info",
               "message": "Analyzer received the workflow task.",
@@ -163,6 +591,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "output",
               "level": "info",
               "message": "Analyzer planned the workflow path.",
@@ -172,6 +601,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Trigger node activated from incoming API request.",
@@ -181,6 +611,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "progress",
               "level": "info",
               "message": "API Weather API is wired as the weather tool.",
@@ -190,6 +621,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "start",
               "level": "info",
               "message": "Calling Weather API with native ALGO payment of 0.010 ALGO.",
@@ -199,6 +631,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "output",
               "level": "info",
               "message": "Weather API returned output.",
@@ -208,6 +641,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Weather API completed successfully.",
@@ -217,6 +651,7 @@
               "txId": "UTP72RQSYDYYCSP67QJS2K7HFCFYRAKYBOZLPLF4KEE4USP5E5YA"
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Analyzer finished analysis.",
@@ -226,6 +661,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "start",
               "level": "info",
               "message": "Responder is preparing the final response.",
@@ -235,6 +671,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "output",
               "level": "info",
               "message": "Responder produced the final response.",
@@ -244,6 +681,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Responder delivered the response back to the caller.",
@@ -253,6 +691,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Pipeline reached the End node and returned an HTTP response.",
@@ -334,10 +773,12 @@
               "enabledTools": [],
               "label": "HTTP Trigger",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": null,
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -358,10 +799,12 @@
               ],
               "label": "Routing Agent",
               "priceAlgo": 0.01,
+              "requestMethod": null,
               "role": "analyzer",
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": "You are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.",
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -378,10 +821,12 @@
               "enabledTools": [],
               "label": "Open-Meteo Weather",
               "priceAlgo": 0.01,
+              "requestMethod": null,
               "role": null,
               "serviceKind": "weather",
               "serviceUrl": "https://api.open-meteo.com/v1/forecast",
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -398,10 +843,12 @@
               "enabledTools": [],
               "label": "DuckDuckGo Search",
               "priceAlgo": 0.01,
+              "requestMethod": null,
               "role": null,
               "serviceKind": "search",
               "serviceUrl": "https://api.duckduckgo.com/",
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -418,10 +865,12 @@
               "enabledTools": [],
               "label": "Response Agent",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": "responder",
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": "Take the upstream tool result and produce a crisp HTTP response body.",
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -438,10 +887,12 @@
               "enabledTools": [],
               "label": "HTTP Response",
               "priceAlgo": 0.0,
+              "requestMethod": null,
               "role": null,
               "serviceKind": null,
               "serviceUrl": null,
               "systemPrompt": null,
+              "testRequestBody": null,
               "treasuryAddress": null,
               "upstreamX402": false
             },
@@ -462,6 +913,7 @@
         "run_66f9844d85": {
           "logs": [
             {
+              "details": {},
               "eventType": "progress",
               "level": "warning",
               "message": "Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
@@ -471,6 +923,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "start",
               "level": "info",
               "message": "Routing Agent received the workflow task.",
@@ -480,6 +933,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "output",
               "level": "info",
               "message": "Routing Agent planned the workflow path.",
@@ -489,6 +943,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Trigger node activated from incoming API request.",
@@ -498,6 +953,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "progress",
               "level": "info",
               "message": "API Open-Meteo Weather is wired as the weather tool.",
@@ -507,6 +963,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "progress",
               "level": "info",
               "message": "API DuckDuckGo Search is wired as the search tool.",
@@ -516,6 +973,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "start",
               "level": "info",
               "message": "Calling DuckDuckGo Search with native ALGO payment of 0.010 ALGO.",
@@ -525,6 +983,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "output",
               "level": "info",
               "message": "DuckDuckGo Search returned output.",
@@ -534,6 +993,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "DuckDuckGo Search completed successfully.",
@@ -543,6 +1003,7 @@
               "txId": "DKQCYPZADJV5QNLRWDQ3GV3T2EHUQ3OL362MQNYZ4MST45VHXZDQ"
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Routing Agent finished analysis.",
@@ -552,6 +1013,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "start",
               "level": "info",
               "message": "Response Agent is preparing the final response.",
@@ -561,6 +1023,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "output",
               "level": "info",
               "message": "Response Agent produced the final response.",
@@ -570,6 +1033,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Response Agent delivered the response back to the caller.",
@@ -579,6 +1043,7 @@
               "txId": null
             },
             {
+              "details": {},
               "eventType": "done",
               "level": "success",
               "message": "Pipeline reached the End node and returned an HTTP response.",
@@ -614,6 +1079,678 @@
           "address": "75LQD5DEFB7Z4JZ6AMHLSN7K3YPY7UX6ADZO3Y6S4PQNEYTJFC4FKGIN3Y",
           "node_id": "service-weather",
           "private_key": "FMdXBw/QW3MkVJCbXcFWRMIUfVyf4aaE9d9D4IAqg6T/VwH0ZCh/nic+Aw65N+reH4/S/gDy7ePS4+DSYmkouA=="
+        }
+      }
+    },
+    "pm_f37f2b55": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trigger-analyzer",
+            "label": "Start",
+            "source": "trigger-1",
+            "target": "agent-analyzer",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-analyzer-weather",
+            "label": "Weather tool",
+            "source": "agent-analyzer",
+            "target": "service-weather",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-search",
+            "label": "Search tool",
+            "source": "agent-analyzer",
+            "target": "service-search",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-analyzer-responder",
+            "label": "Analysis context",
+            "source": "agent-analyzer",
+            "target": "agent-responder",
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-responder-end",
+            "label": "Final output",
+            "source": "agent-responder",
+            "target": "end-1",
+            "wireType": "a2a"
+          }
+        ],
+        "name": "Market Analyzer",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "description": "Incoming HTTP request kicks off the workflow.",
+              "enabledTools": [],
+              "label": "HTTP Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1",
+            "position": {
+              "x": 40.0,
+              "y": 200.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "description": "Chooses the right connected API tool for the incoming prompt.",
+              "enabledTools": [
+                "weather",
+                "search",
+                "custom"
+              ],
+              "label": "Routing Agent",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": "analyzer",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "You are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-analyzer",
+            "position": {
+              "x": 320.0,
+              "y": 120.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-weather",
+            "position": {
+              "x": 650.0,
+              "y": 70.0
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-search",
+            "position": {
+              "x": 660.0,
+              "y": 250.0
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "description": "Formats the final HTTP response for the caller.",
+              "enabledTools": [],
+              "label": "Response Agent",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": "responder",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Take the upstream tool result and produce a crisp HTTP response body.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-responder",
+            "position": {
+              "x": 960.0,
+              "y": 170.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "description": "Shows and returns the final API output to the caller.",
+              "enabledTools": [],
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1240.0,
+              "y": 200.0
+            },
+            "type": "end"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_f37f2b55/run",
+      "payment_wallet": "V2UVSBOHXERFC5SZIMMG6KEWOPCCD2RFFEHYTRUX5LE34FM5KZBK36JFAA",
+      "pipeline_id": "pm_f37f2b55",
+      "price_algo": 0.01,
+      "runs": {
+        "run_093a1023c9": {
+          "logs": [
+            {
+              "details": {},
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T12:18:52.625487",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Routing Agent received the workflow task.",
+              "nodeId": "agent-analyzer",
+              "output": "What is kfc?",
+              "timestamp": "2026-04-04T12:18:52.625549",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Routing Agent planned the workflow path.",
+              "nodeId": "agent-analyzer",
+              "output": "The user is asking a factual 'what is' question, which requires a web-style lookup. The search tool is suitable for this purpose.",
+              "timestamp": "2026-04-04T12:18:54.841325",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-04-04T12:18:54.841345",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "progress",
+              "level": "info",
+              "message": "API Open-Meteo Weather is wired as the weather tool.",
+              "nodeId": "service-weather",
+              "output": null,
+              "timestamp": "2026-04-04T12:18:54.841356",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "progress",
+              "level": "info",
+              "message": "API DuckDuckGo Search is wired as the search tool.",
+              "nodeId": "service-search",
+              "output": null,
+              "timestamp": "2026-04-04T12:18:54.841363",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling DuckDuckGo Search with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "service-search",
+              "output": null,
+              "timestamp": "2026-04-04T12:18:54.841421",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "DuckDuckGo Search returned output.",
+              "nodeId": "service-search",
+              "output": "KFC Corporation, doing business as KFC, is an American multinational fast food restaurant chain specializing in Southern fried chicken and chicken sandwiches. Headquartered in Louisville, Kentucky, it is the world's second-largest restaurant chain after McDonald's, with over 31,980 locations globally in 150 countries, as of September 2025. The chain is a subsidiary of Yum! Brands, a restaurant company that also owns the Pizza Hut and Taco Bell chains. KFC was founded by Colonel Harland Sanders, an entrepreneur who began selling fried chicken from his roadside restaurant in Corbin, Kentucky, during the Great Depression. Sanders identified the potential of the restaurant-franchising concept, and the first \"Kentucky Fried Chicken\" franchise opened in South Salt Lake, Utah, in 1952. KFC popularized chicken in the fast-food industry, diversifying the market by challenging the established dominance of the hamburger.",
+              "timestamp": "2026-04-04T12:19:06.874023",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "DuckDuckGo Search completed successfully.",
+              "nodeId": "service-search",
+              "output": "Payment settled on algorand-testnet with transaction LTQYVQCWT2DKRAGSFBIW7YW3ZENIVL3526SQMNG77ZECUW3QQH3A.",
+              "timestamp": "2026-04-04T12:19:06.874042",
+              "txId": "LTQYVQCWT2DKRAGSFBIW7YW3ZENIVL3526SQMNG77ZECUW3QQH3A"
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Routing Agent finished analysis.",
+              "nodeId": "agent-analyzer",
+              "output": "The user is asking a factual 'what is' question, which requires a web-style lookup. The search tool is suitable for this purpose.\n\nSearching for 'What is kfc?' to retrieve a factual definition or description.",
+              "timestamp": "2026-04-04T12:19:06.874048",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Response Agent is preparing the final response.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T12:19:10.441233",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Response Agent produced the final response.",
+              "nodeId": "agent-responder",
+              "output": "KFC (Kentucky Fried Chicken) is an American multinational fast food restaurant chain specializing in Southern fried chicken. It is the world's second-largest restaurant chain, founded by Colonel Harland Sanders, and is a subsidiary of Yum! Brands.",
+              "timestamp": "2026-04-04T12:19:10.441249",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Response Agent delivered the response back to the caller.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T12:19:10.441253",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "KFC (Kentucky Fried Chicken) is an American multinational fast food restaurant chain specializing in Southern fried chicken. It is the world's second-largest restaurant chain, founded by Colonel Harland Sanders, and is a subsidiary of Yum! Brands.",
+              "timestamp": "2026-04-04T12:19:10.441259",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_f37f2b55",
+          "result": "KFC (Kentucky Fried Chicken) is an American multinational fast food restaurant chain specializing in Southern fried chicken. It is the world's second-largest restaurant chain, founded by Colonel Harland Sanders, and is a subsidiary of Yum! Brands.",
+          "runId": "run_093a1023c9",
+          "settlementMode": "demo"
+        },
+        "run_e152a25b1c": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T13:18:24.371837",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Routing Agent received the workflow task.",
+              "nodeId": "agent-analyzer",
+              "output": "What is the weather of Africa?",
+              "timestamp": "2026-04-04T13:18:24.372122",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Routing Agent planned the workflow path.",
+              "nodeId": "agent-analyzer",
+              "output": "The user's query explicitly asks for weather information, which directly maps to the dedicated weather API.",
+              "timestamp": "2026-04-04T13:18:42.476464",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "What is the weather of Africa?"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-04-04T13:18:42.476509",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "service-weather",
+              "output": null,
+              "timestamp": "2026-04-04T13:18:42.476552",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "ZOBY73YNVPXLWIQI5A5SX3C4WKRMALRUVY2H6BXO6OYU6NT6N3VBTT72AI",
+                "payer": "V2UVSBOHXERFC5SZIMMG6KEWOPCCD2RFFEHYTRUX5LE34FM5KZBK36JFAA",
+                "scheme": "native_algo"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Open-Meteo Weather requested native ALGO settlement before execution.",
+              "nodeId": "service-weather",
+              "output": null,
+              "timestamp": "2026-04-04T13:18:54.554451",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "service-weather",
+              "output": "Africa: 33.2\u00b0C, feels like 34.8\u00b0C, wind 9.7 km/h, weather code 3.",
+              "timestamp": "2026-04-04T13:18:54.554487",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "ZOBY73YNVPXLWIQI5A5SX3C4WKRMALRUVY2H6BXO6OYU6NT6N3VBTT72AI",
+                "payer": "V2UVSBOHXERFC5SZIMMG6KEWOPCCD2RFFEHYTRUX5LE34FM5KZBK36JFAA",
+                "scheme": "native_algo",
+                "tx_id": "WLWQUOZII5BPCNX47JLE2ZDIPZCIVV3TXWRHUR27Q6ELAPXJGFRA"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "service-weather",
+              "output": "Payment settled on algorand-testnet with transaction WLWQUOZII5BPCNX47JLE2ZDIPZCIVV3TXWRHUR27Q6ELAPXJGFRA.",
+              "timestamp": "2026-04-04T13:18:54.554550",
+              "txId": "WLWQUOZII5BPCNX47JLE2ZDIPZCIVV3TXWRHUR27Q6ELAPXJGFRA"
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Routing Agent finished analysis.",
+              "nodeId": "agent-analyzer",
+              "output": "The user's query explicitly asks for weather information, which directly maps to the dedicated weather API.\n\nThe weather API will be used to retrieve weather data for Africa.",
+              "timestamp": "2026-04-04T13:18:54.554603",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Response Agent is preparing the final response.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T13:18:56.718073",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Response Agent produced the final response.",
+              "nodeId": "agent-responder",
+              "output": "The weather in Africa is 33.2\u00b0C, feels like 34.8\u00b0C, with wind at 9.7 km/h.",
+              "timestamp": "2026-04-04T13:18:56.718087",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Response Agent delivered the response back to the caller.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T13:18:56.718091",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "The weather in Africa is 33.2\u00b0C, feels like 34.8\u00b0C, with wind at 9.7 km/h.",
+              "timestamp": "2026-04-04T13:18:56.718099",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_f37f2b55",
+          "result": "The weather in Africa is 33.2\u00b0C, feels like 34.8\u00b0C, with wind at 9.7 km/h.",
+          "runId": "run_e152a25b1c",
+          "settlementMode": "demo"
+        },
+        "run_f0f56d858f": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T13:23:00.034762",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Routing Agent received the workflow task.",
+              "nodeId": "agent-analyzer",
+              "output": "What is the weather of Africa?",
+              "timestamp": "2026-04-04T13:23:00.034831",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Routing Agent planned the workflow path.",
+              "nodeId": "agent-analyzer",
+              "output": "The user is asking a weather-related question, so the weather API is the most appropriate tool.",
+              "timestamp": "2026-04-04T13:23:02.057023",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "What is the weather of Africa?"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-04-04T13:23:02.057048",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "service-weather",
+              "output": null,
+              "timestamp": "2026-04-04T13:23:02.057074",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "ZOBY73YNVPXLWIQI5A5SX3C4WKRMALRUVY2H6BXO6OYU6NT6N3VBTT72AI",
+                "payer": "V2UVSBOHXERFC5SZIMMG6KEWOPCCD2RFFEHYTRUX5LE34FM5KZBK36JFAA",
+                "scheme": "native_algo"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Open-Meteo Weather requested native ALGO settlement before execution.",
+              "nodeId": "service-weather",
+              "output": null,
+              "timestamp": "2026-04-04T13:23:10.881222",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "service-weather",
+              "output": "Africa: 33.2\u00b0C, feels like 34.8\u00b0C, wind 9.7 km/h, weather code 3.",
+              "timestamp": "2026-04-04T13:23:10.881250",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "ZOBY73YNVPXLWIQI5A5SX3C4WKRMALRUVY2H6BXO6OYU6NT6N3VBTT72AI",
+                "payer": "V2UVSBOHXERFC5SZIMMG6KEWOPCCD2RFFEHYTRUX5LE34FM5KZBK36JFAA",
+                "scheme": "native_algo",
+                "tx_id": "Q2DDCWTOUNHVV5UGQMLTE65XNR64JZHXBSEBCZCXQCLJZ4FRUHMA"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "service-weather",
+              "output": "Payment settled on algorand-testnet with transaction Q2DDCWTOUNHVV5UGQMLTE65XNR64JZHXBSEBCZCXQCLJZ4FRUHMA.",
+              "timestamp": "2026-04-04T13:23:10.881268",
+              "txId": "Q2DDCWTOUNHVV5UGQMLTE65XNR64JZHXBSEBCZCXQCLJZ4FRUHMA"
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Routing Agent finished analysis.",
+              "nodeId": "agent-analyzer",
+              "output": "The user is asking a weather-related question, so the weather API is the most appropriate tool.\n\nUse the weather tool to find out the weather of Africa.",
+              "timestamp": "2026-04-04T13:23:10.881292",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Response Agent is preparing the final response.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T13:23:13.709540",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Response Agent produced the final response.",
+              "nodeId": "agent-responder",
+              "output": "The weather in Africa is 33.2\u00b0C, feels like 34.8\u00b0C, with wind at 9.7 km/h.",
+              "timestamp": "2026-04-04T13:23:13.709567",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Response Agent delivered the response back to the caller.",
+              "nodeId": "agent-responder",
+              "output": null,
+              "timestamp": "2026-04-04T13:23:13.709578",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "The weather in Africa is 33.2\u00b0C, feels like 34.8\u00b0C, with wind at 9.7 km/h.",
+              "timestamp": "2026-04-04T13:23:13.709599",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_f37f2b55",
+          "result": "The weather in Africa is 33.2\u00b0C, feels like 34.8\u00b0C, with wind at 9.7 km/h.",
+          "runId": "run_f0f56d858f",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-analyzer": {
+          "address": "V2UVSBOHXERFC5SZIMMG6KEWOPCCD2RFFEHYTRUX5LE34FM5KZBK36JFAA",
+          "node_id": "agent-analyzer",
+          "private_key": "ID8M4XhzidAtizz44hfgPUlsewQCRWEMKf8W7UmpVxyuqVkFx7kiUXZZQxhvKJZzxCHqJSkPicaX6sm+FZ1WQg=="
+        },
+        "agent-responder": {
+          "address": "GEGCJTHG2D3MOQR2OJ3FEZXU2YYK3C4TT72IX6OB4ZMJDDWCXQCBSVXLCY",
+          "node_id": "agent-responder",
+          "private_key": "2lom8++wOKfqn0TLEsB4RPK4n6QmVHXr5sfdfSEQrmExDCTM5tD2x0I6cnZSZvTWMK2Lk5/0i/nB5liRjsK8BA=="
+        },
+        "service-search": {
+          "address": "XNFIYETCD4XLRWMNGXNE5KKATRZAKCWZTPVU72XEASFPERDKU6DACIX4MY",
+          "node_id": "service-search",
+          "private_key": "eC9EyvvNINNHz9aC6rTTNNScSwZTkP3fvBu/q8S5vvO7SowSYh8uuNmNNdpOqUCccgUK2ZvrT+rkBIryRGqnhg=="
+        },
+        "service-weather": {
+          "address": "ZOBY73YNVPXLWIQI5A5SX3C4WKRMALRUVY2H6BXO6OYU6NT6N3VBTT72AI",
+          "node_id": "service-weather",
+          "private_key": "NLBgoE+3Fdz4V2IEArOS2Y8LnXLS97KXYIiBdZV7zYPLg4/vDavuuyII6Dsr7FyyosAuNK40fwbu87FPNn5u6g=="
         }
       }
     }

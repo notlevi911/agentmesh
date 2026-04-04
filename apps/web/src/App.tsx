@@ -15,7 +15,15 @@ import {
   type ReactFlowInstance,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
-import { deployPipeline, getBalances, getFundIntent, runPipeline } from "./api/client";
+import {
+  deployPipeline,
+  getBalances,
+  getFundIntent,
+  getPipelineDetail,
+  listPipelines,
+  preflightPipelinePayment,
+  runPipeline,
+} from "./api/client";
 import { createWire, getDefaultNodeData, initialEdges, initialNodes } from "./canvas/initialGraph";
 import { NodePalette } from "./components/NodePalette";
 import { WireEdge } from "./edges/WireEdge";
@@ -35,6 +43,7 @@ import type {
   FundIntentResponse,
   LogEntry,
   NodeKind,
+  PipelineSummary,
   PipelineNodeData,
   WireKind,
 } from "./types/pipeline";
@@ -227,6 +236,8 @@ function BuilderApp() {
   const [pending, setPending] = useState(false);
   const [runPending, setRunPending] = useState(false);
   const [error, setError] = useState<string>();
+  const [deployedWorkflows, setDeployedWorkflows] = useState<PipelineSummary[]>([]);
+  const [flowsPending, setFlowsPending] = useState(false);
   const playbackIdRef = useRef(0);
 
   const selectedNode = useMemo(
@@ -517,6 +528,91 @@ function BuilderApp() {
     setLeftPanel("palette");
   }, [setEdges, setNodes]);
 
+  const refreshDeployedWorkflows = useCallback(async () => {
+    setFlowsPending(true);
+    try {
+      const items = await listPipelines();
+      setDeployedWorkflows(items);
+    } catch {
+      setDeployedWorkflows([]);
+    } finally {
+      setFlowsPending(false);
+    }
+  }, []);
+
+  const handleLoadDeployedWorkflow = useCallback(
+    async (pipelineId: string) => {
+      setFlowsPending(true);
+      setError(undefined);
+
+      try {
+        const detail = await getPipelineDetail(pipelineId);
+
+        const hydratedNodes: BuilderNode[] = detail.definition.nodes.map((node) => {
+          const deployedNode = detail.nodes.find((candidate) => candidate.id === node.id);
+          const nodeData: PipelineNodeData = {
+            ...(node.data as PipelineNodeData),
+            kind: node.type,
+            status: "live",
+            walletAddress: deployedNode?.walletAddress,
+            balanceAlgo: deployedNode?.balanceAlgo,
+            executionState: "idle",
+            executionNote: undefined,
+          };
+
+          return {
+            id: node.id,
+            type: node.type,
+            position: node.position,
+            data: nodeData,
+          };
+        });
+
+        const hydratedEdges: BuilderEdge[] = detail.definition.edges.map((edge) => ({
+          id: edge.id,
+          source: edge.source,
+          target: edge.target,
+          type: "wire",
+          data: {
+            wireType: edge.wireType,
+            label: edge.label,
+          },
+        }));
+
+        setNodes(hydratedNodes);
+        setEdges(hydratedEdges);
+        setPipelineName(detail.definition.name);
+        setDeployment({
+          pipelineId: detail.pipelineId,
+          status: "live",
+          endpoint: detail.endpoint,
+          priceAlgo: detail.priceAlgo,
+          network: detail.network,
+          paymentWallet: detail.paymentWallet,
+          loraUrl: detail.loraUrl,
+          nodes: detail.nodes,
+          logs: [],
+        });
+        const triggerNode = hydratedNodes.find((node) => node.type === "trigger");
+        setRuntimeQuery(triggerNode?.data.testRequestBody ?? "What is the weather of Africa?");
+        setSelectedNodeId(hydratedNodes.find((node) => node.type === "agent")?.id ?? hydratedNodes[0]?.id ?? null);
+        setSelectedEdgeId(null);
+        setLogs([]);
+        setRunResult(undefined);
+        setMode("studio");
+        setLeftPanel("flows");
+        setLeftOpen(true);
+        setRightOpen(false);
+        setBottomOpen(false);
+      } catch (loadError) {
+        setError(loadError instanceof Error ? loadError.message : "Unable to load deployed workflow.");
+      } finally {
+        setFlowsPending(false);
+      }
+    },
+    [setEdges, setNodes],
+  );
+
   async function handleDeploy() {
     setPending(true);
     setError(undefined);
@@ -551,6 +647,7 @@ function BuilderApp() {
       setMode("studio");
       setBottomOpen(true);
       setRightOpen(false);
+      refreshDeployedWorkflows();
     } catch (deployError) {
       setError(deployError instanceof Error ? deployError.message : "Unable to deploy pipeline.");
     } finally {
@@ -567,14 +664,7 @@ function BuilderApp() {
     setRunPending(true);
     setError(undefined);
     setBottomOpen(true);
-    setLogs([
-      {
-        timestamp: new Date().toISOString(),
-        level: "info",
-        message: "Starting workflow execution...",
-        eventType: "start",
-      },
-    ]);
+    setLogs([]);
     resetExecutionState();
 
     try {
@@ -583,16 +673,66 @@ function BuilderApp() {
         triggerNode?.data.testRequestBody ?? runtimeQuery,
         triggerNode?.data.requestMethod,
       );
-      const response = await runPipeline(deployment.pipelineId, {
+      const requestPayload = {
         query: requestQuery,
-      });
-      await playRunFeedback(response.logs, response.result);
+      };
+      const preflight = await preflightPipelinePayment(deployment.pipelineId, requestPayload);
+      const preflightLogs: LogEntry[] = [
+        {
+          timestamp: new Date().toISOString(),
+          level: preflight.paymentRequired ? "warning" : "info",
+          message: preflight.paymentRequired
+            ? "402 Payment Required returned by the pipeline endpoint."
+            : "Pipeline preflight completed.",
+          eventType: "progress",
+          details: {
+            status: preflight.status,
+            facilitator: preflight.facilitator ?? preflight.body.facilitator,
+            wallet: preflight.body.wallet,
+            amount_algo: preflight.body.amountAlgo.toFixed(3),
+            network: preflight.body.network,
+          },
+          output: preflight.body.message,
+        },
+        {
+          timestamp: new Date().toISOString(),
+          level: "info",
+          message: "Studio is continuing in local test mode after the 402 preflight.",
+          eventType: "progress",
+          details: {
+            mode: "studio_test",
+            demo_bypass: true,
+          },
+        },
+      ];
+
+      const response = await runPipeline(deployment.pipelineId, requestPayload);
+      await playRunFeedback([...preflightLogs, ...response.logs], response.result);
     } catch (runError) {
-      setError(runError instanceof Error ? runError.message : "Pipeline run failed.");
+      const message = runError instanceof Error ? runError.message : "Pipeline run failed.";
+      setError(message);
+      setLogs((currentLogs) => [
+        ...currentLogs,
+        {
+          timestamp: new Date().toISOString(),
+          level: "error",
+          message: "Runtime execution aborted.",
+          eventType: "error",
+          output: message,
+        },
+      ]);
     } finally {
       setRunPending(false);
     }
   }
+
+  useEffect(() => {
+    if (!leftOpen || leftPanel !== "flows") {
+      return;
+    }
+
+    refreshDeployedWorkflows();
+  }, [leftOpen, leftPanel, refreshDeployedWorkflows]);
 
   useEffect(() => {
     if (!deployment) {
@@ -1026,19 +1166,28 @@ function BuilderApp() {
             ) : (
               <div className="drawer-placeholder studio-panel panel-pad">
                 <span className="eyebrow">Flows</span>
-                <h2>Workflow snapshots</h2>
-                <div className="snapshot-card">
-                  <strong>Market Analyzer</strong>
-                  <span>Research Agent to tools to responder</span>
-                </div>
-                <div className="snapshot-card">
-                  <strong>Weather Lookup</strong>
-                  <span>Prompt weather, return forecast summary</span>
-                </div>
-                <div className="snapshot-card">
-                  <strong>Search Explainer</strong>
-                  <span>Run search, send result into final formatter</span>
-                </div>
+                <h2>Deployed workflows</h2>
+                {flowsPending ? <p className="empty-state">Loading deployed workflows...</p> : null}
+                {!flowsPending && deployedWorkflows.length === 0 ? (
+                  <p className="empty-state">No deployed workflows yet. Deploy one and it will appear here.</p>
+                ) : null}
+                {!flowsPending
+                  ? deployedWorkflows.map((workflow) => (
+                      <button
+                        key={workflow.pipelineId}
+                        className="snapshot-card snapshot-card-button"
+                        onClick={() => handleLoadDeployedWorkflow(workflow.pipelineId)}
+                        type="button"
+                      >
+                        <strong>{workflow.name}</strong>
+                        <span>{workflow.pipelineId}</span>
+                        <span>
+                          {workflow.nodeCount} nodes • {workflow.wireCount} wires • {workflow.runCount} runs
+                        </span>
+                        <span>{workflow.priceAlgo.toFixed(3)} ALGO • {workflow.network}</span>
+                      </button>
+                    ))
+                  : null}
               </div>
             )}
           </section>

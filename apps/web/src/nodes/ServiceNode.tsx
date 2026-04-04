@@ -17,17 +17,18 @@ function statusSymbol(state?: PipelineNodeData["executionState"]) {
 export function ServiceNode({ data, type }: NodeProps) {
   const payload = data as unknown as PipelineNodeData;
   const isApi = type === "api";
+  const executionState = payload.executionState ?? "idle";
 
   return (
-    <div className="node-shell node-service">
+    <div className={`node-shell node-service node-state-${executionState}`}>
       <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
       <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">{isApi ? "API" : "Service"}</div>
         <div className="node-chip-row">
           <span className="node-chip">{payload.serviceKind ?? "custom"}</span>
-          <span className={`node-status node-status-${payload.executionState ?? "idle"}`}>
-            {statusSymbol(payload.executionState)}
+          <span className={`node-status node-status-${executionState}`}>
+            {statusSymbol(executionState)}
           </span>
         </div>
       </div>

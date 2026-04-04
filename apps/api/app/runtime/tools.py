@@ -20,8 +20,13 @@ class ToolResult:
     raw: Dict
     payment_tx_id: Optional[str] = None
     payment_payer: Optional[str] = None
+    payment_payee: Optional[str] = None
     payment_network: Optional[str] = None
     paid_via_x402: bool = False
+    payment_amount_algo: Optional[float] = None
+    payment_amount_asset: Optional[str] = None
+    payment_asset: Optional[str] = None
+    payment_requirement: Optional[Dict] = None
 
 
 class ToolRuntime:
@@ -190,6 +195,13 @@ class ToolRuntime:
             node_id=node.id,
         )
 
+        payment_requirement = self._fetch_x402_requirement(
+            endpoint=endpoint,
+            query=query,
+            payee_address=node.data.treasuryAddress or payee_wallet.address,
+            amount_asset=int(round((node.data.priceAlgo or 0) * 1_000_000)),
+        )
+
         session = create_x402_session(payer_wallet, algod_url=self.algorand.algod_address)
         try:
             response = session.get(endpoint, params={"query": query}, timeout=30)
@@ -204,6 +216,10 @@ class ToolRuntime:
             summary=payload.get("summary", "x402 API call completed."),
             raw=payload.get("raw", {}),
             paid_via_x402=settlement is not None,
+            payment_payee=node.data.treasuryAddress or payee_wallet.address,
+            payment_requirement=payment_requirement,
+            payment_amount_asset=str(int(round((node.data.priceAlgo or 0) * 1_000_000))),
+            payment_asset=str(self.asset_id),
         )
 
         if settlement:
@@ -240,7 +256,9 @@ class ToolRuntime:
         result = self.call_api_node_direct(node, query)
         result.payment_tx_id = txid
         result.payment_payer = payer_wallet.address
+        result.payment_payee = payee_wallet.address
         result.payment_network = "algorand-testnet"
+        result.payment_amount_algo = amount_algo
         return result
 
     def _build_api_request(self, url: str, query: str, kind: str) -> Tuple[str, Dict]:
@@ -366,3 +384,29 @@ class ToolRuntime:
             elif "Topics" in topic:
                 items.extend(self._flatten_related_topics(topic["Topics"]))
         return items
+
+    def _fetch_x402_requirement(
+        self,
+        endpoint: str,
+        query: str,
+        payee_address: str,
+        amount_asset: int,
+    ) -> Dict:
+        with httpx.Client(timeout=15.0, headers={"User-Agent": "AgentMesh/0.1"}) as client:
+            response = client.get(endpoint, params={"query": query}, follow_redirects=True)
+
+        header_value = response.headers.get("payment-required") or response.headers.get("PAYMENT-REQUIRED")
+        encoded_requirement = response.headers.get("x-payment-required") or response.headers.get("PAYMENT-REQUEST")
+
+        return {
+            "status": response.status_code,
+            "phase": "payment_required" if response.status_code == 402 else "preflight",
+            "scheme": "x402 exact",
+            "network": "algorand-testnet",
+            "asset": "USDC",
+            "asset_id": str(self.asset_id),
+            "amount_asset": str(amount_asset),
+            "pay_to": payee_address,
+            "endpoint": endpoint,
+            "header_present": bool(header_value or encoded_requirement),
+        }
