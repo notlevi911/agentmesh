@@ -58,9 +58,15 @@ class PipelineOrchestrator:
                     RuntimeLog(
                         level="success",
                         nodeId=node.id,
+                        eventType="done",
                         message="{label} wallet created: {address}".format(
                             label=node.data.label,
                             address=wallet.address,
+                        ),
+                        output=(
+                            "Treasury wallet: {address}".format(address=node.data.treasuryAddress)
+                            if node.data.treasuryAddress
+                            else None
                         ),
                     )
                 )
@@ -81,6 +87,7 @@ class PipelineOrchestrator:
         logs.append(
             RuntimeLog(
                 level="success",
+                eventType="done",
                 message="Pipeline endpoint reserved at {endpoint}".format(endpoint=endpoint),
             )
         )
@@ -170,4 +177,3 @@ class PipelineOrchestrator:
                 return node
 
         return None
-

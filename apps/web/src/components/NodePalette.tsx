@@ -34,18 +34,24 @@ const sections: PaletteSection[] = [
     ],
   },
   {
-    title: "Services",
+    title: "APIs",
     items: [
       {
-        kind: "service",
-        title: "Weather API",
-        subtitle: "Open-Meteo weather lookup.",
+        kind: "api",
+        title: "API",
+        subtitle: "Generic HTTP endpoint with optional x402 pricing.",
         dotClass: "dot-service",
       },
       {
-        kind: "service",
+        kind: "api",
+        title: "Weather API",
+        subtitle: "Open-Meteo weather lookup preset.",
+        dotClass: "dot-service",
+      },
+      {
+        kind: "api",
         title: "Search API",
-        subtitle: "DuckDuckGo instant answers.",
+        subtitle: "DuckDuckGo instant answers preset.",
         dotClass: "dot-service",
       },
     ],

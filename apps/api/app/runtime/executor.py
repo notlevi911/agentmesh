@@ -2,14 +2,16 @@ from collections import defaultdict, deque
 from typing import Dict, List, Optional
 from uuid import uuid4
 
+from app.llm.gemini import GeminiPlanner
 from app.models.pipeline import DeployPipelineRequest, PipelineNode, RunPipelineResponse, RuntimeLog
-from app.runtime.tools import ToolRuntime
+from app.runtime.tools import ToolResult, ToolRuntime
 from app.storage.repository import PipelineRecord
 
 
 class RuntimeExecutor:
     def __init__(self) -> None:
         self.tools = ToolRuntime()
+        self.gemini = GeminiPlanner()
 
     def execute(self, record: PipelineRecord, query: str, settlement_mode: str) -> RunPipelineResponse:
         ordered_nodes = self._topological_nodes(record.definition)
@@ -20,6 +22,7 @@ class RuntimeExecutor:
                 RuntimeLog(
                     level="warning",
                     message="Demo payment accepted locally. Replace with GoPlausible facilitator verification before production.",
+                    eventType="progress",
                 )
             )
         else:
@@ -27,143 +30,257 @@ class RuntimeExecutor:
                 RuntimeLog(
                     level="success",
                     message="Payment response header received. Pipeline execution has started.",
+                    eventType="progress",
                 )
             )
 
         responder = self._agent_by_role(record.definition, "responder")
         analyzer = self._agent_by_role(record.definition, "analyzer") or self._first_agent(record.definition)
-        services = self._service_nodes(record.definition)
-        available_service_kinds = [node.data.serviceKind for node in services if node.data.serviceKind]
+        connected_tools = self._connected_tool_nodes(record.definition, analyzer.id if analyzer else None)
         allowed_tools = analyzer.data.enabledTools if analyzer and analyzer.data.enabledTools else []
-        selected_tools = self.tools.choose_tools(query, available_service_kinds, allowed_tools)
-        tool_results = []
+
+        selected_tools: List[str] = []
+        analyzer_analysis = ""
+        handoff_text = ""
+
+        if analyzer:
+            self._append_log(
+                logs,
+                level="start",
+                message="{label} received the workflow task.".format(label=analyzer.data.label),
+                node_id=analyzer.id,
+                output=query,
+            )
+
+        if analyzer and self.gemini.enabled:
+            try:
+                plan = self.gemini.choose_tools(
+                    query=query,
+                    agent_prompt=analyzer.data.systemPrompt or "",
+                    available_tools=[
+                        {
+                            "id": node.id,
+                            "label": node.data.label,
+                            "kind": node.data.serviceKind or "custom",
+                            "url": node.data.serviceUrl or "",
+                        }
+                        for node in connected_tools
+                    ],
+                    allowed_tools=allowed_tools,
+                )
+                selected_tools = plan["selected_tools"]
+                analyzer_analysis = plan["analysis"] or "Gemini planned the best tool path for the request."
+                handoff_text = plan["handoff"] or "Analyzer prepared a concise handoff for the next node."
+                self._append_log(
+                    logs,
+                    level="output",
+                    message="{label} planned the workflow path.".format(label=analyzer.data.label),
+                    node_id=analyzer.id,
+                    output=analyzer_analysis,
+                )
+            except Exception as error:
+                self._append_log(
+                    logs,
+                    level="warning",
+                    message="Gemini planning failed, falling back to heuristic routing.",
+                    output=str(error),
+                )
+
+        if not selected_tools:
+            selected_tools = self.tools.choose_tools(
+                query,
+                [
+                    {
+                        "id": node.id,
+                        "label": node.data.label,
+                        "kind": node.data.serviceKind or "custom",
+                        "url": node.data.serviceUrl or "",
+                    }
+                    for node in connected_tools
+                ],
+                allowed_tools,
+            )
+            if analyzer:
+                analyzer_analysis = (
+                    "Fallback router selected: {tools}.".format(
+                        tools=", ".join(
+                            [
+                                self._node_by_id(record.definition, tool_id).data.label
+                                for tool_id in selected_tools
+                                if self._node_by_id(record.definition, tool_id)
+                            ]
+                        )
+                    )
+                    if selected_tools
+                    else "Fallback router could not identify a usable tool."
+                )
+                handoff_text = "Analyzer gathered tool results and prepared context for the next node."
+                self._append_log(
+                    logs,
+                    level="output",
+                    message="{label} planned the workflow path.".format(label=analyzer.data.label),
+                    node_id=analyzer.id,
+                    output=analyzer_analysis,
+                )
 
         for node in ordered_nodes:
             if node.type == "trigger":
-                logs.append(
-                    RuntimeLog(
-                        level="info",
-                        message="Trigger node activated from incoming API request.",
-                        nodeId=node.id,
-                    )
+                self._append_log(
+                    logs,
+                    level="done",
+                    message="Trigger node activated from incoming API request.",
+                    node_id=node.id,
                 )
-            elif node.type == "agent":
-                message = "{label} is reasoning over the task.".format(label=node.data.label)
-                if node.data.role == "analyzer":
-                    message = "{label} received '{query}' and is preparing external lookups.".format(
+            elif node.type in {"service", "api"}:
+                self._append_log(
+                    logs,
+                    level="progress",
+                    message="{kind_label} {label} is wired as the {kind} tool.".format(
+                        kind_label="API" if node.type == "api" else "Service",
                         label=node.data.label,
-                        query=query,
-                    )
-                if node.data.role == "responder":
-                    message = "{label} is formatting the final response payload.".format(
-                        label=node.data.label
-                    )
-
-                logs.append(RuntimeLog(level="info", message=message, nodeId=node.id))
-            elif node.type == "service":
-                logs.append(
-                    RuntimeLog(
-                        level="info",
-                        message="Service {label} is available as a {kind} tool.".format(
-                            label=node.data.label,
-                            kind=node.data.serviceKind or "custom",
-                        ),
-                        nodeId=node.id,
-                    )
+                        kind=node.data.serviceKind or "custom",
+                    ),
+                    node_id=node.id,
                 )
-            elif node.type == "end":
-                logs.append(
-                    RuntimeLog(
-                        level="success",
-                        message="Pipeline reached the End node and returned an HTTP response.",
-                        nodeId=node.id,
-                    )
+
+        tool_results: List[ToolResult] = []
+        for tool_id in selected_tools:
+            service_node = self._node_by_id(record.definition, tool_id)
+            if service_node is None or service_node.type not in {"service", "api"}:
+                continue
+
+            if service_node.data.upstreamX402:
+                call_phrase = "Calling {label} as an upstream x402 API.".format(
+                    label=service_node.data.label
+                )
+            elif (service_node.data.priceAlgo or 0) > 0:
+                call_phrase = "Calling {label} over x402 for {price:.3f} ALGO.".format(
+                    label=service_node.data.label,
+                    price=service_node.data.priceAlgo or 0,
+                )
+            else:
+                call_phrase = "Calling {label} as a free API.".format(label=service_node.data.label)
+            self._append_log(logs, level="start", message=call_phrase, node_id=service_node.id)
+
+            try:
+                result = self.tools.call_api_node(service_node, query)
+                tool_results.append(result)
+                self._append_log(
+                    logs,
+                    level="output",
+                    message="{label} returned output.".format(label=service_node.data.label),
+                    node_id=service_node.id,
+                    output=result.summary,
+                )
+                self._append_log(
+                    logs,
+                    level="done",
+                    message="{label} completed successfully.".format(label=service_node.data.label),
+                    node_id=service_node.id,
+                )
+            except Exception as error:
+                self._append_log(
+                    logs,
+                    level="error",
+                    message="{label} failed during execution.".format(label=service_node.data.label),
+                    node_id=service_node.id,
+                    output=str(error),
                 )
 
         if analyzer:
-            logs.append(
-                RuntimeLog(
-                    level="info",
-                    message="{label} selected tool path: {tools}.".format(
-                        label=analyzer.data.label,
-                        tools=", ".join(selected_tools) if selected_tools else "none",
-                    ),
-                    nodeId=analyzer.id,
+            analyzer_output = handoff_text or "Analyzer is handing the tool context to the next node."
+            if tool_results:
+                analyzer_output = "{analysis}\n\n{handoff}".format(
+                    analysis=analyzer_analysis or "Analyzer reviewed the external tool results.",
+                    handoff=handoff_text or "Prepared handoff for the next agent.",
                 )
+            self._append_log(
+                logs,
+                level="done",
+                message="{label} finished analysis.".format(label=analyzer.data.label),
+                node_id=analyzer.id,
+                output=analyzer_output,
             )
 
-        for tool_name in selected_tools:
-            service_node = self._service_by_kind(record.definition, tool_name)
-            if service_node is None:
-                continue
-
-            call_phrase = (
-                "Calling {label} over x402 for {price:.3f} ALGO."
-                if (service_node.data.priceAlgo or 0) > 0
-                else "Calling {label} as a free tool."
-            ).format(label=service_node.data.label, price=service_node.data.priceAlgo or 0)
-            logs.append(RuntimeLog(level="info", message=call_phrase, nodeId=service_node.id))
-
-            try:
-                result = (
-                    self.tools.weather_openmeteo(query)
-                    if tool_name == "weather"
-                    else self.tools.search_duckduckgo(query)
-                )
-                tool_results.append(result)
-                logs.append(
-                    RuntimeLog(
-                        level="success",
-                        message="{label} returned: {summary}".format(
-                            label=service_node.data.label,
-                            summary=result.summary,
-                        ),
-                        nodeId=service_node.id,
-                    )
-                )
-            except Exception as error:
-                logs.append(
-                    RuntimeLog(
-                        level="error",
-                        message="{label} failed: {error}".format(
-                            label=service_node.data.label,
-                            error=str(error),
-                        ),
-                        nodeId=service_node.id,
-                    )
-                )
-
-        if analyzer and tool_results:
-            logs.append(
-                RuntimeLog(
-                    level="success",
-                    message="{analyzer} used {count} tool result(s) and prepared handoff context.".format(
-                        analyzer=analyzer.data.label,
-                        count=len(tool_results),
-                    ),
-                    nodeId=analyzer.id,
-                )
-            )
+        final_result = self._compose_result(query, tool_results, responder, analyzer)
 
         if responder:
-            logs.append(
-                RuntimeLog(
-                    level="success",
-                    message="{label} delivered the final response back to the caller.".format(
-                        label=responder.data.label
-                    ),
-                    nodeId=responder.id,
-                )
+            self._append_log(
+                logs,
+                level="start",
+                message="{label} is preparing the final response.".format(label=responder.data.label),
+                node_id=responder.id,
+            )
+            self._append_log(
+                logs,
+                level="output",
+                message="{label} produced the final response.".format(label=responder.data.label),
+                node_id=responder.id,
+                output=final_result,
+            )
+            self._append_log(
+                logs,
+                level="done",
+                message="{label} delivered the response back to the caller.".format(
+                    label=responder.data.label
+                ),
+                node_id=responder.id,
             )
 
-        result = self._compose_result(query, tool_results, responder, analyzer)
+        end_node = self._end_node(record.definition)
+        if end_node:
+            self._append_log(
+                logs,
+                level="done",
+                message="Pipeline reached the End node and returned an HTTP response.",
+                node_id=end_node.id,
+                output=final_result,
+            )
 
         return RunPipelineResponse(
             runId="run_{token}".format(token=uuid4().hex[:10]),
             pipelineId=record.pipeline_id,
-            result=result,
+            result=final_result,
             settlementMode="demo" if settlement_mode == "demo" else "payment_response",
             logs=logs,
+        )
+
+    def _append_log(
+        self,
+        logs: List[RuntimeLog],
+        level: str,
+        message: str,
+        node_id: Optional[str] = None,
+        output: Optional[str] = None,
+    ) -> None:
+        event_type_map = {
+            "start": "start",
+            "progress": "progress",
+            "output": "output",
+            "done": "done",
+            "error": "error",
+            "warning": "progress",
+            "success": "done",
+            "info": "progress",
+        }
+        level_map = {
+            "start": "info",
+            "progress": "info",
+            "output": "info",
+            "done": "success",
+            "error": "error",
+            "warning": "warning",
+            "success": "success",
+            "info": "info",
+        }
+        logs.append(
+            RuntimeLog(
+                level=level_map[level],
+                message=message,
+                nodeId=node_id,
+                eventType=event_type_map[level],
+                output=output,
+            )
         )
 
     def _topological_nodes(self, definition: DeployPipelineRequest) -> List[PipelineNode]:
@@ -210,19 +327,44 @@ class RuntimeExecutor:
                 return node
         return None
 
-    def _service_nodes(self, definition: DeployPipelineRequest) -> List[PipelineNode]:
-        return [node for node in definition.nodes if node.type == "service"]
+    def _connected_tool_nodes(
+        self,
+        definition: DeployPipelineRequest,
+        source_node_id: Optional[str],
+    ) -> List[PipelineNode]:
+        if not source_node_id:
+            return self._tool_nodes(definition)
 
-    def _service_by_kind(self, definition: DeployPipelineRequest, kind: str) -> Optional[PipelineNode]:
+        node_map = {node.id: node for node in definition.nodes}
+        connected: List[PipelineNode] = []
+        for edge in definition.edges:
+            if edge.source != source_node_id:
+                continue
+            target = node_map.get(edge.target)
+            if target and target.type in {"service", "api"}:
+                connected.append(target)
+
+        return connected or self._tool_nodes(definition)
+
+    def _tool_nodes(self, definition: DeployPipelineRequest) -> List[PipelineNode]:
+        return [node for node in definition.nodes if node.type in {"service", "api"}]
+
+    def _node_by_id(self, definition: DeployPipelineRequest, node_id: str) -> Optional[PipelineNode]:
         for node in definition.nodes:
-            if node.type == "service" and node.data.serviceKind == kind:
+            if node.id == node_id:
+                return node
+        return None
+
+    def _end_node(self, definition: DeployPipelineRequest) -> Optional[PipelineNode]:
+        for node in definition.nodes:
+            if node.type == "end":
                 return node
         return None
 
     def _compose_result(
         self,
         query: str,
-        tool_results,
+        tool_results: List[ToolResult],
         responder: Optional[PipelineNode],
         analyzer: Optional[PipelineNode],
     ) -> str:
@@ -231,6 +373,17 @@ class RuntimeExecutor:
                 "AgentMesh ran the workflow for '{query}', but none of the configured tools returned "
                 "usable data."
             ).format(query=query)
+
+        if self.gemini.enabled:
+            try:
+                return self.gemini.summarize_final(
+                    query=query,
+                    analyzer_prompt=analyzer.data.systemPrompt if analyzer else "",
+                    responder_prompt=responder.data.systemPrompt if responder else "",
+                    tool_results=tool_results,
+                )
+            except Exception:
+                pass
 
         tool_lines = [f"{result.tool}: {result.summary}" for result in tool_results]
         agent_prefix = responder.data.label if responder else analyzer.data.label if analyzer else "Agent"

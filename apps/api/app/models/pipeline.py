@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Literal, Optional
 
 from pydantic import BaseModel, Field
 
-NodeKind = Literal["agent", "service", "trigger", "end"]
+NodeKind = Literal["agent", "api", "service", "trigger", "end"]
 WireKind = Literal["a2a", "x402", "algo_transfer"]
 LogLevel = Literal["info", "success", "warning", "error"]
 
@@ -22,6 +22,8 @@ class NodeData(BaseModel):
     priceAlgo: float = 0
     serviceUrl: Optional[str] = None
     serviceKind: Optional[Literal["weather", "search", "custom"]] = None
+    upstreamX402: bool = False
+    treasuryAddress: Optional[str] = None
 
 
 class PipelineNode(BaseModel):
@@ -51,6 +53,8 @@ class RuntimeLog(BaseModel):
     level: LogLevel
     message: str
     nodeId: Optional[str] = None
+    eventType: Optional[Literal["start", "progress", "output", "done", "error"]] = None
+    output: Optional[str] = None
     txId: Optional[str] = None
 
 

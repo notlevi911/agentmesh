@@ -1019,6 +1019,69 @@ a {
   font-weight: 700;
 }
 
+.wallet-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.wallet-copy-button {
+  border: 1px solid rgba(71, 124, 90, 0.34);
+  border-radius: 999px;
+  background: rgba(8, 14, 11, 0.92);
+  color: #9effc3;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.wallet-copy-button:hover {
+  border-color: rgba(109, 184, 136, 0.5);
+  color: #effff5;
+}
+
+.node-chip-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.node-status {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 999px;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 11px;
+  font-weight: 700;
+  background: #102019;
+  color: #7f9c8d;
+}
+
+.node-status-running {
+  background: rgba(45, 219, 118, 0.12);
+  color: #9effc3;
+}
+
+.node-status-done {
+  background: rgba(45, 219, 118, 0.18);
+  color: #b8ffd4;
+}
+
+.node-status-error {
+  background: rgba(255, 108, 108, 0.16);
+  color: #ffc5c5;
+}
+
+.node-status-idle {
+  background: #102019;
+  color: #7f9c8d;
+}
+
 .node-inline,
 .node-action {
   width: 100%;
@@ -1035,6 +1098,31 @@ a {
   color: #80a392;
 }
 
+.node-output-preview {
+  margin-bottom: 8px;
+  padding: 10px;
+  border: 1px solid rgba(71, 124, 90, 0.24);
+  border-radius: 12px;
+  background: rgba(7, 14, 11, 0.9);
+  color: #bfe5cf;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.node-request-input {
+  width: 100%;
+  min-height: 88px;
+  margin: 8px 0;
+  padding: 10px;
+  border: 1px solid rgba(71, 124, 90, 0.28);
+  border-radius: 12px;
+  background: rgba(6, 12, 9, 0.95);
+  color: #dff7e8;
+  font-size: 11px;
+  line-height: 1.45;
+  resize: vertical;
+}
+
 .wire-label {
   position: absolute;
   display: inline-flex;
@@ -1048,6 +1136,10 @@ a {
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
   pointer-events: none;
+}
+
+.wire-label-selected {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.06);
 }
 
 .palette-section {
@@ -1154,6 +1246,12 @@ a {
   font-weight: 600;
 }
 
+.checkbox-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .prop-input {
   width: 100%;
   padding: 11px 12px;
@@ -1240,6 +1338,78 @@ a {
   color: #effff5;
   font-size: 12px;
   line-height: 1.5;
+}
+
+.console-query-input {
+  margin-bottom: 4px;
+}
+
+.console-terminal {
+  display: grid;
+  gap: 10px;
+  max-height: 360px;
+  overflow: auto;
+  padding: 14px;
+  border: 1px solid rgba(71, 124, 90, 0.26);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(5, 10, 8, 0.98), rgba(2, 4, 3, 0.98));
+  font-family: "JetBrains Mono", monospace;
+}
+
+.console-block {
+  display: grid;
+  gap: 6px;
+}
+
+.console-line {
+  display: grid;
+  grid-template-columns: 88px 140px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  color: #dff7e8;
+  font-size: 11px;
+}
+
+.console-line-muted {
+  color: #6f9380;
+}
+
+.console-time {
+  color: #5f7d6f;
+}
+
+.console-node {
+  color: #81f7ad;
+}
+
+.console-message {
+  color: #effff5;
+  font-size: 11px;
+  line-height: 1.5;
+}
+
+.console-output {
+  padding: 10px 12px;
+  border-left: 2px solid rgba(45, 219, 118, 0.35);
+  background: rgba(8, 14, 11, 0.92);
+  color: #bfe5cf;
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+}
+
+.console-block-success .console-message,
+.console-block-success .console-node {
+  color: #9effc3;
+}
+
+.console-block-warning .console-message {
+  color: #d8ef8a;
+}
+
+.console-block-error .console-message,
+.console-block-error .console-node {
+  color: #ffb8b8;
 }
 
 .dock-tab {

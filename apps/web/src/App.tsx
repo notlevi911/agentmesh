@@ -1,8 +1,9 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Background,
   ConnectionMode,
   Controls,
+  type EdgeMouseHandler,
   MarkerType,
   MiniMap,
   ReactFlow,
@@ -43,6 +44,7 @@ const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v3";
 interface StoredWorkflowDraft {
   pipelineName: string;
   activeWireType: WireKind;
+  runtimeQuery?: string;
   nodes: BuilderNode[];
   edges: BuilderEdge[];
 }
@@ -52,6 +54,7 @@ type LeftPanel = "palette" | "flows";
 
 const nodeTypes = {
   agent: AgentNode,
+  api: ServiceNode,
   service: ServiceNode,
   trigger: TriggerNode,
   end: EndNode,
@@ -60,6 +63,36 @@ const nodeTypes = {
 const edgeTypes = {
   wire: WireEdge,
 };
+
+function sleep(ms: number) {
+  return new Promise((resolve) => window.setTimeout(resolve, ms));
+}
+
+function extractRuntimeQuery(raw: string | undefined, method?: string): string {
+  const text = (raw ?? "").trim();
+  if (!text) {
+    return "What is the weather of Africa?";
+  }
+
+  if ((method ?? "POST") === "GET") {
+    const params = new URLSearchParams(text.startsWith("?") ? text.slice(1) : text);
+    return params.get("prompt") ?? params.get("query") ?? params.get("q") ?? text;
+  }
+
+  try {
+    const parsed = JSON.parse(text) as Record<string, unknown>;
+    for (const key of ["prompt", "query", "message", "input"]) {
+      const value = parsed[key];
+      if (typeof value === "string" && value.trim()) {
+        return value.trim();
+      }
+    }
+  } catch {
+    return text;
+  }
+
+  return text;
+}
 
 function loadStoredWorkflow(): StoredWorkflowDraft | null {
   if (typeof window === "undefined") {
@@ -87,7 +120,7 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
   const data = getDefaultNodeData(kind);
   const presetTitle = title ?? data.label;
 
-  if (kind === "service" && title?.toLowerCase().includes("weather")) {
+  if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("weather")) {
     return {
       id: `${kind}-${Date.now()}-${index}`,
       type: kind,
@@ -103,7 +136,7 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
     };
   }
 
-  if (kind === "service" && title?.toLowerCase().includes("search")) {
+  if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("search")) {
     return {
       id: `${kind}-${Date.now()}-${index}`,
       type: kind,
@@ -119,6 +152,22 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
     };
   }
 
+  if (kind === "api") {
+    return {
+      id: `${kind}-${Date.now()}-${index}`,
+      type: kind,
+      position: { x: 320 + index * 40, y: 220 + index * 40 },
+      data: {
+        ...data,
+        label: presetTitle,
+        description: "Generic HTTP API block. Agents can route requests here.",
+        serviceKind: "custom",
+        serviceUrl: "https://example.com/api?q={{query}}",
+        priceAlgo: 0,
+      },
+    };
+  }
+
   if (kind === "agent") {
     return {
       id: `${kind}-${Date.now()}-${index}`,
@@ -127,7 +176,7 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
       data: {
         ...data,
         label: presetTitle,
-        enabledTools: ["weather", "search"],
+        enabledTools: ["weather", "search", "custom"],
       },
     };
   }
@@ -157,6 +206,9 @@ function BuilderApp() {
     storedWorkflow?.edges ?? initialEdges,
   );
   const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? "AgentMesh Canvas");
+  const [runtimeQuery, setRuntimeQuery] = useState(
+    storedWorkflow?.runtimeQuery ?? "What is the weather of Africa?",
+  );
   const [deployment, setDeployment] = useState<DeployResponse | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [runResult, setRunResult] = useState<string>();
@@ -169,11 +221,13 @@ function BuilderApp() {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(
     storedWorkflow?.nodes?.[0]?.id ?? initialNodes[1]?.id ?? null,
   );
+  const [selectedEdgeId, setSelectedEdgeId] = useState<string | null>(null);
   const [selectedFundNode, setSelectedFundNode] = useState<BuilderNode | null>(null);
   const [fundIntent, setFundIntent] = useState<FundIntentResponse | null>(null);
   const [pending, setPending] = useState(false);
   const [runPending, setRunPending] = useState(false);
   const [error, setError] = useState<string>();
+  const playbackIdRef = useRef(0);
 
   const selectedNode = useMemo(
     () => nodes.find((node) => node.id === selectedNodeId) ?? null,
@@ -195,6 +249,74 @@ function BuilderApp() {
     return "Analyze BTC sentiment and summarize it clearly.";
   }, [nodes, selectedNode]);
 
+  const resetExecutionState = useCallback(() => {
+    setNodes((currentNodes) =>
+      currentNodes.map((node) => ({
+        ...node,
+        data: {
+          ...node.data,
+          executionState: "idle",
+          executionNote: undefined,
+        },
+      })),
+    );
+  }, [setNodes]);
+
+  const applyLogToNodes = useCallback(
+    (log: LogEntry) => {
+      if (!log.nodeId) {
+        return;
+      }
+
+      setNodes((currentNodes) =>
+        currentNodes.map((node) =>
+          node.id === log.nodeId
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  executionState:
+                    log.eventType === "error"
+                      ? "error"
+                      : log.eventType === "done"
+                        ? "done"
+                        : "running",
+                  executionNote: log.output ?? log.message,
+                },
+              }
+            : node,
+        ),
+      );
+    },
+    [setNodes],
+  );
+
+  const playRunFeedback = useCallback(
+    async (runLogs: LogEntry[], result: string) => {
+      playbackIdRef.current += 1;
+      const playbackId = playbackIdRef.current;
+      setLogs([]);
+      setRunResult(undefined);
+      resetExecutionState();
+      setBottomOpen(true);
+
+      for (const log of runLogs) {
+        if (playbackIdRef.current !== playbackId) {
+          return;
+        }
+
+        setLogs((currentLogs) => [...currentLogs, log]);
+        applyLogToNodes(log);
+        await sleep(log.eventType === "output" ? 650 : 340);
+      }
+
+      if (playbackIdRef.current === playbackId) {
+        setRunResult(result);
+      }
+    },
+    [applyLogToNodes, resetExecutionState],
+  );
+
   const handleOpenFunding = useCallback(
     async (nodeId: string) => {
       const node = nodes.find((candidate) => candidate.id === nodeId) ?? null;
@@ -215,6 +337,78 @@ function BuilderApp() {
     [deployment, nodes],
   );
 
+  const handleCopyWallet = useCallback(
+    async (nodeId: string) => {
+      const node = nodes.find((candidate) => candidate.id === nodeId);
+      const address = node?.data.walletAddress;
+      if (!address) {
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(address);
+        setLogs((currentLogs) => [
+          ...currentLogs,
+          {
+            timestamp: new Date().toISOString(),
+            level: "success",
+            message: `Copied wallet address for ${node?.data.label ?? "agent"}.`,
+          },
+        ]);
+      } catch {
+        setLogs((currentLogs) => [
+          ...currentLogs,
+          {
+            timestamp: new Date().toISOString(),
+            level: "warning",
+            message: "Unable to copy wallet address from the browser clipboard API.",
+          },
+        ]);
+      }
+    },
+    [nodes],
+  );
+
+  const handleTriggerTestChange = useCallback(
+    (nodeId: string, value: string) => {
+      setNodes((currentNodes) =>
+        currentNodes.map((node) =>
+          node.id === nodeId
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  testRequestBody: value,
+                },
+              }
+            : node,
+        ),
+      );
+      setRuntimeQuery(value);
+    },
+    [setNodes],
+  );
+
+  const handleRuntimeQueryChange = useCallback(
+    (value: string) => {
+      setRuntimeQuery(value);
+      setNodes((currentNodes) =>
+        currentNodes.map((node) =>
+          node.type === "trigger"
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  testRequestBody: value,
+                },
+              }
+            : node,
+        ),
+      );
+    },
+    [setNodes],
+  );
+
   const decoratedNodes = useMemo(
     () =>
       nodes.map((node) => ({
@@ -225,10 +419,16 @@ function BuilderApp() {
             ? {
                 ...node.data,
                 onFundWallet: handleOpenFunding,
+                onCopyWallet: handleCopyWallet,
               }
+            : node.type === "trigger"
+              ? {
+                  ...node.data,
+                  onTriggerTestChange: handleTriggerTestChange,
+                }
             : node.data,
       })),
-    [handleOpenFunding, nodes, selectedNodeId],
+    [handleCopyWallet, handleOpenFunding, handleTriggerTestChange, nodes, selectedNodeId],
   );
 
   const serializePipeline = useCallback((): DeployRequest => {
@@ -240,6 +440,8 @@ function BuilderApp() {
         type: node.type as NodeKind,
         position: node.position,
         data: {
+          requestMethod: node.data.requestMethod,
+          testRequestBody: node.data.testRequestBody,
           label: node.data.label,
           role: node.data.role,
           description: node.data.description,
@@ -248,6 +450,8 @@ function BuilderApp() {
           priceAlgo: node.data.priceAlgo,
           serviceUrl: node.data.serviceUrl,
           serviceKind: node.data.serviceKind,
+          upstreamX402: node.data.upstreamX402,
+          treasuryAddress: node.data.treasuryAddress,
         },
       })),
       edges: edges.map((edge) => ({
@@ -262,6 +466,9 @@ function BuilderApp() {
 
   const handleNodeChange = useCallback(
     (nodeId: string, updates: Partial<PipelineNodeData>) => {
+      if (typeof updates.testRequestBody === "string") {
+        setRuntimeQuery(updates.testRequestBody);
+      }
       setNodes((currentNodes) =>
         currentNodes.map((node) =>
           node.id === nodeId
@@ -284,6 +491,7 @@ function BuilderApp() {
       const node = createNodeFromKind(kind, presetTitle, nodes.length);
       setNodes((currentNodes) => [...currentNodes, node]);
       setSelectedNodeId(node.id);
+      setSelectedEdgeId(null);
       setMode("studio");
       setLeftOpen(true);
       setLeftPanel("palette");
@@ -296,7 +504,9 @@ function BuilderApp() {
     setNodes(initialNodes);
     setEdges(initialEdges);
     setPipelineName("Market Analyzer");
+    setRuntimeQuery("What is the weather of Africa?");
     setSelectedNodeId(initialNodes[1]?.id ?? null);
+    setSelectedEdgeId(null);
     setDeployment(null);
     setLogs([]);
     setRunResult(undefined);
@@ -312,10 +522,12 @@ function BuilderApp() {
     setError(undefined);
 
     try {
+      playbackIdRef.current += 1;
       const response = await deployPipeline(serializePipeline());
       setDeployment(response);
       setLogs(response.logs);
       setRunResult(undefined);
+      setSelectedEdgeId(null);
       setNodes((currentNodes) =>
         currentNodes.map((node) => {
           const deployedNode = response.nodes.find((candidate) => candidate.id === node.id);
@@ -330,6 +542,8 @@ function BuilderApp() {
               status: "live",
               walletAddress: deployedNode.walletAddress,
               balanceAlgo: deployedNode.balanceAlgo,
+              executionState: "idle",
+              executionNote: undefined,
             },
           };
         }),
@@ -352,14 +566,27 @@ function BuilderApp() {
 
     setRunPending(true);
     setError(undefined);
+    setBottomOpen(true);
+    setLogs([
+      {
+        timestamp: new Date().toISOString(),
+        level: "info",
+        message: "Starting workflow execution...",
+        eventType: "start",
+      },
+    ]);
+    resetExecutionState();
 
     try {
+      const triggerNode = nodes.find((node) => node.type === "trigger");
+      const requestQuery = extractRuntimeQuery(
+        triggerNode?.data.testRequestBody ?? runtimeQuery,
+        triggerNode?.data.requestMethod,
+      );
       const response = await runPipeline(deployment.pipelineId, {
-        query: runtimePrompt,
+        query: requestQuery,
       });
-      setLogs(response.logs);
-      setRunResult(response.result);
-      setBottomOpen(true);
+      await playRunFeedback(response.logs, response.result);
     } catch (runError) {
       setError(runError instanceof Error ? runError.message : "Pipeline run failed.");
     } finally {
@@ -404,18 +631,23 @@ function BuilderApp() {
     const draft: StoredWorkflowDraft = {
       pipelineName,
       activeWireType,
+      runtimeQuery,
       nodes: nodes.map((node) => ({
         ...node,
         data: {
           ...node.data,
           onFundWallet: undefined,
+          onCopyWallet: undefined,
+          onTriggerTestChange: undefined,
+          executionState: undefined,
+          executionNote: undefined,
         },
       })),
       edges,
     };
 
     window.localStorage.setItem(WORKFLOW_STORAGE_KEY, JSON.stringify(draft));
-  }, [activeWireType, edges, nodes, pipelineName]);
+  }, [activeWireType, edges, nodes, pipelineName, runtimeQuery]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -446,14 +678,51 @@ function BuilderApp() {
           },
         },
       ]);
+      setSelectedEdgeId(null);
     },
     [activeWireType, setEdges],
   );
 
   const onNodeClick = useCallback<NodeMouseHandler<BuilderNode>>((_, node) => {
     setSelectedNodeId(node.id);
+    setSelectedEdgeId(null);
     setRightOpen(true);
   }, []);
+
+  const onEdgeClick = useCallback<EdgeMouseHandler<BuilderEdge>>((event, edge) => {
+    event.preventDefault();
+    event.stopPropagation();
+    setSelectedNodeId(null);
+    setSelectedEdgeId(edge.id);
+  }, []);
+
+  useEffect(() => {
+    function handleDeleteKey(event: KeyboardEvent) {
+      const target = event.target as HTMLElement | null;
+      const tagName = target?.tagName?.toLowerCase();
+      const isTyping =
+        tagName === "input" || tagName === "textarea" || target?.isContentEditable === true;
+
+      if (isTyping || !selectedEdgeId || (event.key !== "Delete" && event.key !== "Backspace")) {
+        return;
+      }
+
+      event.preventDefault();
+      setEdges((currentEdges) => currentEdges.filter((edge) => edge.id !== selectedEdgeId));
+      setSelectedEdgeId(null);
+      setLogs((currentLogs) => [
+        ...currentLogs,
+        {
+          timestamp: new Date().toISOString(),
+          level: "info",
+          message: "Wire deleted from the workflow.",
+        },
+      ]);
+    }
+
+    window.addEventListener("keydown", handleDeleteKey);
+    return () => window.removeEventListener("keydown", handleDeleteKey);
+  }, [selectedEdgeId, setEdges]);
 
   const handleDrop = useCallback(
     (event: React.DragEvent<HTMLDivElement>) => {
@@ -703,6 +972,7 @@ function BuilderApp() {
               edgeTypes={edgeTypes}
               edges={edges.map((edge) => ({
                 ...edge,
+                selected: edge.id === selectedEdgeId,
                 markerEnd: {
                   type: MarkerType.ArrowClosed,
                 },
@@ -711,10 +981,16 @@ function BuilderApp() {
               nodeTypes={nodeTypes}
               nodes={decoratedNodes}
               onConnect={onConnect}
+              onEdgeClick={onEdgeClick}
               onEdgesChange={onEdgesChange}
               onInit={setReactFlowInstance}
               onNodeClick={onNodeClick}
               onNodesChange={onNodesChange}
+              onPaneClick={() => {
+                setSelectedNodeId(null);
+                setSelectedEdgeId(null);
+                setRightOpen(false);
+              }}
             >
               <Background color="#113023" gap={28} />
               <MiniMap
@@ -811,7 +1087,9 @@ function BuilderApp() {
             <div className="overlay-bottom-body">
               <RunLogPanel
                 logs={logs}
+                onQueryChange={handleRuntimeQueryChange}
                 onRun={handleRunDemo}
+                query={runtimeQuery}
                 result={runResult}
                 runPending={runPending}
                 runtimePrompt={runtimePrompt}

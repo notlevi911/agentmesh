@@ -80,10 +80,21 @@ export function InspectorPanel({
                   value={selectedNode.data.priceAlgo ?? 0}
                 />
               </label>
+              <label className="field">
+                <span>Treasury wallet</span>
+                <input
+                  className="prop-input"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, { treasuryAddress: event.target.value })
+                  }
+                  placeholder="Optional Algorand address for storing earned funds"
+                  value={selectedNode.data.treasuryAddress ?? ""}
+                />
+              </label>
               <div className="field">
                 <span>Tools</span>
                 <div className="checkbox-grid">
-                  {["weather", "search"].map((tool) => (
+                  {["weather", "search", "custom"].map((tool) => (
                     <label key={tool} className="checkbox-pill">
                       <input
                         checked={toolChecked(selectedNode, tool)}
@@ -104,16 +115,49 @@ export function InspectorPanel({
               <div className="wallet-summary">
                 <span>Wallet</span>
                 <strong>{selectedNode.data.walletAddress ?? "Deploy to create wallet"}</strong>
+                <span>Treasury</span>
+                <strong>{selectedNode.data.treasuryAddress ?? "Uses agent wallet by default"}</strong>
                 <span>Balance</span>
                 <strong>{(selectedNode.data.balanceAlgo ?? 0).toFixed(3)} ALGO</strong>
               </div>
             </>
           ) : null}
 
-          {selectedNode.type === "service" ? (
+          {selectedNode.type === "trigger" ? (
             <>
               <label className="field">
-                <span>Service kind</span>
+                <span>HTTP method</span>
+                <select
+                  className="prop-input"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, {
+                      requestMethod: event.target.value as PipelineNodeData["requestMethod"],
+                    })
+                  }
+                  value={selectedNode.data.requestMethod ?? "POST"}
+                >
+                  <option value="GET">GET</option>
+                  <option value="POST">POST</option>
+                  <option value="PUT">PUT</option>
+                </select>
+              </label>
+              <label className="field">
+                <span>Test request</span>
+                <textarea
+                  className="prop-input prop-textarea tall-textarea"
+                  onChange={(event) =>
+                    onNodeChange(selectedNode.id, { testRequestBody: event.target.value })
+                  }
+                  value={selectedNode.data.testRequestBody ?? ""}
+                />
+              </label>
+            </>
+          ) : null}
+
+          {selectedNode.type === "service" || selectedNode.type === "api" ? (
+            <>
+              <label className="field">
+                <span>API kind</span>
                 <select
                   className="prop-input"
                   onChange={(event) =>
@@ -129,7 +173,7 @@ export function InspectorPanel({
                 </select>
               </label>
               <label className="field">
-                <span>Service URL</span>
+                <span>API endpoint</span>
                 <input
                   className="prop-input"
                   onChange={(event) =>
@@ -150,6 +194,18 @@ export function InspectorPanel({
                   type="number"
                   value={selectedNode.data.priceAlgo ?? 0}
                 />
+              </label>
+              <label className="field">
+                <span className="checkbox-label">
+                  <input
+                    checked={Boolean(selectedNode.data.upstreamX402)}
+                    onChange={(event) =>
+                      onNodeChange(selectedNode.id, { upstreamX402: event.target.checked })
+                    }
+                    type="checkbox"
+                  />
+                  <span>Already x402 paywalled upstream</span>
+                </span>
               </label>
             </>
           ) : null}

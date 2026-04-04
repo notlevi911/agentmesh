@@ -13,6 +13,19 @@ function shortenAddress(address?: string) {
   return `${address.slice(0, 6)}...${address.slice(-4)}`;
 }
 
+function statusSymbol(state?: PipelineNodeData["executionState"]) {
+  if (state === "done") {
+    return "✓";
+  }
+  if (state === "error") {
+    return "!";
+  }
+  if (state === "running") {
+    return "•";
+  }
+  return "○";
+}
+
 export function AgentNode({ id, data }: NodeProps) {
   const payload = data as unknown as PipelineNodeData;
 
@@ -22,7 +35,12 @@ export function AgentNode({ id, data }: NodeProps) {
       <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">Agent</div>
-        <span className="node-chip">{payload.role ?? "operator"}</span>
+        <div className="node-chip-row">
+          <span className="node-chip">{payload.role ?? "operator"}</span>
+          <span className={`node-status node-status-${payload.executionState ?? "idle"}`}>
+            {statusSymbol(payload.executionState)}
+          </span>
+        </div>
       </div>
       <h3>{payload.label}</h3>
       <p>{payload.description}</p>
@@ -33,16 +51,32 @@ export function AgentNode({ id, data }: NodeProps) {
         </div>
         <div>
           <dt>Wallet</dt>
-          <dd>{shortenAddress(payload.walletAddress)}</dd>
+          <dd className="wallet-row">
+            <span>{shortenAddress(payload.walletAddress)}</span>
+            {payload.walletAddress ? (
+              <button
+                className="wallet-copy-button"
+                onClick={() => payload.onCopyWallet?.(id)}
+                type="button"
+              >
+                Copy
+              </button>
+            ) : null}
+          </dd>
         </div>
         <div>
           <dt>Balance</dt>
           <dd>{formatAlgo(payload.balanceAlgo)}</dd>
         </div>
+        <div>
+          <dt>Treasury</dt>
+          <dd>{shortenAddress(payload.treasuryAddress) === "Not deployed" ? "Agent wallet" : shortenAddress(payload.treasuryAddress)}</dd>
+        </div>
       </dl>
       <div className="node-inline muted-inline">
         Tools: {(payload.enabledTools ?? []).length ? (payload.enabledTools ?? []).join(", ") : "none"}
       </div>
+      {payload.executionNote ? <div className="node-output-preview">{payload.executionNote}</div> : null}
       <button
         className="node-action"
         onClick={() => payload.onFundWallet?.(id)}

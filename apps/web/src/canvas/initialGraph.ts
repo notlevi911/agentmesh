@@ -9,8 +9,10 @@ import type {
 const nodeTemplates: Record<NodeKind, PipelineNodeData> = {
   trigger: {
     kind: "trigger",
-    label: "Incoming Request",
-    description: "External API call kicks off the pipeline.",
+    label: "HTTP Trigger",
+    description: "Incoming HTTP request kicks off the workflow.",
+    requestMethod: "POST",
+    testRequestBody: '{ "prompt": "What is the weather of Africa?" }',
     status: "draft",
   },
   agent: {
@@ -19,8 +21,17 @@ const nodeTemplates: Record<NodeKind, PipelineNodeData> = {
     role: "operator",
     description: "Autonomous AI node with a live Algorand wallet.",
     systemPrompt: "Choose the best available tool, then summarize the result for the next node.",
-    enabledTools: ["weather", "search"],
+    enabledTools: ["weather", "search", "custom"],
     priceAlgo: 0,
+    status: "draft",
+  },
+  api: {
+    kind: "api",
+    label: "API",
+    description: "External HTTP API that an agent can call.",
+    serviceUrl: "https://api.duckduckgo.com/",
+    serviceKind: "search",
+    upstreamX402: false,
     status: "draft",
   },
   service: {
@@ -29,6 +40,7 @@ const nodeTemplates: Record<NodeKind, PipelineNodeData> = {
     description: "x402-gated external API.",
     serviceUrl: "https://api.duckduckgo.com/",
     serviceKind: "search",
+    upstreamX402: false,
     status: "draft",
   },
   end: {
@@ -56,39 +68,39 @@ export const initialNodes: BuilderNode[] = [
     position: { x: 320, y: 120 },
     data: {
       ...getDefaultNodeData("agent"),
-      label: "Research Agent",
+      label: "Routing Agent",
       role: "analyzer",
-      description: "Chooses the right tool for the prompt and performs the lookup.",
+      description: "Chooses the right connected API tool for the incoming prompt.",
       systemPrompt:
-        "You are an autonomous research agent. If the user asks about weather, use the weather tool. If they ask about facts, people, topics, or current context, use search.",
-      enabledTools: ["weather", "search"],
+        "You are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.",
+      enabledTools: ["weather", "search", "custom"],
       priceAlgo: 0.01,
     },
   },
   {
     id: "service-weather",
-    type: "service",
+    type: "api",
     position: { x: 650, y: 70 },
     data: {
-      ...getDefaultNodeData("service"),
+      ...getDefaultNodeData("api"),
       label: "Open-Meteo Weather",
       description: "Free live weather lookup via Open-Meteo.",
       serviceUrl: "https://api.open-meteo.com/v1/forecast",
       serviceKind: "weather",
-      priceAlgo: 0,
+      priceAlgo: 0.01,
     },
   },
   {
     id: "service-search",
-    type: "service",
+    type: "api",
     position: { x: 660, y: 250 },
     data: {
-      ...getDefaultNodeData("service"),
+      ...getDefaultNodeData("api"),
       label: "DuckDuckGo Search",
       description: "Free instant-answer/search-style lookup via DuckDuckGo.",
       serviceUrl: "https://api.duckduckgo.com/",
       serviceKind: "search",
-      priceAlgo: 0,
+      priceAlgo: 0.01,
     },
   },
   {
@@ -97,10 +109,10 @@ export const initialNodes: BuilderNode[] = [
     position: { x: 960, y: 170 },
     data: {
       ...getDefaultNodeData("agent"),
-      label: "Responder Agent",
+      label: "Response Agent",
       role: "responder",
-      description: "Formats the final answer for the external caller.",
-      systemPrompt: "Take the tool output and produce a crisp final response.",
+      description: "Formats the final HTTP response for the caller.",
+      systemPrompt: "Take the upstream tool result and produce a crisp HTTP response body.",
       enabledTools: [],
       priceAlgo: 0,
     },
@@ -112,7 +124,7 @@ export const initialNodes: BuilderNode[] = [
     data: {
       ...getDefaultNodeData("end"),
       label: "HTTP Response",
-      description: "Sends the pipeline result back to the caller.",
+      description: "Shows and returns the final API output to the caller.",
     },
   },
 ];

@@ -30,6 +30,7 @@ export function WireEdge({
   sourcePosition,
   targetPosition,
   data,
+  selected,
 }: EdgeProps) {
   const edgeData = (data ?? {}) as unknown as PipelineEdgeData;
   const style = wireStyles[edgeData.wireType ?? "a2a"];
@@ -44,10 +45,19 @@ export function WireEdge({
 
   return (
     <>
-      <BaseEdge id={id} path={path} style={{ stroke: style.color, strokeWidth: 3 }} />
+      <BaseEdge
+        id={id}
+        interactionWidth={28}
+        path={path}
+        style={{
+          stroke: style.color,
+          strokeWidth: selected ? 4.5 : 3,
+          filter: selected ? `drop-shadow(0 0 8px ${style.color})` : undefined,
+        }}
+      />
       <EdgeLabelRenderer>
         <div
-          className="wire-label"
+          className={selected ? "wire-label wire-label-selected" : "wire-label"}
           style={{
             transform: `translate(-50%, -50%) translate(${labelX}px, ${labelY}px)`,
             borderColor: style.color,

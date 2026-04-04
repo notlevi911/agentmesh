@@ -1,12 +1,14 @@
 import type { Edge, Node } from "@xyflow/react";
 
-export type NodeKind = "agent" | "service" | "trigger" | "end";
+export type NodeKind = "agent" | "api" | "service" | "trigger" | "end";
 export type WireKind = "a2a" | "x402" | "algo_transfer";
 export type LogLevel = "info" | "success" | "warning" | "error";
 
 export interface PipelineNodeData extends Record<string, unknown> {
   kind: NodeKind;
   label: string;
+  requestMethod?: "GET" | "POST" | "PUT";
+  testRequestBody?: string;
   role?: string;
   description?: string;
   systemPrompt?: string;
@@ -14,11 +16,17 @@ export interface PipelineNodeData extends Record<string, unknown> {
   priceAlgo?: number;
   serviceUrl?: string;
   serviceKind?: "weather" | "search" | "custom";
+  upstreamX402?: boolean;
+  treasuryAddress?: string;
   walletAddress?: string;
   balanceAlgo?: number;
   runUrl?: string;
   status?: "draft" | "live";
+  executionState?: "idle" | "running" | "done" | "error";
+  executionNote?: string;
   onFundWallet?: (nodeId: string) => void;
+  onCopyWallet?: (nodeId: string) => void;
+  onTriggerTestChange?: (nodeId: string, value: string) => void;
 }
 
 export interface PipelineEdgeData extends Record<string, unknown> {
@@ -38,7 +46,16 @@ export interface DeployRequest {
     position: { x: number; y: number };
     data: Omit<
       PipelineNodeData,
-      "kind" | "walletAddress" | "balanceAlgo" | "runUrl" | "status" | "onFundWallet"
+      | "kind"
+      | "walletAddress"
+      | "balanceAlgo"
+      | "runUrl"
+      | "status"
+      | "executionState"
+      | "executionNote"
+      | "onFundWallet"
+      | "onCopyWallet"
+      | "onTriggerTestChange"
     >;
   }>;
   edges: Array<{
@@ -55,6 +72,8 @@ export interface LogEntry {
   level: LogLevel;
   message: string;
   nodeId?: string;
+  eventType?: "start" | "progress" | "output" | "done" | "error";
+  output?: string;
   txId?: string;
 }
 
