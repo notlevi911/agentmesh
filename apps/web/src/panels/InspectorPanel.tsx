@@ -19,8 +19,8 @@ export function InspectorPanel({
   onNodeChange,
 }: InspectorPanelProps) {
   return (
-    <aside className="inspector-panel">
-      <div className="sidebar-header">
+    <aside className="studio-panel panel-pad inspector-panel">
+      <div className="panel-header-block">
         <span className="eyebrow">Inspector</span>
         <h2>Properties</h2>
       </div>
@@ -155,7 +155,7 @@ export function InspectorPanel({
           ) : null}
         </div>
       ) : (
-        <p className="empty-state">Select a node to edit its prompt, tools, pricing, and service settings.</p>
+        <p className="empty-state">Select a node to edit prompts, tools, pricing, and service settings.</p>
       )}
 
       <div className="deploy-card">
@@ -186,4 +186,3 @@ export function InspectorPanel({
     </aside>
   );
 }
-

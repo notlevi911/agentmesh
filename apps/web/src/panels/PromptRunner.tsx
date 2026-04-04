@@ -7,8 +7,8 @@ interface PromptRunnerProps {
 
 export function PromptRunner({ prompt, onChange, onRun, runPending }: PromptRunnerProps) {
   return (
-    <section className="prompt-runner">
-      <div className="sidebar-header">
+    <section className="studio-panel panel-pad prompt-runner">
+      <div className="panel-header-block">
         <span className="eyebrow">Runtime Input</span>
         <h2>Prompt to agent</h2>
       </div>

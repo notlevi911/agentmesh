@@ -78,8 +78,8 @@ export function NodePalette({ onQuickAdd }: NodePaletteProps) {
   }
 
   return (
-    <aside className="editor-sidebar">
-      <div className="sidebar-header">
+    <aside className="studio-panel panel-pad">
+      <div className="panel-header-block">
         <span className="eyebrow">Palette</span>
         <h2>Workflow blocks</h2>
       </div>
@@ -106,10 +106,7 @@ export function NodePalette({ onQuickAdd }: NodePaletteProps) {
           </div>
         </section>
       ))}
-      <p className="sidebar-hint">
-        Drag blocks into the canvas or click to drop them in automatically.
-      </p>
+      <div className="panel-note">Drag blocks into the canvas or click to place them instantly.</div>
     </aside>
   );
 }
-

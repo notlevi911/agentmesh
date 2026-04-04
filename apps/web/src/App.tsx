@@ -38,7 +38,7 @@ import type {
   WireKind,
 } from "./types/pipeline";
 
-const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v2";
+const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v3";
 
 interface StoredWorkflowDraft {
   pipelineName: string;
@@ -47,6 +47,10 @@ interface StoredWorkflowDraft {
   nodes: BuilderNode[];
   edges: BuilderEdge[];
 }
+
+type AppMode = "landing" | "studio";
+type LeftPanel = "palette" | "flows";
+type BottomPanel = "console" | "prompt";
 
 const nodeTypes = {
   agent: AgentNode,
@@ -143,6 +147,12 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
 
 function BuilderApp() {
   const storedWorkflow = loadStoredWorkflow();
+  const [mode, setMode] = useState<AppMode>("landing");
+  const [leftOpen, setLeftOpen] = useState(true);
+  const [rightOpen, setRightOpen] = useState(true);
+  const [bottomOpen, setBottomOpen] = useState(true);
+  const [leftPanel, setLeftPanel] = useState<LeftPanel>("palette");
+  const [bottomPanel, setBottomPanel] = useState<BottomPanel>("prompt");
   const [nodes, setNodes, onNodesChange] = useNodesState<BuilderNode>(
     storedWorkflow?.nodes ?? initialNodes,
   );
@@ -265,9 +275,30 @@ function BuilderApp() {
       const node = createNodeFromKind(kind, presetTitle, nodes.length);
       setNodes((currentNodes) => [...currentNodes, node]);
       setSelectedNodeId(node.id);
+      setMode("studio");
+      setLeftOpen(true);
+      setLeftPanel("palette");
+      setRightOpen(true);
     },
     [nodes.length, setNodes],
   );
+
+  const handleLoadExample = useCallback(() => {
+    setNodes(initialNodes);
+    setEdges(initialEdges);
+    setPipelineName("Market Analyzer");
+    setPromptInput("Search current sentiment for BTC and summarize it.");
+    setSelectedNodeId(initialNodes[1]?.id ?? null);
+    setDeployment(null);
+    setLogs([]);
+    setRunResult(undefined);
+    setMode("studio");
+    setLeftOpen(true);
+    setRightOpen(true);
+    setBottomOpen(true);
+    setLeftPanel("palette");
+    setBottomPanel("prompt");
+  }, [setEdges, setNodes]);
 
   async function handleDeploy() {
     setPending(true);
@@ -296,6 +327,10 @@ function BuilderApp() {
           };
         }),
       );
+      setMode("studio");
+      setBottomOpen(true);
+      setBottomPanel("console");
+      setRightOpen(true);
     } catch (deployError) {
       setError(deployError instanceof Error ? deployError.message : "Unable to deploy pipeline.");
     } finally {
@@ -318,6 +353,8 @@ function BuilderApp() {
       });
       setLogs(response.logs);
       setRunResult(response.result);
+      setBottomOpen(true);
+      setBottomPanel("console");
     } catch (runError) {
       setError(runError instanceof Error ? runError.message : "Pipeline run failed.");
     } finally {
@@ -351,7 +388,7 @@ function BuilderApp() {
           }),
         );
       } catch {
-        // Ignore intermittent network issues during polling.
+        // Ignore intermittent polling failures.
       }
     }, 5000);
 
@@ -411,6 +448,7 @@ function BuilderApp() {
 
   const onNodeClick = useCallback<NodeMouseHandler<BuilderNode>>((_, node) => {
     setSelectedNodeId(node.id);
+    setRightOpen(true);
   }, []);
 
   const handleDrop = useCallback(
@@ -431,125 +469,387 @@ function BuilderApp() {
       node.position = position;
       setNodes((currentNodes) => [...currentNodes, node]);
       setSelectedNodeId(node.id);
+      setRightOpen(true);
     },
     [nodes.length, reactFlowInstance, setNodes],
   );
 
-  const loadExample = useCallback(() => {
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-    setPipelineName("AgentMesh Canvas");
-    setPromptInput("Search current sentiment for BTC and summarize it.");
-    setSelectedNodeId(initialNodes[1]?.id ?? null);
-    setDeployment(null);
-    setLogs([]);
-    setRunResult(undefined);
-  }, [setEdges, setNodes]);
+  const liveStatus = deployment ? "Live endpoint ready" : "Draft workflow";
+
+  if (mode === "landing") {
+    return (
+      <div className="landing-shell">
+        <div className="landing-noise" />
+        <section className="landing-hero">
+          <div className="landing-nav">
+            <div className="landing-brand">
+              <span className="brand-mark">AM</span>
+              <div>
+                <span className="eyebrow">AgentMesh</span>
+                <strong>Algorand agent workflow studio</strong>
+              </div>
+            </div>
+            <div className="landing-actions">
+              <button className="ghost-button" onClick={handleLoadExample} type="button">
+                Load Demo
+              </button>
+              <button className="primary-button launch-button" onClick={() => setMode("studio")} type="button">
+                Open Studio
+              </button>
+            </div>
+          </div>
+
+          <div className="landing-grid">
+            <div className="hero-copy-card">
+              <div className="hero-kicker">Visual drag-and-drop canvas for agentic commerce</div>
+              <h1>Design, fund, and run wallet-backed AI agents on Algorand.</h1>
+              <p>
+                AgentMesh turns autonomous agent workflows into something you can actually wire,
+                inspect, and execute visually. Build a network of agents and services, deploy it,
+                then run prompt-driven flows where agents choose connected tools.
+              </p>
+              <div className="hero-cta-row">
+                <button className="primary-button hero-primary" onClick={() => setMode("studio")} type="button">
+                  Go To Playground
+                </button>
+                <button className="ghost-button hero-secondary" onClick={handleLoadExample} type="button">
+                  Test It Now
+                </button>
+              </div>
+              <div className="hero-stat-row">
+                <div className="hero-stat-card">
+                  <span>Agent wallets</span>
+                  <strong>Real Algorand testnet accounts</strong>
+                </div>
+                <div className="hero-stat-card">
+                  <span>Tooling</span>
+                  <strong>Weather + Search working today</strong>
+                </div>
+                <div className="hero-stat-card">
+                  <span>UX</span>
+                  <strong>No auth, local drafts, instant canvas</strong>
+                </div>
+              </div>
+            </div>
+
+            <div className="hero-visual-card">
+              <div className="visual-header">
+                <span className="eyebrow">Live Flow</span>
+                <strong>Market Analyzer</strong>
+              </div>
+              <div className="visual-flow">
+                <div className="visual-node">
+                  <span>Trigger</span>
+                  <strong>Incoming Request</strong>
+                </div>
+                <div className="visual-link" />
+                <div className="visual-node">
+                  <span>Agent</span>
+                  <strong>Research Agent</strong>
+                </div>
+                <div className="visual-link dual-link">
+                  <i />
+                  <i />
+                </div>
+                <div className="visual-service-stack">
+                  <div className="visual-service">
+                    <span>Service</span>
+                    <strong>Open-Meteo</strong>
+                  </div>
+                  <div className="visual-service">
+                    <span>Service</span>
+                    <strong>DuckDuckGo</strong>
+                  </div>
+                </div>
+                <div className="visual-link" />
+                <div className="visual-node">
+                  <span>Agent</span>
+                  <strong>Responder</strong>
+                </div>
+              </div>
+              <div className="visual-footer">
+                <div className="visual-pill">x402-ready wires</div>
+                <div className="visual-pill">fundable wallets</div>
+                <div className="visual-pill">run endpoint</div>
+              </div>
+            </div>
+          </div>
+
+          <div className="landing-feature-grid">
+            <div className="feature-tile">
+              <span>Canvas</span>
+              <strong>n8n-style editing, but for autonomous agent networks</strong>
+            </div>
+            <div className="feature-tile">
+              <span>Funding</span>
+              <strong>Each agent gets a real wallet you can fund and inspect</strong>
+            </div>
+            <div className="feature-tile">
+              <span>Runtime</span>
+              <strong>Deploy to a callable pipeline and test prompts immediately</strong>
+            </div>
+          </div>
+        </section>
+      </div>
+    );
+  }
 
   return (
-    <div className="agentmesh-shell">
-      <header className="builder-header">
-        <div className="header-copy">
-          <span className="eyebrow">AgentMesh</span>
-          <input
-            className="builder-title"
-            onChange={(event) => setPipelineName(event.target.value)}
-            value={pipelineName}
-          />
-          <p>Visual agentic commerce builder for Algorand wallets, tools, and x402-ready flows.</p>
+    <div className="studio-shell">
+      <header className="studio-topbar">
+        <div className="studio-topbar-left">
+          <button className="ghost-button compact-button" onClick={() => setMode("landing")} type="button">
+            Dashboard
+          </button>
+          <div className="studio-brand">
+            <span className="brand-mark small-mark">AM</span>
+            <div>
+              <span className="eyebrow">Studio</span>
+              <input
+                className="studio-title-input"
+                onChange={(event) => setPipelineName(event.target.value)}
+                value={pipelineName}
+              />
+            </div>
+          </div>
         </div>
-        <div className="toolbar-cluster">
-          <div className="wire-toggle">
+
+        <div className="studio-topbar-center">
+          <div className="segmented-control">
             {(["a2a", "x402", "algo_transfer"] as WireKind[]).map((wireType) => (
               <button
                 key={wireType}
-                className={wireType === activeWireType ? "wire-button active-wire" : "wire-button"}
+                className={wireType === activeWireType ? "segment-button segment-active" : "segment-button"}
                 onClick={() => setActiveWireType(wireType)}
                 type="button"
               >
-                {wireType === "a2a" ? "Purple" : wireType === "x402" ? "Green" : "Blue"}
+                {wireType === "a2a" ? "Purple Wire" : wireType === "x402" ? "Green Wire" : "Blue Wire"}
               </button>
             ))}
           </div>
-          <button
-            className="secondary-button"
-            onClick={() => {
-              setNodes([]);
-              setEdges([]);
-              setSelectedNodeId(null);
-            }}
-            type="button"
-          >
-            Clear nodes
+        </div>
+
+        <div className="studio-topbar-right">
+          <button className="ghost-button compact-button" onClick={handleLoadExample} type="button">
+            Load Example
           </button>
-          <button className="secondary-button" onClick={loadExample} type="button">
-            Load example
-          </button>
-          <button className="primary-button" disabled={pending} onClick={handleDeploy} type="button">
+          <button className="primary-button compact-button" disabled={pending} onClick={handleDeploy} type="button">
             {pending ? "Deploying..." : "Deploy"}
           </button>
         </div>
       </header>
 
-      {error ? <div className="error-banner">{error}</div> : null}
+      {error ? <div className="error-banner floating-error">{error}</div> : null}
 
-      <main className="editor-grid">
-        <NodePalette onQuickAdd={handleQuickAdd} />
-
-        <section className="canvas-panel">
-          <div className="canvas-topline">
-            <span className="canvas-hint">Drag from node handles to connect steps. Select any node to edit it.</span>
-          </div>
-          <div
-            className="canvas-shell"
-            onDragOver={(event) => {
-              event.preventDefault();
-              event.dataTransfer.dropEffect = "move";
+      <main className="studio-main">
+        <nav className="studio-rail">
+          <button
+            className={leftPanel === "palette" ? "rail-button rail-active" : "rail-button"}
+            onClick={() => {
+              setLeftPanel("palette");
+              setLeftOpen(true);
             }}
-            onDrop={handleDrop}
+            type="button"
           >
-            <ReactFlow<BuilderNode, BuilderEdge>
-              edgeTypes={edgeTypes}
-              edges={edges.map((edge) => ({
-                ...edge,
-                markerEnd: {
-                  type: MarkerType.ArrowClosed,
-                },
-              }))}
-              fitView
-              nodeTypes={nodeTypes}
-              nodes={decoratedNodes}
-              onConnect={onConnect}
-              onEdgesChange={onEdgesChange}
-              onInit={setReactFlowInstance}
-              onNodeClick={onNodeClick}
-              onNodesChange={onNodesChange}
-            >
-              <Background color="#e3e5ea" gap={24} />
-              <MiniMap pannable style={{ background: "#fbfbfd", border: "1px solid #e4e6eb" }} zoomable />
-              <Controls />
-            </ReactFlow>
-          </div>
-          <PromptRunner
-            onChange={setPromptInput}
-            onRun={handleRunDemo}
-            prompt={promptInput}
-            runPending={runPending}
-          />
-          <RunLogPanel logs={logs} result={runResult} />
-        </section>
+            Blocks
+          </button>
+          <button
+            className={leftPanel === "flows" ? "rail-button rail-active" : "rail-button"}
+            onClick={() => {
+              setLeftPanel("flows");
+              setLeftOpen(true);
+            }}
+            type="button"
+          >
+            Flows
+          </button>
+          <button
+            className={bottomPanel === "prompt" ? "rail-button rail-active" : "rail-button"}
+            onClick={() => {
+              setBottomPanel("prompt");
+              setBottomOpen(true);
+            }}
+            type="button"
+          >
+            Prompt
+          </button>
+          <button
+            className={bottomPanel === "console" ? "rail-button rail-active" : "rail-button"}
+            onClick={() => {
+              setBottomPanel("console");
+              setBottomOpen(true);
+            }}
+            type="button"
+          >
+            Console
+          </button>
+        </nav>
 
-        <InspectorPanel
-          deployment={deployment}
-          onCopyEndpoint={() => {
-            if (deployment) {
-              navigator.clipboard.writeText(deployment.endpoint);
-            }
-          }}
-          onNodeChange={handleNodeChange}
-          selectedNode={selectedNode}
-        />
+        <section className="studio-workspace">
+          <aside className={leftOpen ? "studio-drawer studio-drawer-left" : "studio-drawer studio-drawer-left drawer-hidden"}>
+            {leftPanel === "palette" ? (
+              <NodePalette onQuickAdd={handleQuickAdd} />
+            ) : (
+              <div className="drawer-placeholder">
+                <span className="eyebrow">Flows</span>
+                <h2>Workflow snapshots</h2>
+                <div className="snapshot-card">
+                  <strong>Market Analyzer</strong>
+                  <span>Research Agent to Tools to Responder</span>
+                </div>
+                <div className="snapshot-card">
+                  <strong>Weather Lookup</strong>
+                  <span>Prompt weather, return forecast summary</span>
+                </div>
+                <div className="snapshot-card">
+                  <strong>Search Explainer</strong>
+                  <span>Run search, send result into final formatter</span>
+                </div>
+              </div>
+            )}
+          </aside>
+
+          <button
+            aria-label={leftOpen ? "Collapse left drawer" : "Expand left drawer"}
+            className={leftOpen ? "edge-toggle edge-toggle-left" : "edge-toggle edge-toggle-left edge-toggle-collapsed"}
+            onClick={() => setLeftOpen((value) => !value)}
+            type="button"
+          >
+            {leftOpen ? "<<" : ">>"}
+          </button>
+
+          <section className="canvas-shell canvas-super-shell">
+            <div className="canvas-overlay-top">
+              <div className="canvas-badge-cluster">
+                <div className="canvas-status-pill">{liveStatus}</div>
+                <div className="canvas-status-pill">{nodes.length} nodes</div>
+                <div className="canvas-status-pill">{edges.length} wires</div>
+              </div>
+              <div className="canvas-status-pill strong-pill">{deployment ? deployment.pipelineId : "Not deployed"}</div>
+            </div>
+
+            <div
+              className="canvas-flow-wrap"
+              onDragOver={(event) => {
+                event.preventDefault();
+                event.dataTransfer.dropEffect = "move";
+              }}
+              onDrop={handleDrop}
+            >
+              <ReactFlow<BuilderNode, BuilderEdge>
+                edgeTypes={edgeTypes}
+                edges={edges.map((edge) => ({
+                  ...edge,
+                  markerEnd: {
+                    type: MarkerType.ArrowClosed,
+                  },
+                }))}
+                fitView
+                nodeTypes={nodeTypes}
+                nodes={decoratedNodes}
+                onConnect={onConnect}
+                onEdgesChange={onEdgesChange}
+                onInit={setReactFlowInstance}
+                onNodeClick={onNodeClick}
+                onNodesChange={onNodesChange}
+              >
+                <Background color="#113023" gap={28} />
+                <MiniMap
+                  pannable
+                  style={{ background: "#08110d", border: "1px solid #183126" }}
+                  zoomable
+                />
+                <Controls />
+              </ReactFlow>
+            </div>
+          </section>
+
+          <aside className={rightOpen ? "studio-drawer studio-drawer-right" : "studio-drawer studio-drawer-right drawer-hidden"}>
+            <InspectorPanel
+              deployment={deployment}
+              onCopyEndpoint={() => {
+                if (deployment) {
+                  navigator.clipboard.writeText(deployment.endpoint);
+                }
+              }}
+              onNodeChange={handleNodeChange}
+              selectedNode={selectedNode}
+            />
+          </aside>
+
+          <button
+            aria-label={rightOpen ? "Collapse right drawer" : "Expand right drawer"}
+            className={rightOpen ? "edge-toggle edge-toggle-right" : "edge-toggle edge-toggle-right edge-toggle-collapsed"}
+            onClick={() => setRightOpen((value) => !value)}
+            type="button"
+          >
+            {rightOpen ? ">>" : "<<"}
+          </button>
+        </section>
       </main>
+
+      <section className={bottomOpen ? "studio-dock" : "studio-dock dock-hidden"}>
+        <div className="studio-dock-header">
+          <div className="dock-tabs">
+            <button
+              className={bottomPanel === "prompt" ? "dock-tab dock-tab-active" : "dock-tab"}
+              onClick={() => setBottomPanel("prompt")}
+              type="button"
+            >
+              Prompt Input
+            </button>
+            <button
+              className={bottomPanel === "console" ? "dock-tab dock-tab-active" : "dock-tab"}
+              onClick={() => setBottomPanel("console")}
+              type="button"
+            >
+              Runtime Console
+            </button>
+          </div>
+          <button className="edge-toggle dock-toggle" onClick={() => setBottomOpen((value) => !value)} type="button">
+            {bottomOpen ? "<<" : ">>"}
+          </button>
+        </div>
+        <div className="studio-dock-body">
+          {bottomPanel === "prompt" ? (
+            <div className="dock-panel-grid">
+              <PromptRunner
+                onChange={setPromptInput}
+                onRun={handleRunDemo}
+                prompt={promptInput}
+                runPending={runPending}
+              />
+              <div className="dock-helper-card">
+                <span className="eyebrow">Prompt Suggestions</span>
+                <h3>Try these inputs</h3>
+                <button
+                  className="prompt-suggestion"
+                  onClick={() => setPromptInput("What's the weather in Bengaluru today?")}
+                  type="button"
+                >
+                  Weather in Bengaluru today
+                </button>
+                <button
+                  className="prompt-suggestion"
+                  onClick={() => setPromptInput("Search BTC sentiment and explain what BTC is.")}
+                  type="button"
+                >
+                  Search BTC sentiment and explain BTC
+                </button>
+                <button
+                  className="prompt-suggestion"
+                  onClick={() => setPromptInput("Find current weather in Mumbai and summarize it cleanly.")}
+                  type="button"
+                >
+                  Find weather in Mumbai and summarize it
+                </button>
+              </div>
+            </div>
+          ) : (
+            <RunLogPanel logs={logs} result={runResult} />
+          )}
+        </div>
+      </section>
 
       <FundingModal
         fundIntent={fundIntent}

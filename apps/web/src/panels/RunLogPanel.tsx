@@ -7,8 +7,8 @@ interface RunLogPanelProps {
 
 export function RunLogPanel({ logs, result }: RunLogPanelProps) {
   return (
-    <section className="log-panel">
-      <div className="panel-header">
+    <section className="studio-panel panel-pad log-panel">
+      <div className="panel-header-block">
         <span className="eyebrow">Runtime</span>
         <h2>Pipeline logs</h2>
       </div>
@@ -34,4 +34,3 @@ export function RunLogPanel({ logs, result }: RunLogPanelProps) {
     </section>
   );
 }
-
