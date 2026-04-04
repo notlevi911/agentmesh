@@ -131,6 +131,15 @@ class RunPipelineRequest(BaseModel):
     query: Optional[str] = None
     payload: Dict[str, Any] = Field(default_factory=dict)
 
+    def definition_override(self) -> Optional["DeployPipelineRequest"]:
+        candidate = self.payload.get("definition")
+        if not isinstance(candidate, dict):
+            return None
+        try:
+            return DeployPipelineRequest.model_validate(candidate)
+        except Exception:
+            return None
+
 
 class RunPipelineResponse(BaseModel):
     runId: str

@@ -1,5 +1,6 @@
 import os
 import secrets
+from dataclasses import replace
 from typing import List, Optional
 
 from app.a2a.orchestrator import MultiAgentOrchestrator
@@ -205,17 +206,24 @@ class PipelineOrchestrator:
             qrValue=wallet.address,
         )
 
-    def execute(self, pipeline_id: str, query: Optional[str], settlement_mode: str) -> RunPipelineResponse:
+    def execute(
+        self,
+        pipeline_id: str,
+        query: Optional[str],
+        settlement_mode: str,
+        definition_override: Optional[DeployPipelineRequest] = None,
+    ) -> RunPipelineResponse:
         record = self._get_record(pipeline_id)
-        if self.multi_agent.supports(record):
+        effective_record = self._record_with_override(record, definition_override)
+        if self.multi_agent.supports(effective_record):
             response = self.multi_agent.execute(
-                pipeline_id=pipeline_id,
+                record=effective_record,
                 query=query or "analyze BTC sentiment",
                 settlement_mode=settlement_mode,
             )
         else:
             response = self.runtime.execute(
-                record=record,
+                record=effective_record,
                 query=query or "analyze BTC sentiment",
                 settlement_mode=settlement_mode,
             )
@@ -265,3 +273,13 @@ class PipelineOrchestrator:
                 return node
 
         return None
+
+    def _record_with_override(
+        self,
+        record: PipelineRecord,
+        definition_override: Optional[DeployPipelineRequest],
+    ) -> PipelineRecord:
+        if definition_override is None:
+            return record
+
+        return replace(record, definition=definition_override)

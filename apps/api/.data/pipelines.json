@@ -2110,6 +2110,348 @@
       "pipeline_id": "pm_492dceea",
       "price_algo": 0.05,
       "runs": {
+        "run_2918657cec": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-lead",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T18:08:43.745656",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 4,
+                "pipeline_id": "pm_492dceea"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T18:08:43.745691",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "ALGO"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"ALGO\"\n}",
+              "timestamp": "2026-04-04T18:09:46.502887",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.474
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"balance_algo\": 0.474\n}",
+              "timestamp": "2026-04-04T18:09:46.502959",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "ALGO is **bullish** with high confidence (92), supported by strong 7d momentum (+45.55%) and price vs. mean (+20.58%).",
+                "to_agent": "agent-tech"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "A2A response received.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"response\": \"ALGO is **bullish** with high confidence (92), supported by strong 7d momentum (+45.55%) and price vs. mean (+20.58%).\",\n  \"to_agent\": \"agent-tech\"\n}",
+              "timestamp": "2026-04-04T18:09:46.502980",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "ALGO risk is HIGH.\n**Position Size:** 5%\n**Stop Loss:** 6% (approx. $0.1117)\n**Take Profit:** 12% (approx. $0.1331)",
+                "to_agent": "agent-risk"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "A2A response received.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"response\": \"ALGO risk is HIGH.\\n**Position Size:** 5%\\n**Stop Loss:** 6% (approx. $0.1117)\\n**Take Profit:** 12% (approx. $0.1331)\",\n  \"to_agent\": \"agent-risk\"\n}",
+              "timestamp": "2026-04-04T18:09:46.502994",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "crypto",
+                "tool": "Crypto Prices"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"service_kind\": \"crypto\",\n  \"tool\": \"Crypto Prices\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503007",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "ALGO $0.1188 (-2.50% 24h)",
+                "tool": "crypto",
+                "tx_id": "SPVWY6YUHCAVOLAW53I25IE3SCWHBPQWC4RFV35Y5LRKEGNWFTFQ"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"summary\": \"ALGO $0.1188 (-2.50% 24h)\",\n  \"tool\": \"crypto\",\n  \"tx_id\": \"SPVWY6YUHCAVOLAW53I25IE3SCWHBPQWC4RFV35Y5LRKEGNWFTFQ\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503022",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "**Trade Note: ALGO**\n\n*   **Recommendation:** BUY\n*   **Confidence:** High (92%)\n*   **Position Size:** 5%\n*   **Stop Loss:** 6% (approx. $0.1117)\n*   **Take Profit:** 12% (approx. $0.1331)\n*   **Current Price:** $0.1188\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH.",
+                "to_agent": "agent-report"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"response\": \"**Trade Note: ALGO**\\n\\n*   **Recommendation:** BUY\\n*   **Confidence:** High (92%)\\n*   **Position Size:** 5%\\n*   **Stop Loss:** 6% (approx. $0.1117)\\n*   **Take Profit:** 12% (approx. $0.1331)\\n*   **Current Price:** $0.1188\\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH.\",\n  \"to_agent\": \"agent-report\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503038",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "**Trade Note: ALGO**\n\n*   **Recommendation:** BUY\n*   **Confidence:** High (92%)\n*   **Position Size:** 5%\n*   **Stop Loss:** 6% (approx. $0.1117)\n*   **Take Profit:** 12% (approx. $0.1331)\n*   **Current Price:** $0.1188\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-lead",
+              "output": "{\n  \"result\": \"**Trade Note: ALGO**\\n\\n*   **Recommendation:** BUY\\n*   **Confidence:** High (92%)\\n*   **Position Size:** 5%\\n*   **Stop Loss:** 6% (approx. $0.1117)\\n*   **Take Profit:** 12% (approx. $0.1331)\\n*   **Current Price:** $0.1188\\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH.\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503052",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-lead",
+                "message": "Request technical view\n\nIncoming task: ALGO"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-tech",
+              "output": "{\n  \"from_agent\": \"agent-lead\",\n  \"message\": \"Request technical view\\n\\nIncoming task: ALGO\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503069",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 1.101
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-tech",
+              "output": "{\n  \"balance_algo\": 1.101\n}",
+              "timestamp": "2026-04-04T18:09:46.503082",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "chart",
+                "tool": "Chart Signal"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-tech",
+              "output": "{\n  \"service_kind\": \"chart\",\n  \"tool\": \"Chart Signal\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503094",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "ALGO technical bias BUY with confidence 92. 7d momentum +45.55% and price vs mean +20.58%.",
+                "tool": "chart",
+                "tx_id": "NU365MYVPMEPKNULPFYZAMIYIGBCOURSYQEQQWB7HVYSU5YUWA4A"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-tech",
+              "output": "{\n  \"summary\": \"ALGO technical bias BUY with confidence 92. 7d momentum +45.55% and price vs mean +20.58%.\",\n  \"tool\": \"chart\",\n  \"tx_id\": \"NU365MYVPMEPKNULPFYZAMIYIGBCOURSYQEQQWB7HVYSU5YUWA4A\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503108",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "ALGO is **bullish** with high confidence (92), supported by strong 7d momentum (+45.55%) and price vs. mean (+20.58%)."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-tech",
+              "output": "{\n  \"result\": \"ALGO is **bullish** with high confidence (92), supported by strong 7d momentum (+45.55%) and price vs. mean (+20.58%).\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503120",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-lead",
+                "message": "Request risk view\n\nIncoming task: ALGO"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-risk",
+              "output": "{\n  \"from_agent\": \"agent-lead\",\n  \"message\": \"Request risk view\\n\\nIncoming task: ALGO\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503135",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.501
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-risk",
+              "output": "{\n  \"balance_algo\": 0.501\n}",
+              "timestamp": "2026-04-04T18:09:46.503149",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "risk",
+                "tool": "Risk Model"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-risk",
+              "output": "{\n  \"service_kind\": \"risk\",\n  \"tool\": \"Risk Model\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503161",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "ALGO risk is HIGH. Suggested position size 5%, stop loss 6%, take profit 12%, latest price $0.1188.",
+                "tool": "risk",
+                "tx_id": "6JXSYWGD6GUPR52VKYU66GQ7M453MVYUAKS7GK4IA6IRLCH3CHRA"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-risk",
+              "output": "{\n  \"summary\": \"ALGO risk is HIGH. Suggested position size 5%, stop loss 6%, take profit 12%, latest price $0.1188.\",\n  \"tool\": \"risk\",\n  \"tx_id\": \"6JXSYWGD6GUPR52VKYU66GQ7M453MVYUAKS7GK4IA6IRLCH3CHRA\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503174",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "ALGO risk is HIGH.\n**Position Size:** 5%\n**Stop Loss:** 6% (approx. $0.1117)\n**Take Profit:** 12% (approx. $0.1331)"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-risk",
+              "output": "{\n  \"result\": \"ALGO risk is HIGH.\\n**Position Size:** 5%\\n**Stop Loss:** 6% (approx. $0.1117)\\n**Take Profit:** 12% (approx. $0.1331)\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503186",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-lead",
+                "message": "You are receiving workflow context from an upstream agent.\nYou are the report writer for the trade desk. Take the specialist outputs and create a polished final trade note with BUY / SELL / HOLD, confidence, position size, stop loss, take profit, and thesis. If Gmail is available, use it to send the note.\n\nsent mail to soubhagyasadhukhan@gmail.com\n\nOriginal request: ALGO\n\nCollected context:\nagent-tech: ALGO is **bullish** with high confidence (92), supported by strong 7d momentum (+45.55%) and price vs. mean (+20.58%).\nagent-risk: ALGO risk is HIGH.\n**Position Size:** 5%\n**Stop Loss:** 6% (approx. $0.1117)\n**Take Profit:** 12% (approx. $0.1331)\ncrypto: ALGO $0.1188 (-2.50% 24h)"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-report",
+              "output": "{\n  \"from_agent\": \"agent-lead\",\n  \"message\": \"You are receiving workflow context from an upstream agent.\\nYou are the report writer for the trade desk. Take the specialist outputs and create a polished final trade note with BUY / SELL / HOLD, confidence, position size, stop loss, take profit, and thesis. If Gmail is available, use it to send the note.\\n\\nsent mail to soubhagyasadhukhan@gmail.com\\n\\nOriginal request: ALGO\\n\\nCollected context:\\nagent-tech: ALGO is **bullish** with high confidence (92), supported by strong 7d momentum (+45.55%) and price vs. mean (+20.58%).\\nagent-risk: ALGO risk is HIGH.\\n**Position Size:** 5%\\n**Stop Loss:** 6% (approx. $0.1117)\\n**Take Profit:** 12% (approx. $0.1331)\\ncrypto: ALGO $0.1188 (-2.50% 24h)\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503208",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.411
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-report",
+              "output": "{\n  \"balance_algo\": 0.411\n}",
+              "timestamp": "2026-04-04T18:09:46.503220",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "gmail",
+                "tool": "Gmail"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-report",
+              "output": "{\n  \"service_kind\": \"gmail\",\n  \"tool\": \"Gmail\"\n}",
+              "timestamp": "2026-04-04T18:09:46.503232",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Prepare an email based on this request. Agent instruc...'.",
+                "tool": "gmail",
+                "tx_id": "NRXQCK7UBGVJ6BTZBHFXI7OBXWWB7CDYOKQEFYV4AMU6J6YSKKBQ"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-report",
+              "output": "{\n  \"summary\": \"Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Prepare an email based on this request. Agent instruc...'.\",\n  \"tool\": \"gmail\",\n  \"tx_id\": \"NRXQCK7UBGVJ6BTZBHFXI7OBXWWB7CDYOKQEFYV4AMU6J6YSKKBQ\"\n}",
+              "timestamp": "2026-04-04T18:09:46.504652",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "**Trade Note: ALGO**\n\n*   **Recommendation:** BUY\n*   **Confidence:** High (92%)\n*   **Position Size:** 5%\n*   **Stop Loss:** 6% (approx. $0.1117)\n*   **Take Profit:** 12% (approx. $0.1331)\n*   **Current Price:** $0.1188\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-report",
+              "output": "{\n  \"result\": \"**Trade Note: ALGO**\\n\\n*   **Recommendation:** BUY\\n*   **Confidence:** High (92%)\\n*   **Position Size:** 5%\\n*   **Stop Loss:** 6% (approx. $0.1117)\\n*   **Take Profit:** 12% (approx. $0.1331)\\n*   **Current Price:** $0.1188\\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH.\"\n}",
+              "timestamp": "2026-04-04T18:09:46.504708",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-lead,agent-tech,agent-risk,agent-report"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "**Trade Note: ALGO**\n\n*   **Recommendation:** BUY\n*   **Confidence:** High (92%)\n*   **Position Size:** 5%\n*   **Stop Loss:** 6% (approx. $0.1117)\n*   **Take Profit:** 12% (approx. $0.1331)\n*   **Current Price:** $0.1188\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH.",
+              "timestamp": "2026-04-04T18:09:46.504733",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_492dceea",
+          "result": "**Trade Note: ALGO**\n\n*   **Recommendation:** BUY\n*   **Confidence:** High (92%)\n*   **Position Size:** 5%\n*   **Stop Loss:** 6% (approx. $0.1117)\n*   **Take Profit:** 12% (approx. $0.1331)\n*   **Current Price:** $0.1188\n*   **Thesis:** ALGO is currently bullish with strong 7-day momentum (+45.55%) and positive price vs. mean (+20.58%), suggesting potential for upward movement despite current 24-hour decline. Risk is assessed as HIGH.",
+          "runId": "run_2918657cec",
+          "settlementMode": "demo"
+        },
         "run_8b95fcae06": {
           "logs": [
             {
@@ -4211,7 +4553,1558 @@
       "payment_wallet": "ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI",
       "pipeline_id": "pm_9c2338a9",
       "price_algo": 0.01,
-      "runs": {},
+      "runs": {
+        "run_06ba12f973": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:21:27.608092",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:21:27.608115",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "{\"propmt\":\"what is watermelon\"}"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"{\\\"propmt\\\":\\\"what is watermelon\\\"}\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365205",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:21:45.365238",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 10.578876939s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 10.578876939s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365262",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365279",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "TransactionPool.Remember: transaction VO4NKYNLNHSBPTS6LAPFIHBY2A5ZSRN4EKDYTWDWBMRTEOQR76VQ: overspend (account ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:0} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{NumUint:0 NumByteSlice:0} TotalExtraAppPages:0 TotalAppParams:0 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {1000})",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "error",
+              "level": "error",
+              "message": "Tool execution failed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"TransactionPool.Remember: transaction VO4NKYNLNHSBPTS6LAPFIHBY2A5ZSRN4EKDYTWDWBMRTEOQR76VQ: overspend (account ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:0} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{NumUint:0 NumByteSlice:0} TotalExtraAppPages:0 TotalAppParams:0 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {1000})\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365299",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "No connected agents or tools returned useful output.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"No connected agents or tools returned useful output.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365320",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365333",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "{\"propmt\":\"what is watermelon\"}"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"{\\\"propmt\\\":\\\"what is watermelon\\\"}\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365348",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.6
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.6\n}",
+              "timestamp": "2026-04-04T17:21:45.365371",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 30.941694635s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '30s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 30.941694635s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '30s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365390",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365405",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "DuckDuckGo returned no direct instant answer, but the search request completed.",
+                "tool": "search",
+                "tx_id": "AMGA3G3NXDL2CX3NIK6JOR3BB6YAGCSF3XFM26HK6CWSSIDB5WDA"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"DuckDuckGo returned no direct instant answer, but the search request completed.\",\n  \"tool\": \"search\",\n  \"tx_id\": \"AMGA3G3NXDL2CX3NIK6JOR3BB6YAGCSF3XFM26HK6CWSSIDB5WDA\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365422",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "No connected agents or tools returned useful output.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"No connected agents or tools returned useful output.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365438",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365452",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving specialist outputs from the lead analyst.\nCreate a polished final trade note, then use Gmail if available.\n\nOriginal request: {\"propmt\":\"what is watermelon\"}\n\nCollected context:"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving specialist outputs from the lead analyst.\\nCreate a polished final trade note, then use Gmail if available.\\n\\nOriginal request: {\\\"propmt\\\":\\\"what is watermelon\\\"}\\n\\nCollected context:\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365472",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:21:45.365487",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365501",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving specialist outputs from the lead analyst.\nCreate a polished final trade note, then use Gmail if available.\n\nOriginal request: {\"propmt\":\"what is watermelon\"}\n\nCollected context:\nsearch: DuckDuckGo returned no direct instant answer, but the search request completed."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving specialist outputs from the lead analyst.\\nCreate a polished final trade note, then use Gmail if available.\\n\\nOriginal request: {\\\"propmt\\\":\\\"what is watermelon\\\"}\\n\\nCollected context:\\nsearch: DuckDuckGo returned no direct instant answer, but the search request completed.\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365518",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:21:45.365557",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:21:45.365574",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "No connected agents or tools returned useful output.",
+              "timestamp": "2026-04-04T17:21:45.365582",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "No connected agents or tools returned useful output.",
+          "runId": "run_06ba12f973",
+          "settlementMode": "demo"
+        },
+        "run_393376a0eb": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:52:51.461154",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:52:51.461162",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "what is watermelon"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"what is watermelon\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135344",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.576
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.576\n}",
+              "timestamp": "2026-04-04T17:53:11.135382",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 7.438441589s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '7s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 7.438441589s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '7s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135401",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135414",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+                "tool": "search",
+                "tx_id": "HK4WJNPIC5BUWPGSAO7VBLTQGXOU7AFSPP76PBPLCDUNDYDX7AUQ"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\",\n  \"tool\": \"search\",\n  \"tx_id\": \"HK4WJNPIC5BUWPGSAO7VBLTQGXOU7AFSPP76PBPLCDUNDYDX7AUQ\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135431",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135448",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135462",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving workflow context from an upstream agent.\nYou are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.\n\nOriginal request: what is watermelon\n\nCollected context:\nsearch: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving workflow context from an upstream agent.\\nYou are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.\\n\\nOriginal request: what is watermelon\\n\\nCollected context:\\nsearch: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135482",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:53:11.135494",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T17:53:11.135507",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+              "timestamp": "2026-04-04T17:53:11.135513",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+          "runId": "run_393376a0eb",
+          "settlementMode": "demo"
+        },
+        "run_67e23b4c3a": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:22:20.332406",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:22:20.332441",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "{\"propmt\":\"what is watermelon\"}"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"{\\\"propmt\\\":\\\"what is watermelon\\\"}\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044089",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:22:41.044122",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 10.578876939s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 10.578876939s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044141",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044156",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "TransactionPool.Remember: transaction VO4NKYNLNHSBPTS6LAPFIHBY2A5ZSRN4EKDYTWDWBMRTEOQR76VQ: overspend (account ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:0} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{NumUint:0 NumByteSlice:0} TotalExtraAppPages:0 TotalAppParams:0 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {1000})",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "error",
+              "level": "error",
+              "message": "Tool execution failed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"TransactionPool.Remember: transaction VO4NKYNLNHSBPTS6LAPFIHBY2A5ZSRN4EKDYTWDWBMRTEOQR76VQ: overspend (account ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:0} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{NumUint:0 NumByteSlice:0} TotalExtraAppPages:0 TotalAppParams:0 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {1000})\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044174",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "No connected agents or tools returned useful output.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"No connected agents or tools returned useful output.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044189",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044202",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "{\"propmt\":\"what is watermelon\"}"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"{\\\"propmt\\\":\\\"what is watermelon\\\"}\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044215",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.6
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.6\n}",
+              "timestamp": "2026-04-04T17:22:41.044230",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 30.941694635s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '30s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 30.941694635s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '30s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044246",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044260",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "DuckDuckGo returned no direct instant answer, but the search request completed.",
+                "tool": "search",
+                "tx_id": "AMGA3G3NXDL2CX3NIK6JOR3BB6YAGCSF3XFM26HK6CWSSIDB5WDA"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"DuckDuckGo returned no direct instant answer, but the search request completed.\",\n  \"tool\": \"search\",\n  \"tx_id\": \"AMGA3G3NXDL2CX3NIK6JOR3BB6YAGCSF3XFM26HK6CWSSIDB5WDA\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044276",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "No connected agents or tools returned useful output.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"No connected agents or tools returned useful output.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044290",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044303",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "{\"propmt\":\"what is watermelon\"}"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"{\\\"propmt\\\":\\\"what is watermelon\\\"}\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044315",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.588
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.588\n}",
+              "timestamp": "2026-04-04T17:22:41.044329",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 38.410086072s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '38s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 38.410086072s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'model': 'gemini-2.5-flash', 'location': 'global'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '38s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044344",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044357",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "DuckDuckGo returned no direct instant answer, but the search request completed.",
+                "tool": "search",
+                "tx_id": "DZLIQCXB2J5W6LLQFFY46JWAL2WLY4IQ7PGD26TG3FS6X7VF5CLA"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"DuckDuckGo returned no direct instant answer, but the search request completed.\",\n  \"tool\": \"search\",\n  \"tx_id\": \"DZLIQCXB2J5W6LLQFFY46JWAL2WLY4IQ7PGD26TG3FS6X7VF5CLA\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044371",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "No connected agents or tools returned useful output.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"No connected agents or tools returned useful output.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044384",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044396",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving specialist outputs from the lead analyst.\nCreate a polished final trade note, then use Gmail if available.\n\nOriginal request: {\"propmt\":\"what is watermelon\"}\n\nCollected context:"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving specialist outputs from the lead analyst.\\nCreate a polished final trade note, then use Gmail if available.\\n\\nOriginal request: {\\\"propmt\\\":\\\"what is watermelon\\\"}\\n\\nCollected context:\"\n}",
+              "timestamp": "2026-04-04T17:22:41.044413",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:22:41.045404",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.045425",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving specialist outputs from the lead analyst.\nCreate a polished final trade note, then use Gmail if available.\n\nOriginal request: {\"propmt\":\"what is watermelon\"}\n\nCollected context:\nsearch: DuckDuckGo returned no direct instant answer, but the search request completed."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving specialist outputs from the lead analyst.\\nCreate a polished final trade note, then use Gmail if available.\\n\\nOriginal request: {\\\"propmt\\\":\\\"what is watermelon\\\"}\\n\\nCollected context:\\nsearch: DuckDuckGo returned no direct instant answer, but the search request completed.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.045441",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:22:41.045454",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.045466",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving specialist outputs from the lead analyst.\nCreate a polished final trade note, then use Gmail if available.\n\nOriginal request: {\"propmt\":\"what is watermelon\"}\n\nCollected context:\nsearch: DuckDuckGo returned no direct instant answer, but the search request completed."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving specialist outputs from the lead analyst.\\nCreate a polished final trade note, then use Gmail if available.\\n\\nOriginal request: {\\\"propmt\\\":\\\"what is watermelon\\\"}\\n\\nCollected context:\\nsearch: DuckDuckGo returned no direct instant answer, but the search request completed.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.045480",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:22:41.045492",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:22:41.045504",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "No connected agents or tools returned useful output.",
+              "timestamp": "2026-04-04T17:22:41.045511",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "No connected agents or tools returned useful output.",
+          "runId": "run_67e23b4c3a",
+          "settlementMode": "demo"
+        },
+        "run_904466eed8": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T18:06:06.711589",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T18:06:06.711596",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "what is watermelon"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"what is watermelon\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931135",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.552
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.552\n}",
+              "timestamp": "2026-04-04T18:06:23.931172",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931188",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+                "tool": "search",
+                "tx_id": "OT5I44NLYIDQS5PY724G63PDEW57QUOD5MU5MOQ5Y4P4S76MIQ4Q"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\",\n  \"tool\": \"search\",\n  \"tx_id\": \"OT5I44NLYIDQS5PY724G63PDEW57QUOD5MU5MOQ5Y4P4S76MIQ4Q\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931206",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931223",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931237",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving workflow context from an upstream agent.\nTake the upstream tool result and produce a crisp HTTP response body.\n\nOriginal request: what is watermelon\n\nCollected context:\nsearch: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving workflow context from an upstream agent.\\nTake the upstream tool result and produce a crisp HTTP response body.\\n\\nOriginal request: what is watermelon\\n\\nCollected context:\\nsearch: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931257",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T18:06:23.931270",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T18:06:23.931284",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+              "timestamp": "2026-04-04T18:06:23.931290",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+          "runId": "run_904466eed8",
+          "settlementMode": "demo"
+        },
+        "run_a2fcd7f8f0": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T18:07:53.413440",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T18:07:53.413475",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "what is weather in kolkata"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"what is weather in kolkata\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168758",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.54
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.54\n}",
+              "timestamp": "2026-04-04T18:08:17.168802",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "weather",
+                "tool": "Open-Meteo Weather"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"weather\",\n  \"tool\": \"Open-Meteo Weather\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168818",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3.",
+                "tool": "weather",
+                "tx_id": "X3UNKJL4K3IMMLE372U5WNNDGEZCSQQRNNTAV4OOEST4KSFPTQYQ"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"Calcutta: 27.8\\u00b0C, feels like 34.0\\u00b0C, wind 7.8 km/h, weather code 3.\",\n  \"tool\": \"weather\",\n  \"tx_id\": \"X3UNKJL4K3IMMLE372U5WNNDGEZCSQQRNNTAV4OOEST4KSFPTQYQ\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168835",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"Calcutta: 27.8\\u00b0C, feels like 34.0\\u00b0C, wind 7.8 km/h, weather code 3.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168850",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"Calcutta: 27.8\\u00b0C, feels like 34.0\\u00b0C, wind 7.8 km/h, weather code 3.\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168869",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving workflow context from an upstream agent.\nTake the upstream tool result and produce a crisp HTTP response body.\n\nOriginal request: what is weather in kolkata\n\nCollected context:\nweather: Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving workflow context from an upstream agent.\\nTake the upstream tool result and produce a crisp HTTP response body.\\n\\nOriginal request: what is weather in kolkata\\n\\nCollected context:\\nweather: Calcutta: 27.8\\u00b0C, feels like 34.0\\u00b0C, wind 7.8 km/h, weather code 3.\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168886",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T18:08:17.168900",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"Calcutta: 27.8\\u00b0C, feels like 34.0\\u00b0C, wind 7.8 km/h, weather code 3.\"\n}",
+              "timestamp": "2026-04-04T18:08:17.168913",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3.",
+              "timestamp": "2026-04-04T18:08:17.168920",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "Calcutta: 27.8\u00b0C, feels like 34.0\u00b0C, wind 7.8 km/h, weather code 3.",
+          "runId": "run_a2fcd7f8f0",
+          "settlementMode": "demo"
+        },
+        "run_c74b2c2a1a": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:20:48.136678",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:20:48.136695",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "{\"propmt\":\"what is watermelon\"}"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"{\\\"propmt\\\":\\\"what is watermelon\\\"}\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020436",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:20:55.020474",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\nPlease retry in 10.578876939s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini tool planning failed, falling back to heuristic router.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"429 RESOURCE_EXHAUSTED. {'error': {'code': 429, 'message': 'You exceeded your current quota, please check your plan and billing details. For more information on this error, head to: https://ai.google.dev/gemini-api/docs/rate-limits. To monitor your current usage, head to: https://ai.dev/rate-limit. \\\\n* Quota exceeded for metric: generativelanguage.googleapis.com/generate_content_free_tier_requests, limit: 20, model: gemini-2.5-flash\\\\nPlease retry in 10.578876939s.', 'status': 'RESOURCE_EXHAUSTED', 'details': [{'@type': 'type.googleapis.com/google.rpc.Help', 'links': [{'description': 'Learn more about Gemini API quotas', 'url': 'https://ai.google.dev/gemini-api/docs/rate-limits'}]}, {'@type': 'type.googleapis.com/google.rpc.QuotaFailure', 'violations': [{'quotaMetric': 'generativelanguage.googleapis.com/generate_content_free_tier_requests', 'quotaId': 'GenerateRequestsPerDayPerProjectPerModel-FreeTier', 'quotaDimensions': {'location': 'global', 'model': 'gemini-2.5-flash'}, 'quotaValue': '20'}]}, {'@type': 'type.googleapis.com/google.rpc.RetryInfo', 'retryDelay': '10s'}]}}\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020494",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020509",
+              "txId": null
+            },
+            {
+              "details": {
+                "error": "TransactionPool.Remember: transaction VO4NKYNLNHSBPTS6LAPFIHBY2A5ZSRN4EKDYTWDWBMRTEOQR76VQ: overspend (account ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:0} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{NumUint:0 NumByteSlice:0} TotalExtraAppPages:0 TotalAppParams:0 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {1000})",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "error",
+              "level": "error",
+              "message": "Tool execution failed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"error\": \"TransactionPool.Remember: transaction VO4NKYNLNHSBPTS6LAPFIHBY2A5ZSRN4EKDYTWDWBMRTEOQR76VQ: overspend (account ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI, data {AccountBaseData:{Status:Offline MicroAlgos:{Raw:0} RewardsBase:0 RewardedMicroAlgos:{Raw:0} AuthAddr:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAY5HFKQ IncentiveEligible:false TotalAppSchema:{NumUint:0 NumByteSlice:0} TotalExtraAppPages:0 TotalAppParams:0 TotalAppLocalStates:0 TotalAssetParams:0 TotalAssets:0 TotalBoxes:0 TotalBoxBytes:0 LastProposed:0 LastHeartbeat:0} VotingData:{VoteID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] SelectionID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] StateProofID:[0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0] VoteFirstValid:0 VoteLastValid:0 VoteKeyDilution:0}}, tried to spend {1000})\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020525",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "No connected agents or tools returned useful output.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"No connected agents or tools returned useful output.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020538",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020550",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving specialist outputs from the lead analyst.\nCreate a polished final trade note, then use Gmail if available.\n\nOriginal request: {\"propmt\":\"what is watermelon\"}\n\nCollected context:"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving specialist outputs from the lead analyst.\\nCreate a polished final trade note, then use Gmail if available.\\n\\nOriginal request: {\\\"propmt\\\":\\\"what is watermelon\\\"}\\n\\nCollected context:\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020567",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T17:20:55.020579",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "No connected agents or tools returned useful output."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"No connected agents or tools returned useful output.\"\n}",
+              "timestamp": "2026-04-04T17:20:55.020590",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "No connected agents or tools returned useful output.",
+              "timestamp": "2026-04-04T17:20:55.020597",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "No connected agents or tools returned useful output.",
+          "runId": "run_c74b2c2a1a",
+          "settlementMode": "demo"
+        },
+        "run_eec094622b": {
+          "logs": [
+            {
+              "details": {
+                "entry_agent": "agent-analyzer",
+                "runtime": "multi_agent",
+                "settlement_mode": "demo"
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:59:50.930507",
+              "txId": null
+            },
+            {
+              "details": {
+                "agent_count": 2,
+                "pipeline_id": "pm_9c2338a9"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Booted agent microservices for the pipeline.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-04-04T17:59:50.930516",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": null,
+                "message": "what is watermelon"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"from_agent\": null,\n  \"message\": \"what is watermelon\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195510",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.564
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"balance_algo\": 0.564\n}",
+              "timestamp": "2026-04-04T18:00:11.195547",
+              "txId": null
+            },
+            {
+              "details": {
+                "service_kind": "search",
+                "tool": "DuckDuckGo Search"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Executing tool.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"service_kind\": \"search\",\n  \"tool\": \"DuckDuckGo Search\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195568",
+              "txId": null
+            },
+            {
+              "details": {
+                "summary": "The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+                "tool": "search",
+                "tx_id": "WH62SGRN5WP2AWFXT3F3IKL3ZHIG5U2H4453OQTAMM7IMSFH2A4Q"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Tool completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"summary\": \"The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\",\n  \"tool\": \"search\",\n  \"tx_id\": \"WH62SGRN5WP2AWFXT3F3IKL3ZHIG5U2H4453OQTAMM7IMSFH2A4Q\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195585",
+              "txId": null
+            },
+            {
+              "details": {
+                "response": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+                "to_agent": "agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Downstream response agent completed.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"response\": \"search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\",\n  \"to_agent\": \"agent-responder\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195600",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-analyzer",
+              "output": "{\n  \"result\": \"search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195613",
+              "txId": null
+            },
+            {
+              "details": {
+                "from_agent": "agent-analyzer",
+                "message": "You are receiving workflow context from an upstream agent.\nYou are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.\n\nOriginal request: what is watermelon\n\nCollected context:\nsearch: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Agent started reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"from_agent\": \"agent-analyzer\",\n  \"message\": \"You are receiving workflow context from an upstream agent.\\nYou are an autonomous routing agent. Read the incoming HTTP request prompt. If it asks about weather, use the connected weather API. If it asks for facts, topics, or web-style lookup, use the connected search API. Return concise context for the next node.\\n\\nOriginal request: what is watermelon\\n\\nCollected context:\\nsearch: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195631",
+              "txId": null
+            },
+            {
+              "details": {
+                "balance_algo": 0.0
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Loaded wallet balance for reasoning context.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"balance_algo\": 0.0\n}",
+              "timestamp": "2026-04-04T18:00:11.195644",
+              "txId": null
+            },
+            {
+              "details": {
+                "result": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons."
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Agent finished reasoning.",
+              "nodeId": "agent-responder",
+              "output": "{\n  \"result\": \"search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.\"\n}",
+              "timestamp": "2026-04-04T18:00:11.195657",
+              "txId": null
+            },
+            {
+              "details": {
+                "agents_involved": "agent-analyzer,agent-responder"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Multi-agent pipeline finished.",
+              "nodeId": null,
+              "output": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+              "timestamp": "2026-04-04T18:00:11.195662",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_9c2338a9",
+          "result": "search: The watermelon is a species of flowering plant in the family Cucurbitaceae, that has a large, edible fruit. It is a scrambling and trailing vine-like plant, and is widely cultivated worldwide, with more than 1,000 varieties. Watermelons are grown in favorable climates from tropical to temperate regions worldwide for its large edible fruit, which is a berry with a hard rind and no internal divisions, botanically called a pepo. The sweet, juicy flesh is usually deep red to pink, with many seeds that are black when mature, white when immature. Seedless varieties also exist. The fruit can be eaten raw or pickled, and the rind is edible after cooking. It may also be consumed as a juice or an ingredient in mixed beverages. Watermelon originated in Africa, where it was first cultivated. Kordofan melons from Sudan are the closest relatives and may be progenitors of modern, cultivated watermelons.",
+          "runId": "run_eec094622b",
+          "settlementMode": "demo"
+        }
+      },
       "wallets": {
         "agent-analyzer": {
           "address": "ROFKTK5JFIQOI7O6PEPKQKHBHQJWIPRFXUELNTFAWX4VU254Z2HGGNNMNI",

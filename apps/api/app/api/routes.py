@@ -146,4 +146,5 @@ def run_pipeline(
         pipeline_id=pipeline_id,
         query=payload.query,
         settlement_mode=settlement_mode,
+        definition_override=payload.definition_override(),
     )

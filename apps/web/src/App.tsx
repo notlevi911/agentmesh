@@ -300,7 +300,7 @@ function BuilderApp() {
   );
   const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? "Trade Signal Desk");
   const [runtimeQuery, setRuntimeQuery] = useState(
-    storedWorkflow?.runtimeQuery ?? "Email me the latest ALGO price and weather in Bengaluru at founder@example.com",
+    storedWorkflow?.runtimeQuery ?? '{ "prompt": "" }',
   );
   const [deployment, setDeployment] = useState<DeployResponse | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -681,8 +681,7 @@ function BuilderApp() {
         });
         const triggerNode = hydratedNodes.find((node) => node.type === "trigger");
         setRuntimeQuery(
-          triggerNode?.data.testRequestBody ??
-            "Email me the latest ALGO price and weather in Bengaluru at founder@example.com",
+          triggerNode?.data.testRequestBody ?? '{ "prompt": "" }',
         );
         setSelectedNodeId(hydratedNodes.find((node) => node.type === "agent")?.id ?? hydratedNodes[0]?.id ?? null);
         setSelectedEdgeId(null);
@@ -764,6 +763,9 @@ function BuilderApp() {
       );
       const requestPayload = {
         query: requestQuery,
+        payload: {
+          definition: serializePipeline(),
+        },
       };
       const preflight = await preflightPipelinePayment(deployment.pipelineId, requestPayload);
       const preflightLogs: LogEntry[] = [

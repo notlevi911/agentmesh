@@ -51,6 +51,10 @@ class MultiAgentOrchestrator:
 
     def boot_pipeline_agents(self, pipeline_id: str) -> MultiAgentBootResponse:
         record = self._get_record(pipeline_id)
+        return self.boot_pipeline_agents_for_record(record)
+
+    def boot_pipeline_agents_for_record(self, record: PipelineRecord) -> MultiAgentBootResponse:
+        pipeline_id = record.pipeline_id
         runtime_config = build_runtime_config(record)
 
         with self._lock:
@@ -58,6 +62,10 @@ class MultiAgentOrchestrator:
 
         for agent_config in runtime_config.agents:
             if agent_config.id in pipeline_handles:
+                handle = pipeline_handles[agent_config.id]
+                handle.runtime.agent_config = agent_config
+                handle.runtime.record = record
+                handle.runtime.pipeline_config = runtime_config
                 continue
 
             runtime = AgentServiceRuntime(
@@ -95,13 +103,13 @@ class MultiAgentOrchestrator:
             ],
         )
 
-    def execute(self, pipeline_id: str, query: str, settlement_mode: str) -> RunPipelineResponse:
-        return asyncio.run(self.execute_async(pipeline_id, query, settlement_mode))
+    def execute(self, record: PipelineRecord, query: str, settlement_mode: str) -> RunPipelineResponse:
+        return asyncio.run(self.execute_async(record, query, settlement_mode))
 
-    async def execute_async(self, pipeline_id: str, query: str, settlement_mode: str) -> RunPipelineResponse:
-        record = self._get_record(pipeline_id)
+    async def execute_async(self, record: PipelineRecord, query: str, settlement_mode: str) -> RunPipelineResponse:
+        pipeline_id = record.pipeline_id
         runtime_config = build_runtime_config(record)
-        self.boot_pipeline_agents(pipeline_id)
+        self.boot_pipeline_agents_for_record(record)
 
         entry_agent = next((agent for agent in runtime_config.agents if agent.is_entry), None)
         if entry_agent is None:

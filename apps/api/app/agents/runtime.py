@@ -77,6 +77,7 @@ class AgentServiceRuntime:
         return list(self.logs)
 
     async def _reasoning_loop(self, message: str, from_agent: Optional[str] = None) -> str:
+        self.logs = []
         self.state = "running"
         self._log(
             "info",
@@ -180,6 +181,7 @@ class AgentServiceRuntime:
         for target_agent_id in downstream_agent_ids:
             try:
                 downstream_message = self._downstream_handoff_message(
+                    target_agent_id=target_agent_id,
                     original_message=message,
                     tool_results=tool_results,
                     agent_results=agent_results,
@@ -275,6 +277,10 @@ class AgentServiceRuntime:
             except Exception as error:
                 self._log("warning", "Gemini synthesis failed, falling back to string synthesis.", {"error": str(error)})
 
+        collected_context = self._extract_collected_context(message)
+        if self._is_downstream_agent(self.agent_config.id) and collected_context:
+            return self._format_downstream_response(collected_context)
+
         parts: List[str] = []
         for agent_id, result in agent_results.items():
             parts.append(f"{agent_id}: {result}")
@@ -359,15 +365,17 @@ class AgentServiceRuntime:
 
     def _downstream_handoff_message(
         self,
+        target_agent_id: str,
         original_message: str,
         tool_results: List[ToolResult],
         agent_results: Dict[str, str],
     ) -> str:
         context_lines = [f"{agent_id}: {result}" for agent_id, result in agent_results.items()]
         context_lines.extend([f"{result.tool}: {result.summary}" for result in tool_results])
+        instructions = self._downstream_instruction_text(target_agent_id)
         return (
-            "You are receiving specialist outputs from the lead analyst.\n"
-            "Create a polished final trade note, then use Gmail if available.\n\n"
+            "You are receiving workflow context from an upstream agent.\n"
+            f"{instructions}\n\n"
             f"Original request: {original_message}\n\n"
             f"Collected context:\n{chr(10).join(context_lines)}"
         )
@@ -401,6 +409,14 @@ class AgentServiceRuntime:
         role = (self.agent_config.role or "").lower()
         prompt = self.agent_config.system_prompt.lower()
         return "lead" in role or "trade signal" in prompt or "lead analyst" in prompt
+
+    def _downstream_instruction_text(self, target_agent_id: str) -> str:
+        target = next((agent for agent in self.pipeline_config.agents if agent.id == target_agent_id), None)
+        prompt = (target.system_prompt if target else "") or ""
+        prompt = prompt.strip()
+        if prompt:
+            return prompt
+        return "Use the collected context to produce the best final response for the original request."
 
     def _is_downstream_agent(self, target_agent_id: str) -> bool:
         target = next((agent for agent in self.pipeline_config.agents if agent.id == target_agent_id), None)
@@ -439,6 +455,33 @@ class AgentServiceRuntime:
             return int(match.group(1))
         except Exception:
             return None
+
+    def _extract_collected_context(self, message: str) -> Optional[str]:
+        marker = "Collected context:"
+        if marker not in message:
+            return None
+        _, _, tail = message.partition(marker)
+        cleaned = tail.strip()
+        return cleaned or None
+
+    def _format_downstream_response(self, collected_context: str) -> str:
+        lines = [line.strip() for line in collected_context.splitlines() if line.strip()]
+        if not lines:
+            return collected_context
+
+        normalized: List[str] = []
+        for line in lines:
+            if ": " in line:
+                prefix, value = line.split(": ", 1)
+                if prefix in {"search", "weather", "crypto", "chart", "risk", "gmail"} and value.strip():
+                    normalized.append(value.strip())
+                    continue
+            normalized.append(line)
+
+        if len(normalized) == 1:
+            return normalized[0]
+
+        return "\n".join(normalized)
 
     def _pipeline_node(self, node_id: str) -> Optional[PipelineNode]:
         return next((node for node in self.record.definition.nodes if node.id == node_id), None)
