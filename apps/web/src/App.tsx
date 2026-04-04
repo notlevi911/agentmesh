@@ -149,8 +149,8 @@ function BuilderApp() {
   const storedWorkflow = loadStoredWorkflow();
   const [mode, setMode] = useState<AppMode>("landing");
   const [leftOpen, setLeftOpen] = useState(true);
-  const [rightOpen, setRightOpen] = useState(true);
-  const [bottomOpen, setBottomOpen] = useState(true);
+  const [rightOpen, setRightOpen] = useState(false);
+  const [bottomOpen, setBottomOpen] = useState(false);
   const [leftPanel, setLeftPanel] = useState<LeftPanel>("palette");
   const [bottomPanel, setBottomPanel] = useState<BottomPanel>("prompt");
   const [nodes, setNodes, onNodesChange] = useNodesState<BuilderNode>(
@@ -293,9 +293,9 @@ function BuilderApp() {
     setLogs([]);
     setRunResult(undefined);
     setMode("studio");
-    setLeftOpen(true);
-    setRightOpen(true);
-    setBottomOpen(true);
+    setLeftOpen(false);
+    setRightOpen(false);
+    setBottomOpen(false);
     setLeftPanel("palette");
     setBottomPanel("prompt");
   }, [setEdges, setNodes]);
@@ -330,7 +330,7 @@ function BuilderApp() {
       setMode("studio");
       setBottomOpen(true);
       setBottomPanel("console");
-      setRightOpen(true);
+      setRightOpen(false);
     } catch (deployError) {
       setError(deployError instanceof Error ? deployError.message : "Unable to deploy pipeline.");
     } finally {
@@ -641,61 +641,127 @@ function BuilderApp() {
 
       {error ? <div className="error-banner floating-error">{error}</div> : null}
 
-      <main className="studio-main">
-        <nav className="studio-rail">
-          <button
-            className={leftPanel === "palette" ? "rail-button rail-active" : "rail-button"}
-            onClick={() => {
-              setLeftPanel("palette");
-              setLeftOpen(true);
-            }}
-            type="button"
-          >
-            Blocks
-          </button>
-          <button
-            className={leftPanel === "flows" ? "rail-button rail-active" : "rail-button"}
-            onClick={() => {
-              setLeftPanel("flows");
-              setLeftOpen(true);
-            }}
-            type="button"
-          >
-            Flows
-          </button>
-          <button
-            className={bottomPanel === "prompt" ? "rail-button rail-active" : "rail-button"}
-            onClick={() => {
-              setBottomPanel("prompt");
-              setBottomOpen(true);
-            }}
-            type="button"
-          >
-            Prompt
-          </button>
-          <button
-            className={bottomPanel === "console" ? "rail-button rail-active" : "rail-button"}
-            onClick={() => {
-              setBottomPanel("console");
-              setBottomOpen(true);
-            }}
-            type="button"
-          >
-            Console
-          </button>
-        </nav>
+      <main className="playground-stage">
+        <section className="playground-shell canvas-super-shell">
+          <div className="canvas-overlay-top">
+            <div className="canvas-badge-cluster">
+              <div className="canvas-status-pill">{liveStatus}</div>
+              <div className="canvas-status-pill">{nodes.length} nodes</div>
+              <div className="canvas-status-pill">{edges.length} wires</div>
+            </div>
+            <div className="canvas-status-pill strong-pill">
+              {deployment ? deployment.pipelineId : "Not deployed"}
+            </div>
+          </div>
 
-        <section className="studio-workspace">
-          <aside className={leftOpen ? "studio-drawer studio-drawer-left" : "studio-drawer studio-drawer-left drawer-hidden"}>
+          <div className="playground-launchers playground-launchers-left">
+            <button
+              className={leftOpen && leftPanel === "palette" ? "launcher-button launcher-active" : "launcher-button"}
+              onClick={() => {
+                setLeftPanel("palette");
+                setLeftOpen(true);
+              }}
+              type="button"
+            >
+              Blocks
+            </button>
+            <button
+              className={leftOpen && leftPanel === "flows" ? "launcher-button launcher-active" : "launcher-button"}
+              onClick={() => {
+                setLeftPanel("flows");
+                setLeftOpen(true);
+              }}
+              type="button"
+            >
+              Flows
+            </button>
+            <button
+              className={rightOpen ? "launcher-button launcher-active" : "launcher-button"}
+              onClick={() => setRightOpen(true)}
+              type="button"
+            >
+              Inspector
+            </button>
+          </div>
+
+          <div className="playground-launchers playground-launchers-right">
+            <button
+              className={bottomOpen && bottomPanel === "prompt" ? "launcher-button launcher-active" : "launcher-button"}
+              onClick={() => {
+                setBottomPanel("prompt");
+                setBottomOpen(true);
+              }}
+              type="button"
+            >
+              Prompt
+            </button>
+            <button
+              className={bottomOpen && bottomPanel === "console" ? "launcher-button launcher-active" : "launcher-button"}
+              onClick={() => {
+                setBottomPanel("console");
+                setBottomOpen(true);
+              }}
+              type="button"
+            >
+              Console
+            </button>
+          </div>
+
+          <div
+            className="canvas-flow-wrap"
+            onDragOver={(event) => {
+              event.preventDefault();
+              event.dataTransfer.dropEffect = "move";
+            }}
+            onDrop={handleDrop}
+          >
+            <ReactFlow<BuilderNode, BuilderEdge>
+              edgeTypes={edgeTypes}
+              edges={edges.map((edge) => ({
+                ...edge,
+                markerEnd: {
+                  type: MarkerType.ArrowClosed,
+                },
+              }))}
+              fitView
+              nodeTypes={nodeTypes}
+              nodes={decoratedNodes}
+              onConnect={onConnect}
+              onEdgesChange={onEdgesChange}
+              onInit={setReactFlowInstance}
+              onNodeClick={onNodeClick}
+              onNodesChange={onNodesChange}
+            >
+              <Background color="#113023" gap={28} />
+              <MiniMap
+                pannable
+                style={{ background: "#08110d", border: "1px solid #183126" }}
+                zoomable
+              />
+              <Controls />
+            </ReactFlow>
+          </div>
+
+          <section
+            className={leftOpen ? "overlay-panel overlay-panel-left" : "overlay-panel overlay-panel-left overlay-hidden-left"}
+          >
+            <button
+              aria-label="Close left panel"
+              className="overlay-close"
+              onClick={() => setLeftOpen(false)}
+              type="button"
+            >
+              ×
+            </button>
             {leftPanel === "palette" ? (
               <NodePalette onQuickAdd={handleQuickAdd} />
             ) : (
-              <div className="drawer-placeholder">
+              <div className="drawer-placeholder studio-panel panel-pad">
                 <span className="eyebrow">Flows</span>
                 <h2>Workflow snapshots</h2>
                 <div className="snapshot-card">
                   <strong>Market Analyzer</strong>
-                  <span>Research Agent to Tools to Responder</span>
+                  <span>Research Agent to tools to responder</span>
                 </div>
                 <div className="snapshot-card">
                   <strong>Weather Lookup</strong>
@@ -707,64 +773,19 @@ function BuilderApp() {
                 </div>
               </div>
             )}
-          </aside>
-
-          <button
-            aria-label={leftOpen ? "Collapse left drawer" : "Expand left drawer"}
-            className={leftOpen ? "edge-toggle edge-toggle-left" : "edge-toggle edge-toggle-left edge-toggle-collapsed"}
-            onClick={() => setLeftOpen((value) => !value)}
-            type="button"
-          >
-            {leftOpen ? "<<" : ">>"}
-          </button>
-
-          <section className="canvas-shell canvas-super-shell">
-            <div className="canvas-overlay-top">
-              <div className="canvas-badge-cluster">
-                <div className="canvas-status-pill">{liveStatus}</div>
-                <div className="canvas-status-pill">{nodes.length} nodes</div>
-                <div className="canvas-status-pill">{edges.length} wires</div>
-              </div>
-              <div className="canvas-status-pill strong-pill">{deployment ? deployment.pipelineId : "Not deployed"}</div>
-            </div>
-
-            <div
-              className="canvas-flow-wrap"
-              onDragOver={(event) => {
-                event.preventDefault();
-                event.dataTransfer.dropEffect = "move";
-              }}
-              onDrop={handleDrop}
-            >
-              <ReactFlow<BuilderNode, BuilderEdge>
-                edgeTypes={edgeTypes}
-                edges={edges.map((edge) => ({
-                  ...edge,
-                  markerEnd: {
-                    type: MarkerType.ArrowClosed,
-                  },
-                }))}
-                fitView
-                nodeTypes={nodeTypes}
-                nodes={decoratedNodes}
-                onConnect={onConnect}
-                onEdgesChange={onEdgesChange}
-                onInit={setReactFlowInstance}
-                onNodeClick={onNodeClick}
-                onNodesChange={onNodesChange}
-              >
-                <Background color="#113023" gap={28} />
-                <MiniMap
-                  pannable
-                  style={{ background: "#08110d", border: "1px solid #183126" }}
-                  zoomable
-                />
-                <Controls />
-              </ReactFlow>
-            </div>
           </section>
 
-          <aside className={rightOpen ? "studio-drawer studio-drawer-right" : "studio-drawer studio-drawer-right drawer-hidden"}>
+          <section
+            className={rightOpen ? "overlay-panel overlay-panel-right" : "overlay-panel overlay-panel-right overlay-hidden-right"}
+          >
+            <button
+              aria-label="Close inspector"
+              className="overlay-close"
+              onClick={() => setRightOpen(false)}
+              type="button"
+            >
+              ×
+            </button>
             <InspectorPanel
               deployment={deployment}
               onCopyEndpoint={() => {
@@ -775,81 +796,82 @@ function BuilderApp() {
               onNodeChange={handleNodeChange}
               selectedNode={selectedNode}
             />
-          </aside>
+          </section>
 
-          <button
-            aria-label={rightOpen ? "Collapse right drawer" : "Expand right drawer"}
-            className={rightOpen ? "edge-toggle edge-toggle-right" : "edge-toggle edge-toggle-right edge-toggle-collapsed"}
-            onClick={() => setRightOpen((value) => !value)}
-            type="button"
+          <section
+            className={bottomOpen ? "overlay-panel overlay-panel-bottom" : "overlay-panel overlay-panel-bottom overlay-hidden-bottom"}
           >
-            {rightOpen ? ">>" : "<<"}
-          </button>
-        </section>
-      </main>
-
-      <section className={bottomOpen ? "studio-dock" : "studio-dock dock-hidden"}>
-        <div className="studio-dock-header">
-          <div className="dock-tabs">
-            <button
-              className={bottomPanel === "prompt" ? "dock-tab dock-tab-active" : "dock-tab"}
-              onClick={() => setBottomPanel("prompt")}
-              type="button"
-            >
-              Prompt Input
-            </button>
-            <button
-              className={bottomPanel === "console" ? "dock-tab dock-tab-active" : "dock-tab"}
-              onClick={() => setBottomPanel("console")}
-              type="button"
-            >
-              Runtime Console
-            </button>
-          </div>
-          <button className="edge-toggle dock-toggle" onClick={() => setBottomOpen((value) => !value)} type="button">
-            {bottomOpen ? "<<" : ">>"}
-          </button>
-        </div>
-        <div className="studio-dock-body">
-          {bottomPanel === "prompt" ? (
-            <div className="dock-panel-grid">
-              <PromptRunner
-                onChange={setPromptInput}
-                onRun={handleRunDemo}
-                prompt={promptInput}
-                runPending={runPending}
-              />
-              <div className="dock-helper-card">
-                <span className="eyebrow">Prompt Suggestions</span>
-                <h3>Try these inputs</h3>
+            <div className="overlay-bottom-header">
+              <div className="overlay-tabs">
                 <button
-                  className="prompt-suggestion"
-                  onClick={() => setPromptInput("What's the weather in Bengaluru today?")}
+                  className={bottomPanel === "prompt" ? "dock-tab dock-tab-active" : "dock-tab"}
+                  onClick={() => setBottomPanel("prompt")}
                   type="button"
                 >
-                  Weather in Bengaluru today
+                  Prompt Input
                 </button>
                 <button
-                  className="prompt-suggestion"
-                  onClick={() => setPromptInput("Search BTC sentiment and explain what BTC is.")}
+                  className={bottomPanel === "console" ? "dock-tab dock-tab-active" : "dock-tab"}
+                  onClick={() => setBottomPanel("console")}
                   type="button"
                 >
-                  Search BTC sentiment and explain BTC
-                </button>
-                <button
-                  className="prompt-suggestion"
-                  onClick={() => setPromptInput("Find current weather in Mumbai and summarize it cleanly.")}
-                  type="button"
-                >
-                  Find weather in Mumbai and summarize it
+                  Runtime Console
                 </button>
               </div>
+              <button
+                aria-label="Close bottom panel"
+                className="overlay-close overlay-close-inline"
+                onClick={() => setBottomOpen(false)}
+                type="button"
+              >
+                ×
+              </button>
             </div>
-          ) : (
-            <RunLogPanel logs={logs} result={runResult} />
-          )}
-        </div>
-      </section>
+
+            <div className="overlay-bottom-body">
+              {bottomPanel === "prompt" ? (
+                <div className="dock-panel-grid">
+                  <PromptRunner
+                    onChange={setPromptInput}
+                    onRun={handleRunDemo}
+                    prompt={promptInput}
+                    runPending={runPending}
+                  />
+                  <div className="dock-helper-card">
+                    <span className="eyebrow">Prompt Suggestions</span>
+                    <h3>Try these inputs</h3>
+                    <button
+                      className="prompt-suggestion"
+                      onClick={() => setPromptInput("What's the weather in Bengaluru today?")}
+                      type="button"
+                    >
+                      Weather in Bengaluru today
+                    </button>
+                    <button
+                      className="prompt-suggestion"
+                      onClick={() => setPromptInput("Search BTC sentiment and explain what BTC is.")}
+                      type="button"
+                    >
+                      Search BTC sentiment and explain BTC
+                    </button>
+                    <button
+                      className="prompt-suggestion"
+                      onClick={() =>
+                        setPromptInput("Find current weather in Mumbai and summarize it cleanly.")
+                      }
+                      type="button"
+                    >
+                      Find weather in Mumbai and summarize it
+                    </button>
+                  </div>
+                </div>
+              ) : (
+                <RunLogPanel logs={logs} result={runResult} />
+              )}
+            </div>
+          </section>
+        </section>
+      </main>
 
       <FundingModal
         fundIntent={fundIntent}
