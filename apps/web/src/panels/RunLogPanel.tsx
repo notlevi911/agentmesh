@@ -2,15 +2,27 @@ import type { LogEntry } from "../types/pipeline";
 
 interface RunLogPanelProps {
   logs: LogEntry[];
+  onRun: () => void;
   result?: string;
+  runPending: boolean;
+  runtimePrompt: string;
 }
 
-export function RunLogPanel({ logs, result }: RunLogPanelProps) {
+export function RunLogPanel({ logs, onRun, result, runPending, runtimePrompt }: RunLogPanelProps) {
   return (
     <section className="studio-panel panel-pad log-panel">
       <div className="panel-header-block">
         <span className="eyebrow">Runtime</span>
         <h2>Pipeline logs</h2>
+      </div>
+      <div className="console-toolbar">
+        <div className="console-prompt-preview">
+          <span>Execution prompt</span>
+          <strong>{runtimePrompt}</strong>
+        </div>
+        <button className="primary-button compact-button" disabled={runPending} onClick={onRun} type="button">
+          {runPending ? "Running..." : "Run Workflow"}
+        </button>
       </div>
       <div className="log-list">
         {logs.length === 0 ? (

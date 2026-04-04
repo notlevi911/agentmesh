@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   Background,
+  ConnectionMode,
   Controls,
   MarkerType,
   MiniMap,
@@ -23,7 +24,6 @@ import { ServiceNode } from "./nodes/ServiceNode";
 import { TriggerNode } from "./nodes/TriggerNode";
 import { FundingModal } from "./panels/FundingModal";
 import { InspectorPanel } from "./panels/InspectorPanel";
-import { PromptRunner } from "./panels/PromptRunner";
 import { RunLogPanel } from "./panels/RunLogPanel";
 import "./styles/app.css";
 import type {
@@ -43,14 +43,12 @@ const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v3";
 interface StoredWorkflowDraft {
   pipelineName: string;
   activeWireType: WireKind;
-  promptInput: string;
   nodes: BuilderNode[];
   edges: BuilderEdge[];
 }
 
 type AppMode = "landing" | "studio";
 type LeftPanel = "palette" | "flows";
-type BottomPanel = "console" | "prompt";
 
 const nodeTypes = {
   agent: AgentNode,
@@ -152,7 +150,6 @@ function BuilderApp() {
   const [rightOpen, setRightOpen] = useState(false);
   const [bottomOpen, setBottomOpen] = useState(false);
   const [leftPanel, setLeftPanel] = useState<LeftPanel>("palette");
-  const [bottomPanel, setBottomPanel] = useState<BottomPanel>("prompt");
   const [nodes, setNodes, onNodesChange] = useNodesState<BuilderNode>(
     storedWorkflow?.nodes ?? initialNodes,
   );
@@ -160,9 +157,6 @@ function BuilderApp() {
     storedWorkflow?.edges ?? initialEdges,
   );
   const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? "AgentMesh Canvas");
-  const [promptInput, setPromptInput] = useState(
-    storedWorkflow?.promptInput ?? "What's the weather in Bengaluru today?",
-  );
   const [deployment, setDeployment] = useState<DeployResponse | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
   const [runResult, setRunResult] = useState<string>();
@@ -185,6 +179,21 @@ function BuilderApp() {
     () => nodes.find((node) => node.id === selectedNodeId) ?? null,
     [nodes, selectedNodeId],
   );
+
+  const runtimePrompt = useMemo(() => {
+    const selectedAgentPrompt =
+      selectedNode?.type === "agent" ? selectedNode.data.systemPrompt?.trim() : undefined;
+    if (selectedAgentPrompt) {
+      return selectedAgentPrompt;
+    }
+
+    const firstAgentPrompt = nodes.find((node) => node.type === "agent")?.data.systemPrompt?.trim();
+    if (firstAgentPrompt) {
+      return firstAgentPrompt;
+    }
+
+    return "Analyze BTC sentiment and summarize it clearly.";
+  }, [nodes, selectedNode]);
 
   const handleOpenFunding = useCallback(
     async (nodeId: string) => {
@@ -287,7 +296,6 @@ function BuilderApp() {
     setNodes(initialNodes);
     setEdges(initialEdges);
     setPipelineName("Market Analyzer");
-    setPromptInput("Search current sentiment for BTC and summarize it.");
     setSelectedNodeId(initialNodes[1]?.id ?? null);
     setDeployment(null);
     setLogs([]);
@@ -297,7 +305,6 @@ function BuilderApp() {
     setRightOpen(false);
     setBottomOpen(false);
     setLeftPanel("palette");
-    setBottomPanel("prompt");
   }, [setEdges, setNodes]);
 
   async function handleDeploy() {
@@ -329,7 +336,6 @@ function BuilderApp() {
       );
       setMode("studio");
       setBottomOpen(true);
-      setBottomPanel("console");
       setRightOpen(false);
     } catch (deployError) {
       setError(deployError instanceof Error ? deployError.message : "Unable to deploy pipeline.");
@@ -349,12 +355,11 @@ function BuilderApp() {
 
     try {
       const response = await runPipeline(deployment.pipelineId, {
-        query: promptInput,
+        query: runtimePrompt,
       });
       setLogs(response.logs);
       setRunResult(response.result);
       setBottomOpen(true);
-      setBottomPanel("console");
     } catch (runError) {
       setError(runError instanceof Error ? runError.message : "Pipeline run failed.");
     } finally {
@@ -399,7 +404,6 @@ function BuilderApp() {
     const draft: StoredWorkflowDraft = {
       pipelineName,
       activeWireType,
-      promptInput,
       nodes: nodes.map((node) => ({
         ...node,
         data: {
@@ -411,7 +415,7 @@ function BuilderApp() {
     };
 
     window.localStorage.setItem(WORKFLOW_STORAGE_KEY, JSON.stringify(draft));
-  }, [activeWireType, edges, nodes, pipelineName, promptInput]);
+  }, [activeWireType, edges, nodes, pipelineName]);
 
   const onConnect = useCallback(
     (connection: Connection) => {
@@ -598,9 +602,6 @@ function BuilderApp() {
     <div className="studio-shell">
       <header className="studio-topbar">
         <div className="studio-topbar-left">
-          <button className="ghost-button compact-button" onClick={() => setMode("landing")} type="button">
-            Dashboard
-          </button>
           <div className="studio-brand">
             <span className="brand-mark small-mark">AM</span>
             <div>
@@ -630,8 +631,41 @@ function BuilderApp() {
         </div>
 
         <div className="studio-topbar-right">
+          <div className="toolbar-panel-group">
+            <button
+              className={leftOpen && leftPanel === "palette" ? "compact-button toolbar-panel-button toolbar-panel-active" : "compact-button toolbar-panel-button"}
+              onClick={() => {
+                if (leftOpen && leftPanel === "palette") {
+                  setLeftOpen(false);
+                  return;
+                }
+                setLeftPanel("palette");
+                setLeftOpen(true);
+              }}
+              type="button"
+            >
+              Blocks
+            </button>
+            <button
+              className={leftOpen && leftPanel === "flows" ? "compact-button toolbar-panel-button toolbar-panel-active" : "compact-button toolbar-panel-button"}
+              onClick={() => {
+                if (leftOpen && leftPanel === "flows") {
+                  setLeftOpen(false);
+                  return;
+                }
+                setLeftPanel("flows");
+                setLeftOpen(true);
+              }}
+              type="button"
+            >
+              Flows
+            </button>
+          </div>
           <button className="ghost-button compact-button" onClick={handleLoadExample} type="button">
             Load Example
+          </button>
+          <button className="ghost-button compact-button" disabled={runPending} onClick={handleRunDemo} type="button">
+            {runPending ? "Running..." : "Run"}
           </button>
           <button className="primary-button compact-button" disabled={pending} onClick={handleDeploy} type="button">
             {pending ? "Deploying..." : "Deploy"}
@@ -654,59 +688,6 @@ function BuilderApp() {
             </div>
           </div>
 
-          <div className="playground-launchers playground-launchers-left">
-            <button
-              className={leftOpen && leftPanel === "palette" ? "launcher-button launcher-active" : "launcher-button"}
-              onClick={() => {
-                setLeftPanel("palette");
-                setLeftOpen(true);
-              }}
-              type="button"
-            >
-              Blocks
-            </button>
-            <button
-              className={leftOpen && leftPanel === "flows" ? "launcher-button launcher-active" : "launcher-button"}
-              onClick={() => {
-                setLeftPanel("flows");
-                setLeftOpen(true);
-              }}
-              type="button"
-            >
-              Flows
-            </button>
-            <button
-              className={rightOpen ? "launcher-button launcher-active" : "launcher-button"}
-              onClick={() => setRightOpen(true)}
-              type="button"
-            >
-              Inspector
-            </button>
-          </div>
-
-          <div className="playground-launchers playground-launchers-right">
-            <button
-              className={bottomOpen && bottomPanel === "prompt" ? "launcher-button launcher-active" : "launcher-button"}
-              onClick={() => {
-                setBottomPanel("prompt");
-                setBottomOpen(true);
-              }}
-              type="button"
-            >
-              Prompt
-            </button>
-            <button
-              className={bottomOpen && bottomPanel === "console" ? "launcher-button launcher-active" : "launcher-button"}
-              onClick={() => {
-                setBottomPanel("console");
-                setBottomOpen(true);
-              }}
-              type="button"
-            >
-              Console
-            </button>
-          </div>
-
           <div
             className="canvas-flow-wrap"
             onDragOver={(event) => {
@@ -716,6 +697,9 @@ function BuilderApp() {
             onDrop={handleDrop}
           >
             <ReactFlow<BuilderNode, BuilderEdge>
+              connectionLineStyle={{ stroke: "#2ddb76", strokeWidth: 2.5 }}
+              connectionMode={ConnectionMode.Loose}
+              connectionRadius={32}
               edgeTypes={edgeTypes}
               edges={edges.map((edge) => ({
                 ...edge,
@@ -741,6 +725,14 @@ function BuilderApp() {
               <Controls />
             </ReactFlow>
           </div>
+
+          <button
+            className={bottomOpen ? "console-fab console-fab-active" : "console-fab"}
+            onClick={() => setBottomOpen((value) => !value)}
+            type="button"
+          >
+            Console
+          </button>
 
           <section
             className={leftOpen ? "overlay-panel overlay-panel-left" : "overlay-panel overlay-panel-left overlay-hidden-left"}
@@ -802,21 +794,9 @@ function BuilderApp() {
             className={bottomOpen ? "overlay-panel overlay-panel-bottom" : "overlay-panel overlay-panel-bottom overlay-hidden-bottom"}
           >
             <div className="overlay-bottom-header">
-              <div className="overlay-tabs">
-                <button
-                  className={bottomPanel === "prompt" ? "dock-tab dock-tab-active" : "dock-tab"}
-                  onClick={() => setBottomPanel("prompt")}
-                  type="button"
-                >
-                  Prompt Input
-                </button>
-                <button
-                  className={bottomPanel === "console" ? "dock-tab dock-tab-active" : "dock-tab"}
-                  onClick={() => setBottomPanel("console")}
-                  type="button"
-                >
-                  Runtime Console
-                </button>
+              <div className="overlay-console-title">
+                <span className="eyebrow">Console</span>
+                <h3>Runtime terminal</h3>
               </div>
               <button
                 aria-label="Close bottom panel"
@@ -829,45 +809,13 @@ function BuilderApp() {
             </div>
 
             <div className="overlay-bottom-body">
-              {bottomPanel === "prompt" ? (
-                <div className="dock-panel-grid">
-                  <PromptRunner
-                    onChange={setPromptInput}
-                    onRun={handleRunDemo}
-                    prompt={promptInput}
-                    runPending={runPending}
-                  />
-                  <div className="dock-helper-card">
-                    <span className="eyebrow">Prompt Suggestions</span>
-                    <h3>Try these inputs</h3>
-                    <button
-                      className="prompt-suggestion"
-                      onClick={() => setPromptInput("What's the weather in Bengaluru today?")}
-                      type="button"
-                    >
-                      Weather in Bengaluru today
-                    </button>
-                    <button
-                      className="prompt-suggestion"
-                      onClick={() => setPromptInput("Search BTC sentiment and explain what BTC is.")}
-                      type="button"
-                    >
-                      Search BTC sentiment and explain BTC
-                    </button>
-                    <button
-                      className="prompt-suggestion"
-                      onClick={() =>
-                        setPromptInput("Find current weather in Mumbai and summarize it cleanly.")
-                      }
-                      type="button"
-                    >
-                      Find weather in Mumbai and summarize it
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <RunLogPanel logs={logs} result={runResult} />
-              )}
+              <RunLogPanel
+                logs={logs}
+                onRun={handleRunDemo}
+                result={runResult}
+                runPending={runPending}
+                runtimePrompt={runtimePrompt}
+              />
             </div>
           </section>
         </section>

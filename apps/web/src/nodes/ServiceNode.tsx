@@ -6,8 +6,8 @@ export function ServiceNode({ data }: NodeProps) {
 
   return (
     <div className="node-shell node-service">
-      <Handle position={Position.Left} type="target" />
-      <Handle position={Position.Right} type="source" />
+      <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
+      <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">Service</div>
         <span className="node-chip">{payload.serviceKind ?? "custom"}</span>

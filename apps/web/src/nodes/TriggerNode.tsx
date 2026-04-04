@@ -6,7 +6,7 @@ export function TriggerNode({ data }: NodeProps) {
 
   return (
     <div className="node-shell node-trigger">
-      <Handle position={Position.Right} type="source" />
+      <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">Trigger</div>
       </div>

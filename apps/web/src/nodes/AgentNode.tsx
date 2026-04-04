@@ -18,8 +18,8 @@ export function AgentNode({ id, data }: NodeProps) {
 
   return (
     <div className="node-shell node-agent">
-      <Handle position={Position.Left} type="target" />
-      <Handle position={Position.Right} type="source" />
+      <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
+      <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
       <div className="node-header-row">
         <div className="node-badge">Agent</div>
         <span className="node-chip">{payload.role ?? "operator"}</span>

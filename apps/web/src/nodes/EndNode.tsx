@@ -6,7 +6,7 @@ export function EndNode({ data }: NodeProps) {
 
   return (
     <div className="node-shell node-end">
-      <Handle position={Position.Left} type="target" />
+      <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
       <div className="node-header-row">
         <div className="node-badge">End</div>
       </div>
