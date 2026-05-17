@@ -4804,7 +4804,7 @@
           },
           {
             "data": {
-              "apiKey": "",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
               "enabledTools": [],
@@ -5125,7 +5125,7 @@
           },
           {
             "data": {
-              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Chooses the right market tools and returns a trade-ready view.",
               "enabledTools": [
@@ -5204,7 +5204,7 @@
           },
           {
             "data": {
-              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
               "enabledTools": [],
@@ -5824,7 +5824,7 @@
           },
           {
             "data": {
-              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Chooses the right market tools and returns a trade-ready view.",
               "enabledTools": [
@@ -5903,7 +5903,7 @@
           },
           {
             "data": {
-              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
               "enabledTools": [],
@@ -6104,7 +6104,7 @@
           },
           {
             "data": {
-              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Autonomous AI node with a live Algorand wallet.",
               "enabledTools": [
@@ -6182,7 +6182,7 @@
           },
           {
             "data": {
-              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
               "enabledTools": [],
@@ -6913,6 +6913,950 @@
           "address": "KN5RLYRC5FPSCL5MKHY7GMVCO3JYBSSBJCOKT2QGTSPKFGNA27L4LU2V3Y",
           "node_id": "agent-main",
           "private_key": "7o8Gnj89e/S4OaWWqdAkSJTJDky6GPRTsx2C+WzRWclTexXiIulfIS+sUfHzMqJ204DKQUicqeoGnJ6imaDX1w=="
+        }
+      }
+    },
+    "pm_81251ffd": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trade-trigger-agent",
+            "label": "Start",
+            "source": "trigger-trade",
+            "sourceHandle": null,
+            "target": "agent-trade",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-trade-agent-gmail",
+            "label": "Prepare trade email",
+            "source": "agent-trade",
+            "sourceHandle": null,
+            "target": "gmail-trade",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-trade-gmail-end",
+            "label": "Final response",
+            "source": "gmail-trade",
+            "sourceHandle": null,
+            "target": "end-trade",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-trade-model",
+            "label": "Model connection",
+            "source": "gemini-trade",
+            "sourceHandle": "model-out",
+            "target": "agent-trade",
+            "targetHandle": "model",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-trade-crypto",
+            "label": "Agent tool access",
+            "source": "crypto-trade",
+            "sourceHandle": "tool-out",
+            "target": "agent-trade",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          }
+        ],
+        "name": "Trade Signal Desk",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Incoming token analysis request.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Manual Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": "POST",
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": "{ \"token\": \"ETH\" }",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-trade",
+            "position": {
+              "x": 60.0,
+              "y": 260.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Chooses the right market tools and returns a trade-ready view.",
+              "enabledTools": [
+                "crypto"
+              ],
+              "gmailTo": null,
+              "label": "Lead Signal Agent",
+              "priceAlgo": 0.05,
+              "requestMethod": null,
+              "role": "lead_analyst",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "You are the lead analyst for a crypto trade desk. Use the connected tools to assess the token and return a concise BUY, SELL, or HOLD view with confidence and brief reasoning.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-trade",
+            "position": {
+              "x": 421.2306014498797,
+              "y": 19.458658222935867
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Draft or send the final trade note.",
+              "enabledTools": [],
+              "gmailTo": "",
+              "label": "Gmail",
+              "priceAlgo": 0.02,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gmail",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "gmail-trade",
+            "position": {
+              "x": 869.3828816487576,
+              "y": 118.45902174819636
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Returns the final market response.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-trade",
+            "position": {
+              "x": 1310.0,
+              "y": 250.0
+            },
+            "type": "end"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Gemini",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gemini",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "gemini-trade",
+            "position": {
+              "x": 213.305650973537,
+              "y": 742.6958031275052
+            },
+            "type": "service"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": "BTC,ETH,ALGO,SOL",
+              "description": "Live crypto price lookup via CoinGecko.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Crypto Prices",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "crypto",
+              "serviceUrl": "https://api.coingecko.com/api/v3/simple/price",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "crypto-trade",
+            "position": {
+              "x": 718.9245869510822,
+              "y": 633.3850628003205
+            },
+            "type": "api"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_81251ffd/run",
+      "payment_wallet": "EIZOKG2VG4Z3BG5WSWPLNNEYLCY45TQPV43MNJJOAA6PRXPFJGRZSTCQ4E",
+      "pipeline_id": "pm_81251ffd",
+      "price_algo": 0.05,
+      "runs": {
+        "run_5605cdbe20": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T11:40:11.341887",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Lead Signal Agent received the workflow task.",
+              "nodeId": "agent-trade",
+              "output": "ETH",
+              "timestamp": "2026-05-17T11:40:11.341962",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini planning failed, falling back to heuristic routing.",
+              "nodeId": null,
+              "output": "403 PERMISSION_DENIED. {'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}",
+              "timestamp": "2026-05-17T11:40:12.063826",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Lead Signal Agent planned the workflow path.",
+              "nodeId": "agent-trade",
+              "output": "Fallback router selected: Crypto Prices.",
+              "timestamp": "2026-05-17T11:40:12.064005",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "ETH"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:40:12.064027",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Crypto Prices with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "crypto-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:40:12.064052",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "UGBLTX67D4GFQH6BWCKSUGNM3S5Y37YLPHN5T4TAI6PBFHSAJ7IIA4NMSA",
+                "payer": "EIZOKG2VG4Z3BG5WSWPLNNEYLCY45TQPV43MNJJOAA6PRXPFJGRZSTCQ4E",
+                "scheme": "native_algo"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Crypto Prices requested native ALGO settlement before execution.",
+              "nodeId": "crypto-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:40:18.748415",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Crypto Prices returned output.",
+              "nodeId": "crypto-trade",
+              "output": "ETH $2191.4500 (+0.59% 24h)",
+              "timestamp": "2026-05-17T11:40:18.748451",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "UGBLTX67D4GFQH6BWCKSUGNM3S5Y37YLPHN5T4TAI6PBFHSAJ7IIA4NMSA",
+                "payer": "EIZOKG2VG4Z3BG5WSWPLNNEYLCY45TQPV43MNJJOAA6PRXPFJGRZSTCQ4E",
+                "scheme": "native_algo",
+                "tx_id": "M5YBTCNPQBMOZJIC4BGKVA24MPNTJOCYOU4OAVVVPGDZN5735IVQ"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Crypto Prices completed successfully.",
+              "nodeId": "crypto-trade",
+              "output": "Payment settled on algorand-testnet with transaction M5YBTCNPQBMOZJIC4BGKVA24MPNTJOCYOU4OAVVVPGDZN5735IVQ.",
+              "timestamp": "2026-05-17T11:40:18.748478",
+              "txId": "M5YBTCNPQBMOZJIC4BGKVA24MPNTJOCYOU4OAVVVPGDZN5735IVQ"
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Lead Signal Agent finished analysis.",
+              "nodeId": "agent-trade",
+              "output": "Fallback router selected: Crypto Prices.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T11:40:18.748503",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "gmail-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:40:19.599040",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Gmail returned output.",
+              "nodeId": "gmail-trade",
+              "output": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Send or draft an email using this final workflow outp...'.",
+              "timestamp": "2026-05-17T11:40:22.870386",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Gmail completed successfully.",
+              "nodeId": "gmail-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:40:22.870420",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-trade",
+              "output": "Lead Signal Agent response for 'ETH': crypto: ETH $2191.4500 (+0.59% 24h)",
+              "timestamp": "2026-05-17T11:40:22.870441",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_81251ffd",
+          "result": "Lead Signal Agent response for 'ETH': crypto: ETH $2191.4500 (+0.59% 24h)",
+          "runId": "run_5605cdbe20",
+          "settlementMode": "demo"
+        },
+        "run_8274029527": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T11:38:40.125569",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Lead Signal Agent received the workflow task.",
+              "nodeId": "agent-trade",
+              "output": "ETH",
+              "timestamp": "2026-05-17T11:38:40.125615",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini planning failed, falling back to heuristic routing.",
+              "nodeId": null,
+              "output": "403 PERMISSION_DENIED. {'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}",
+              "timestamp": "2026-05-17T11:38:40.901649",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Lead Signal Agent planned the workflow path.",
+              "nodeId": "agent-trade",
+              "output": "Fallback router selected: Crypto Prices.",
+              "timestamp": "2026-05-17T11:38:40.901784",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "ETH"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:38:40.901800",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Crypto Prices with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "crypto-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:38:40.901817",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "UGBLTX67D4GFQH6BWCKSUGNM3S5Y37YLPHN5T4TAI6PBFHSAJ7IIA4NMSA",
+                "payer": "EIZOKG2VG4Z3BG5WSWPLNNEYLCY45TQPV43MNJJOAA6PRXPFJGRZSTCQ4E",
+                "scheme": "native_algo"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Crypto Prices requested native ALGO settlement before execution.",
+              "nodeId": "crypto-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:38:46.909502",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Crypto Prices returned output.",
+              "nodeId": "crypto-trade",
+              "output": "ETH $2191.2100 (+0.57% 24h)",
+              "timestamp": "2026-05-17T11:38:46.909535",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "UGBLTX67D4GFQH6BWCKSUGNM3S5Y37YLPHN5T4TAI6PBFHSAJ7IIA4NMSA",
+                "payer": "EIZOKG2VG4Z3BG5WSWPLNNEYLCY45TQPV43MNJJOAA6PRXPFJGRZSTCQ4E",
+                "scheme": "native_algo",
+                "tx_id": "KVQWRYTTP2K6QVLA4W6YTIY5MJBLAUPM4K7LGXRTH7MVKZD4B27Q"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Crypto Prices completed successfully.",
+              "nodeId": "crypto-trade",
+              "output": "Payment settled on algorand-testnet with transaction KVQWRYTTP2K6QVLA4W6YTIY5MJBLAUPM4K7LGXRTH7MVKZD4B27Q.",
+              "timestamp": "2026-05-17T11:38:46.909562",
+              "txId": "KVQWRYTTP2K6QVLA4W6YTIY5MJBLAUPM4K7LGXRTH7MVKZD4B27Q"
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Lead Signal Agent finished analysis.",
+              "nodeId": "agent-trade",
+              "output": "Fallback router selected: Crypto Prices.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T11:38:46.909602",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "gmail-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:38:47.740628",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Gmail returned output.",
+              "nodeId": "gmail-trade",
+              "output": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Send or draft an email using this final workflow outp...'.",
+              "timestamp": "2026-05-17T11:38:51.436910",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Gmail completed successfully.",
+              "nodeId": "gmail-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:38:51.436943",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-trade",
+              "output": "Lead Signal Agent response for 'ETH': crypto: ETH $2191.2100 (+0.57% 24h)",
+              "timestamp": "2026-05-17T11:38:51.436964",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_81251ffd",
+          "result": "Lead Signal Agent response for 'ETH': crypto: ETH $2191.2100 (+0.57% 24h)",
+          "runId": "run_8274029527",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-trade": {
+          "address": "EIZOKG2VG4Z3BG5WSWPLNNEYLCY45TQPV43MNJJOAA6PRXPFJGRZSTCQ4E",
+          "node_id": "agent-trade",
+          "private_key": "lpyx5xNz4/RyNlGk/lrYeVg72Mnj0sLpLtlldjXiORsiMuUbVTczsJu2lZ62tJhYsc7OD682xqUuADz43eVJow=="
+        }
+      }
+    },
+    "pm_917ff2f4": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trade-trigger-agent",
+            "label": "Start",
+            "source": "trigger-trade",
+            "sourceHandle": null,
+            "target": "agent-trade",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-trade-agent-gmail",
+            "label": "Prepare trade email",
+            "source": "agent-trade",
+            "sourceHandle": null,
+            "target": "gmail-trade",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-trade-gmail-end",
+            "label": "Final response",
+            "source": "gmail-trade",
+            "sourceHandle": null,
+            "target": "end-trade",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-trade-model",
+            "label": "Model connection",
+            "source": "gemini-trade",
+            "sourceHandle": "model-out",
+            "target": "agent-trade",
+            "targetHandle": "model",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-trade-crypto",
+            "label": "Agent tool access",
+            "source": "crypto-trade",
+            "sourceHandle": "tool-out",
+            "target": "agent-trade",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          }
+        ],
+        "name": "Trade Signal Desk",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Incoming token analysis request.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Manual Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": "POST",
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": "{ \"token\": \"ETH\" }",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-trade",
+            "position": {
+              "x": 60.0,
+              "y": 260.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Chooses the right market tools and returns a trade-ready view.",
+              "enabledTools": [
+                "crypto"
+              ],
+              "gmailTo": null,
+              "label": "Lead Signal Agent",
+              "priceAlgo": 0.05,
+              "requestMethod": null,
+              "role": "lead_analyst",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "You are the lead analyst for a crypto trade desk. Use the connected tools to assess the token and return a concise BUY, SELL, or HOLD view with confidence and brief reasoning.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-trade",
+            "position": {
+              "x": 421.2306014498797,
+              "y": 19.458658222935867
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Draft or send the final trade note.",
+              "enabledTools": [],
+              "gmailTo": "soubhagyasadhukhan@gmail.com",
+              "label": "Gmail",
+              "priceAlgo": 0.02,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gmail",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "gmail-trade",
+            "position": {
+              "x": 869.3828816487576,
+              "y": 118.45902174819636
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Returns the final market response.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-trade",
+            "position": {
+              "x": 1310.0,
+              "y": 250.0
+            },
+            "type": "end"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Gemini",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gemini",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "gemini-trade",
+            "position": {
+              "x": 213.305650973537,
+              "y": 742.6958031275052
+            },
+            "type": "service"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": "BTC,ETH,ALGO,SOL",
+              "description": "Live crypto price lookup via CoinGecko.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Crypto Prices",
+              "priceAlgo": 0.01,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "crypto",
+              "serviceUrl": "https://api.coingecko.com/api/v3/simple/price",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "crypto-trade",
+            "position": {
+              "x": 718.9245869510822,
+              "y": 633.3850628003205
+            },
+            "type": "api"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_917ff2f4/run",
+      "payment_wallet": "IYEHLTRDZ6ORKPNL3R77TOXNFQ67QXOHJEUMIONNB7VOEYTUTEEZYZKEFQ",
+      "pipeline_id": "pm_917ff2f4",
+      "price_algo": 0.05,
+      "runs": {
+        "run_fde85a0214": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T11:42:35.844657",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Lead Signal Agent received the workflow task.",
+              "nodeId": "agent-trade",
+              "output": "ETH",
+              "timestamp": "2026-05-17T11:42:35.844696",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Gemini planning failed, falling back to heuristic routing.",
+              "nodeId": null,
+              "output": "403 PERMISSION_DENIED. {'error': {'code': 403, 'message': 'Your API key was reported as leaked. Please use another API key.', 'status': 'PERMISSION_DENIED'}}",
+              "timestamp": "2026-05-17T11:42:36.943369",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Lead Signal Agent planned the workflow path.",
+              "nodeId": "agent-trade",
+              "output": "Fallback router selected: Crypto Prices.",
+              "timestamp": "2026-05-17T11:42:36.943461",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "ETH"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:42:36.943475",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Crypto Prices with native ALGO payment of 0.010 ALGO.",
+              "nodeId": "crypto-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:42:36.943491",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "UGBLTX67D4GFQH6BWCKSUGNM3S5Y37YLPHN5T4TAI6PBFHSAJ7IIA4NMSA",
+                "payer": "IYEHLTRDZ6ORKPNL3R77TOXNFQ67QXOHJEUMIONNB7VOEYTUTEEZYZKEFQ",
+                "scheme": "native_algo"
+              },
+              "eventType": "progress",
+              "level": "info",
+              "message": "Crypto Prices requested native ALGO settlement before execution.",
+              "nodeId": "crypto-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:42:42.011530",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Crypto Prices returned output.",
+              "nodeId": "crypto-trade",
+              "output": "ETH $2192.2500 (+0.64% 24h)",
+              "timestamp": "2026-05-17T11:42:42.011564",
+              "txId": null
+            },
+            {
+              "details": {
+                "amount_algo": "0.010000",
+                "network": "algorand-testnet",
+                "pay_to": "UGBLTX67D4GFQH6BWCKSUGNM3S5Y37YLPHN5T4TAI6PBFHSAJ7IIA4NMSA",
+                "payer": "IYEHLTRDZ6ORKPNL3R77TOXNFQ67QXOHJEUMIONNB7VOEYTUTEEZYZKEFQ",
+                "scheme": "native_algo",
+                "tx_id": "E37LTPHOQEBPFDAUNKPW7DCWGQVM5JGSG23CAUDC7A44HOUX2YBQ"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Crypto Prices completed successfully.",
+              "nodeId": "crypto-trade",
+              "output": "Payment settled on algorand-testnet with transaction E37LTPHOQEBPFDAUNKPW7DCWGQVM5JGSG23CAUDC7A44HOUX2YBQ.",
+              "timestamp": "2026-05-17T11:42:42.011587",
+              "txId": "E37LTPHOQEBPFDAUNKPW7DCWGQVM5JGSG23CAUDC7A44HOUX2YBQ"
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Lead Signal Agent finished analysis.",
+              "nodeId": "agent-trade",
+              "output": "Fallback router selected: Crypto Prices.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T11:42:42.011603",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "gmail-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:42:43.163860",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Gmail returned output.",
+              "nodeId": "gmail-trade",
+              "output": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Send or draft an email using this final workflow outp...'.",
+              "timestamp": "2026-05-17T11:42:46.403591",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Gmail completed successfully.",
+              "nodeId": "gmail-trade",
+              "output": null,
+              "timestamp": "2026-05-17T11:42:46.403642",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-trade",
+              "output": "Lead Signal Agent response for 'ETH': crypto: ETH $2192.2500 (+0.64% 24h)",
+              "timestamp": "2026-05-17T11:42:46.403664",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_917ff2f4",
+          "result": "Lead Signal Agent response for 'ETH': crypto: ETH $2192.2500 (+0.64% 24h)",
+          "runId": "run_fde85a0214",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-trade": {
+          "address": "IYEHLTRDZ6ORKPNL3R77TOXNFQ67QXOHJEUMIONNB7VOEYTUTEEZYZKEFQ",
+          "node_id": "agent-trade",
+          "private_key": "eNx69MZg2n2ugqWPzyVvy88/J3jE9J6GIkIdT+xg29BGCHXOI8+dFT2r3H/5uu0sPfhdx0koxDmtD+riYnSZCQ=="
         }
       }
     },

@@ -10,13 +10,12 @@ from app.runtime.tools import ToolResult
 
 class GeminiPlanner:
     def __init__(self) -> None:
-        self.api_key = os.getenv("GEMINI_API_KEY", "").strip()
+        self.env_api_key = os.getenv("GEMINI_API_KEY", "").strip()
         self.model = os.getenv("AGENTMESH_LLM_MODEL", "gemini-2.5-flash").strip() or "gemini-2.5-flash"
-        self._client = genai.Client(api_key=self.api_key) if self.api_key else None
 
     @property
     def enabled(self) -> bool:
-        return self._client is not None
+        return bool(self.env_api_key)
 
     def choose_tools(
         self,
@@ -140,8 +139,8 @@ Return only the final user-facing answer. Keep it concise but useful.
                 raise RuntimeError("Gemini planner is not configured on the connected model node.")
             return genai.Client(api_key=normalized)
 
-        if allow_env_fallback and self._client is not None:
-            return self._client
+        if allow_env_fallback and self.env_api_key:
+            return genai.Client(api_key=self.env_api_key)
 
         raise RuntimeError("Gemini planner is not configured.")
 

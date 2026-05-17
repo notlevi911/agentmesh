@@ -887,11 +887,20 @@ function BuilderApp() {
 
       try {
         const detail = await getPipelineDetail(pipelineId);
+        const currentNodeApiKeys = new Map(
+          nodes
+            .map((node) => [node.id, typeof node.data.apiKey === "string" ? node.data.apiKey : ""] as const)
+            .filter((entry) => Boolean(entry[1])),
+        );
 
         const hydratedNodes: BuilderNode[] = detail.definition.nodes.map((node) => {
           const deployedNode = detail.nodes.find((candidate) => candidate.id === node.id);
           const nodeData: PipelineNodeData = {
             ...(node.data as PipelineNodeData),
+            apiKey:
+              (node.data as PipelineNodeData).apiKey ??
+              currentNodeApiKeys.get(node.id) ??
+              undefined,
             kind: node.type,
             status: "live",
             walletAddress: deployedNode?.walletAddress,
@@ -958,7 +967,7 @@ function BuilderApp() {
         setFlowsPending(false);
       }
     },
-    [setEdges, setNodes],
+    [nodes, setEdges, setNodes],
   );
 
   async function handleDeploy() {

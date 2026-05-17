@@ -38,9 +38,18 @@ class LocalPipelineRepository:
 
     def save_pipeline(self, record: PipelineRecord) -> PipelineRecord:
         with self._lock:
-            self._pipelines[record.pipeline_id] = record
+            sanitized_record = PipelineRecord(
+                pipeline_id=record.pipeline_id,
+                definition=self._sanitize_definition(record.definition),
+                endpoint=record.endpoint,
+                price_algo=record.price_algo,
+                payment_wallet=record.payment_wallet,
+                wallets=record.wallets,
+                runs=record.runs,
+            )
+            self._pipelines[record.pipeline_id] = sanitized_record
             self._flush()
-            return record
+            return sanitized_record
 
     def get_pipeline(self, pipeline_id: str) -> Optional[PipelineRecord]:
         return self._pipelines.get(pipeline_id)
@@ -60,10 +69,18 @@ class LocalPipelineRepository:
             return
 
         raw = json.loads(self._storage_path.read_text())
+        needs_flush = False
+        for payload in raw.get("pipelines", {}).values():
+            definition = payload.get("definition", {})
+            if self._definition_payload_contains_api_keys(definition):
+                needs_flush = True
+
         self._pipelines = {
             pipeline_id: self._record_from_dict(payload)
             for pipeline_id, payload in raw.get("pipelines", {}).items()
         }
+        if needs_flush:
+            self._flush()
 
     def _flush(self) -> None:
         self._storage_path.parent.mkdir(parents=True, exist_ok=True)
@@ -99,7 +116,9 @@ class LocalPipelineRepository:
     def _record_from_dict(self, payload: Dict) -> PipelineRecord:
         return PipelineRecord(
             pipeline_id=payload["pipeline_id"],
-            definition=DeployPipelineRequest.model_validate(payload["definition"]),
+            definition=self._sanitize_definition(
+                DeployPipelineRequest.model_validate(payload["definition"])
+            ),
             endpoint=payload["endpoint"],
             price_algo=payload["price_algo"],
             payment_wallet=payload.get("payment_wallet"),
@@ -112,3 +131,20 @@ class LocalPipelineRepository:
                 for run_id, run_payload in payload.get("runs", {}).items()
             },
         )
+
+    def _sanitize_definition(self, definition: DeployPipelineRequest) -> DeployPipelineRequest:
+        sanitized_nodes = []
+        for node in definition.nodes:
+            node_copy = node.model_copy(deep=True)
+            if hasattr(node_copy.data, "apiKey"):
+                node_copy.data.apiKey = None
+            sanitized_nodes.append(node_copy)
+
+        return definition.model_copy(update={"nodes": sanitized_nodes}, deep=True)
+
+    def _definition_payload_contains_api_keys(self, definition_payload: Dict) -> bool:
+        for node in definition_payload.get("nodes", []):
+            data = node.get("data", {})
+            if "apiKey" in data:
+                return True
+        return False
