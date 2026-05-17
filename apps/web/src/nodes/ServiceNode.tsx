@@ -110,8 +110,8 @@ export function ServiceNode({ id, data, type }: NodeProps) {
           Connect the top dot to an agent's bottom-left AI Model port.
         </div>
 
-        {payload.executionNote
-          ? <div className="node-output-preview">{payload.executionNote}</div>
+        {payload.executionOutput || payload.executionMessage || payload.executionNote
+          ? <div className="node-output-preview">{payload.executionOutput ?? payload.executionMessage ?? payload.executionNote}</div>
           : null}
       </div>
     );
@@ -177,8 +177,8 @@ export function ServiceNode({ id, data, type }: NodeProps) {
         <strong>Connect this to an agent's bottom-right Tools port</strong>
       </div>
       <div className="node-inline muted-inline">{helperText}</div>
-      {payload.executionNote
-        ? <div className="node-output-preview">{payload.executionNote}</div>
+      {payload.executionOutput || payload.executionMessage || payload.executionNote
+        ? <div className="node-output-preview">{payload.executionOutput ?? payload.executionMessage ?? payload.executionNote}</div>
         : null}
       <div className="node-handle-labels">
         <span>AI Link</span>

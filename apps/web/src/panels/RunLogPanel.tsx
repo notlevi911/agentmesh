@@ -19,22 +19,6 @@ function formatTerminalTime(timestamp: string) {
   });
 }
 
-function logPrefix(log: LogEntry) {
-  if (log.eventType === "error") {
-    return "!";
-  }
-  if (log.eventType === "done") {
-    return "✓";
-  }
-  if (log.eventType === "start") {
-    return ">";
-  }
-  if (log.eventType === "output") {
-    return "$";
-  }
-  return "~";
-}
-
 function logLabel(log: LogEntry) {
   if (log.nodeId) {
     return log.nodeId;
@@ -43,6 +27,22 @@ function logLabel(log: LogEntry) {
     return String(log.details.entrypoint);
   }
   return "system";
+}
+
+function levelTag(log: LogEntry) {
+  if (log.eventType === "error") {
+    return "error";
+  }
+  if (log.eventType === "done") {
+    return "ok";
+  }
+  if (log.eventType === "start") {
+    return "run";
+  }
+  if (log.eventType === "output") {
+    return "out";
+  }
+  return "info";
 }
 
 function orderedDetails(details?: LogEntry["details"]) {
@@ -99,7 +99,7 @@ export function RunLogPanel({
 
       <div className="terminal-control-row">
         <label className="terminal-input-group">
-          <span>Incoming request</span>
+          <span>stdin / request payload</span>
           <textarea
             className="prop-input terminal-query-input"
             onChange={(event) => onQueryChange(event.target.value)}
@@ -109,7 +109,7 @@ export function RunLogPanel({
         </label>
 
         <div className="terminal-sidecard">
-          <span>Agent prompt</span>
+          <span>planner instructions</span>
           <strong>{runtimePrompt}</strong>
           <button className="primary-button compact-button terminal-run-button" disabled={runPending} onClick={onRun} type="button">
             {runPending ? "Streaming..." : "Run Workflow"}
@@ -120,20 +120,20 @@ export function RunLogPanel({
       <div className="console-terminal" ref={terminalRef}>
         <div className="terminal-session-meta">
           <div className="terminal-command-line">
-            <span className="terminal-prompt">agentmesh@studio</span>
+            <span className="terminal-prompt">agentmesh@studio:~$</span>
             <span className="terminal-command">
               run --query "
               {query || "Email me the latest ALGO price at founder@example.com"}"
             </span>
           </div>
           <div className="terminal-command-line terminal-command-line-muted">
-            <span className="terminal-prompt">planner</span>
+            <span className="terminal-prompt">planner@agentmesh:~$</span>
             <span className="terminal-command">{runtimePrompt}</span>
           </div>
         </div>
 
         {logs.length === 0 ? (
-          <div className="console-line console-line-muted terminal-idle-line">$ waiting for runtime output...</div>
+          <div className="console-line console-line-muted terminal-idle-line">[idle] waiting for runtime output...</div>
         ) : (
           logs.map((log, index) => {
             const details = orderedDetails(log.details);
@@ -142,7 +142,7 @@ export function RunLogPanel({
               <div key={`${log.timestamp}-${index}`} className={`console-block console-block-${log.level}`}>
                 <div className="console-line terminal-log-line">
                   <span className="console-time">{formatTerminalTime(log.timestamp)}</span>
-                  <span className={`terminal-prefix terminal-prefix-${log.level}`}>{logPrefix(log)}</span>
+                  <span className={`terminal-prefix terminal-prefix-${log.level}`}>[{levelTag(log)}]</span>
                   <span className="console-node">{logLabel(log)}</span>
                   <strong className="console-message">{log.message}</strong>
                   {log.txId ? <code className="terminal-code-chip">{log.txId}</code> : null}
@@ -152,14 +152,20 @@ export function RunLogPanel({
                   <div className="terminal-detail-grid">
                     {details.map(([key, value]) => (
                       <div key={`${log.timestamp}-${key}`} className="terminal-detail-pill">
-                        <span>{key.replace(/_/g, " ")}</span>
-                        <strong>{String(value)}</strong>
+                        <span className="terminal-detail-key">{key.replace(/_/g, "-")}</span>
+                        <strong className="terminal-detail-value">{String(value)}</strong>
                       </div>
                     ))}
                   </div>
                 ) : null}
 
-                {log.output ? <pre className="console-output">{log.output}</pre> : null}
+                {log.output ? (
+                  <pre className="console-output">
+                    <span className="terminal-stream-label">stdout</span>
+                    {"\n"}
+                    {log.output}
+                  </pre>
+                ) : null}
               </div>
             );
           })
@@ -169,11 +175,16 @@ export function RunLogPanel({
           <div className="terminal-result-block">
             <div className="console-line terminal-log-line">
               <span className="console-time">final</span>
-              <span className="terminal-prefix terminal-prefix-success">✓</span>
+              <span className="terminal-prefix terminal-prefix-success">[ok]</span>
               <span className="console-node">response</span>
               <strong className="console-message">Pipeline returned the final HTTP response.</strong>
             </div>
-            <pre className="console-output terminal-result-output">{result}</pre>
+            <pre className="console-output terminal-result-output">
+              <span className="terminal-stream-label">stdout</span>
+              {"\n"}
+              {result}
+            </pre>
+            <div className="terminal-exit-line">agentmesh@studio:~$ echo $? 0</div>
           </div>
         ) : null}
       </div>

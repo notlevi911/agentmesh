@@ -24,7 +24,15 @@ import {
   preflightPipelinePayment,
   runPipeline,
 } from "./api/client";
-import { createWire, getDefaultNodeData, initialEdges, initialNodes } from "./canvas/initialGraph";
+import {
+  createWire,
+  defaultWorkflowTemplate,
+  getDefaultNodeData,
+  initialEdges,
+  initialNodes,
+  workflowTemplates,
+  type WorkflowTemplate,
+} from "./canvas/initialGraph";
 import { NodePalette } from "./components/NodePalette";
 import { WireEdge } from "./edges/WireEdge";
 import { AgentNode } from "./nodes/AgentNode";
@@ -48,7 +56,7 @@ import type {
   WireKind,
 } from "./types/pipeline";
 
-const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v7";
+const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v8";
 
 interface StoredWorkflowDraft {
   pipelineName: string;
@@ -126,6 +134,52 @@ function normalizeConnectionEdge(edge: BuilderEdge): BuilderEdge {
 
 function normalizeConnectionEdges(edges: BuilderEdge[]): BuilderEdge[] {
   return edges.map(normalizeConnectionEdge);
+}
+
+function cloneTemplate(template: WorkflowTemplate) {
+  return {
+    nodes: JSON.parse(JSON.stringify(template.nodes)) as BuilderNode[],
+    edges: JSON.parse(JSON.stringify(template.edges)) as BuilderEdge[],
+  };
+}
+
+function validatePipelineConfiguration(nodes: BuilderNode[], edges: BuilderEdge[]): string | null {
+  const nodeMap = new Map(nodes.map((node) => [node.id, node]));
+  const agentNodes = nodes.filter((node) => node.type === "agent");
+
+  if (!agentNodes.length) {
+    return "Add at least one AI Agent before deploying.";
+  }
+
+  for (const agent of agentNodes) {
+    const modelEdges = edges.filter(
+      (edge) =>
+        edge.target === agent.id &&
+        edge.targetHandle === "model" &&
+        edge.data?.wireType === "connection",
+    );
+
+    if (!modelEdges.length) {
+      return `Connect an AI model to "${agent.data.label}" before deploying.`;
+    }
+
+    if (modelEdges.length > 1) {
+      return `"${agent.data.label}" has multiple AI model connections. Keep only one model per agent.`;
+    }
+
+    const modelNode = nodeMap.get(modelEdges[0].source);
+    if (!isModelServiceNode(modelNode)) {
+      return `"${agent.data.label}" must be connected to a valid AI model node.`;
+    }
+
+    const apiKey = String(modelNode?.data?.apiKey ?? "").trim();
+    if (!apiKey) {
+      const modelLabel = modelNode?.data?.label ?? "Connected model";
+      return `Add an API key to "${modelLabel}" before deploying "${agent.data.label}".`;
+    }
+  }
+
+  return null;
 }
 
 function resolveWireMeta(
@@ -415,20 +469,21 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
 
 function BuilderApp() {
   const storedWorkflow = loadStoredWorkflow();
+  const defaultTemplateClone = useMemo(() => cloneTemplate(defaultWorkflowTemplate), []);
   const [mode, setMode] = useState<AppMode>("landing");
   const [leftOpen, setLeftOpen] = useState(true);
   const [rightOpen, setRightOpen] = useState(false);
   const [bottomOpen, setBottomOpen] = useState(false);
   const [leftPanel, setLeftPanel] = useState<LeftPanel>("palette");
   const [nodes, setNodes, onNodesChange] = useNodesState<BuilderNode>(
-    storedWorkflow?.nodes ?? initialNodes,
+    storedWorkflow?.nodes ?? defaultTemplateClone.nodes ?? initialNodes,
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState<BuilderEdge>(
-    storedWorkflow?.edges ?? initialEdges,
+    storedWorkflow?.edges ?? defaultTemplateClone.edges ?? initialEdges,
   );
-  const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? "Trade Signal Desk");
+  const [pipelineName, setPipelineName] = useState(storedWorkflow?.pipelineName ?? defaultWorkflowTemplate.name);
   const [runtimeQuery, setRuntimeQuery] = useState(
-    storedWorkflow?.runtimeQuery ?? '{ "prompt": "" }',
+    storedWorkflow?.runtimeQuery ?? defaultWorkflowTemplate.runtimeQuery,
   );
   const [deployment, setDeployment] = useState<DeployResponse | null>(null);
   const [logs, setLogs] = useState<LogEntry[]>([]);
@@ -450,6 +505,7 @@ function BuilderApp() {
   const [error, setError] = useState<string>();
   const [deployedWorkflows, setDeployedWorkflows] = useState<PipelineSummary[]>([]);
   const [flowsPending, setFlowsPending] = useState(false);
+  const [selectedExampleId, setSelectedExampleId] = useState(defaultWorkflowTemplate.id);
   const playbackIdRef = useRef(0);
 
   const selectedNode = useMemo(
@@ -480,6 +536,8 @@ function BuilderApp() {
           ...node.data,
           executionState: "idle",
           executionNote: undefined,
+          executionMessage: undefined,
+          executionOutput: undefined,
         },
       })),
     );
@@ -504,7 +562,12 @@ function BuilderApp() {
                       : log.eventType === "done"
                         ? "done"
                         : "running",
-                  executionNote: log.output ?? log.message,
+                  executionNote: log.message,
+                  executionMessage: log.message,
+                  executionOutput:
+                    typeof log.output === "string" && log.output.trim()
+                      ? log.output
+                      : node.data.executionOutput,
                 },
               }
             : node,
@@ -787,11 +850,13 @@ function BuilderApp() {
   );
 
   const handleLoadExample = useCallback(() => {
-    setNodes(initialNodes);
-    setEdges(initialEdges);
-    setPipelineName("Trade Signal Desk");
-    setRuntimeQuery('{ "token": "what do u mean by a water bottle" }');
-    setSelectedNodeId(initialNodes[1]?.id ?? null);
+    const template = workflowTemplates.find((candidate) => candidate.id === selectedExampleId) ?? defaultWorkflowTemplate;
+    const cloned = cloneTemplate(template);
+    setNodes(cloned.nodes);
+    setEdges(cloned.edges);
+    setPipelineName(template.name);
+    setRuntimeQuery(template.runtimeQuery);
+    setSelectedNodeId(cloned.nodes[1]?.id ?? null);
     setSelectedEdgeId(null);
     setDeployment(null);
     setLogs([]);
@@ -801,7 +866,7 @@ function BuilderApp() {
     setRightOpen(false);
     setBottomOpen(false);
     setLeftPanel("palette");
-  }, [setEdges, setNodes]);
+  }, [selectedExampleId, setEdges, setNodes]);
 
   const refreshDeployedWorkflows = useCallback(async () => {
     setFlowsPending(true);
@@ -833,6 +898,8 @@ function BuilderApp() {
             balanceAlgo: deployedNode?.balanceAlgo,
             executionState: "idle",
             executionNote: undefined,
+            executionMessage: undefined,
+            executionOutput: undefined,
           };
 
           return {
@@ -895,6 +962,12 @@ function BuilderApp() {
   );
 
   async function handleDeploy() {
+    const validationError = validatePipelineConfiguration(nodes, edges);
+    if (validationError) {
+      setError(validationError);
+      return;
+    }
+
     setPending(true);
     setError(undefined);
 
@@ -921,6 +994,8 @@ function BuilderApp() {
               balanceAlgo: deployedNode.balanceAlgo,
               executionState: "idle",
               executionNote: undefined,
+              executionMessage: undefined,
+              executionOutput: undefined,
             },
           };
         }),
@@ -1065,6 +1140,8 @@ function BuilderApp() {
           onTriggerTestChange: undefined,
           executionState: undefined,
           executionNote: undefined,
+          executionMessage: undefined,
+          executionOutput: undefined,
         },
       })),
       edges,
@@ -1382,6 +1459,21 @@ function BuilderApp() {
               Flows
             </button>
           </div>
+          <label className="example-picker" htmlFor="workflow-example">
+            <span className="sr-only">Sample workflow</span>
+            <select
+              className="example-select"
+              id="workflow-example"
+              onChange={(event) => setSelectedExampleId(event.target.value)}
+              value={selectedExampleId}
+            >
+              {workflowTemplates.map((template) => (
+                <option key={template.id} value={template.id}>
+                  {template.name}
+                </option>
+              ))}
+            </select>
+          </label>
           <button className="ghost-button compact-button" onClick={handleLoadExample} type="button">
             Load Example
           </button>

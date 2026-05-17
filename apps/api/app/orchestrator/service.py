@@ -23,6 +23,8 @@ from app.runtime.executor import RuntimeExecutor
 from app.storage.repository import LocalPipelineRepository, PipelineRecord
 from app.wallets.service import WalletService
 
+MODEL_SERVICE_KINDS = {"gemini", "openai", "claude", "mistral"}
+
 
 class PipelineOrchestrator:
     def __init__(
@@ -43,6 +45,7 @@ class PipelineOrchestrator:
         )
 
     def deploy(self, definition: DeployPipelineRequest) -> DeployPipelineResponse:
+        self._validate_definition(definition)
         pipeline_id = "pm_{token}".format(token=secrets.token_hex(4))
         entrypoint_agent = self._entrypoint_agent(definition)
         price_algo = entrypoint_agent.data.priceAlgo if entrypoint_agent else 0.0
@@ -215,6 +218,7 @@ class PipelineOrchestrator:
     ) -> RunPipelineResponse:
         record = self._get_record(pipeline_id)
         effective_record = self._record_with_override(record, definition_override)
+        self._validate_definition(effective_record.definition)
         if self.multi_agent.supports(effective_record):
             response = self.multi_agent.execute(
                 record=effective_record,
@@ -258,6 +262,56 @@ class PipelineOrchestrator:
         if record is None:
             raise KeyError("Pipeline {pipeline_id} not found".format(pipeline_id=pipeline_id))
         return record
+
+    def _validate_definition(self, definition: DeployPipelineRequest) -> None:
+        node_map = {node.id: node for node in definition.nodes}
+        agent_nodes = [node for node in definition.nodes if node.type == "agent"]
+
+        if not agent_nodes:
+            raise ValueError("Add at least one AI Agent before deploying this workflow.")
+
+        for agent in agent_nodes:
+            model_edges = [
+                edge
+                for edge in definition.edges
+                if edge.target == agent.id
+                and edge.targetHandle == "model"
+                and edge.wireType == "connection"
+            ]
+
+            if not model_edges:
+                raise ValueError(
+                    'Connect an AI model to "{label}" before deploying.'.format(
+                        label=agent.data.label
+                    )
+                )
+
+            if len(model_edges) > 1:
+                raise ValueError(
+                    '"{label}" has multiple AI model connections. Keep only one model per agent.'.format(
+                        label=agent.data.label
+                    )
+                )
+
+            model_node = node_map.get(model_edges[0].source)
+            if (
+                model_node is None
+                or model_node.type not in {"service", "api"}
+                or (model_node.data.serviceKind or "custom") not in MODEL_SERVICE_KINDS
+            ):
+                raise ValueError(
+                    '"{label}" must be connected to a valid AI model node.'.format(
+                        label=agent.data.label
+                    )
+                )
+
+            if not (model_node.data.apiKey or "").strip():
+                raise ValueError(
+                    'Add an API key to "{model}" before deploying "{agent}".'.format(
+                        model=model_node.data.label,
+                        agent=agent.data.label,
+                    )
+                )
 
     def _entrypoint_agent(self, definition: DeployPipelineRequest):
         priced_agents = [

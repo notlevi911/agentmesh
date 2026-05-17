@@ -17,6 +17,13 @@ function statusSymbol(state?: PipelineNodeData["executionState"]) {
   return "○";
 }
 
+function statusLabel(state?: PipelineNodeData["executionState"]) {
+  if (state === "done") return "Completed";
+  if (state === "error") return "Failed";
+  if (state === "running") return "Running";
+  return "Idle";
+}
+
 const TOOLLESS_SERVICE_KINDS = new Set(["gemini", "openai", "claude", "mistral"]);
 
 export function AgentNode({ id, data }: NodeProps) {
@@ -137,8 +144,19 @@ export function AgentNode({ id, data }: NodeProps) {
         </div>
       </dl>
 
-      {payload.executionNote ? (
-        <div className="node-output-preview">{payload.executionNote}</div>
+      {payload.executionMessage || payload.executionOutput ? (
+        <div className="node-runtime-card">
+          <div className="node-runtime-header">
+            <span>Last run</span>
+            <strong>{statusLabel(executionState)}</strong>
+          </div>
+          {payload.executionMessage ? (
+            <div className="node-runtime-message">{payload.executionMessage}</div>
+          ) : null}
+          {payload.executionOutput ? (
+            <pre className="node-runtime-output">{payload.executionOutput}</pre>
+          ) : null}
+        </div>
       ) : null}
 
       <button

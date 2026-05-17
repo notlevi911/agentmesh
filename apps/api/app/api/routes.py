@@ -31,7 +31,10 @@ def deploy_pipeline(
     payload: DeployPipelineRequest,
     orchestrator: PipelineOrchestrator = Depends(get_orchestrator),
 ) -> DeployPipelineResponse:
-    return orchestrator.deploy(payload)
+    try:
+        return orchestrator.deploy(payload)
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))
 
 
 @router.post("/api/pipelines/{pipeline_id}/agents/boot", response_model=MultiAgentBootResponse)
@@ -142,9 +145,12 @@ def run_pipeline(
         return x402.payment_required_response(record)
 
     settlement_mode = "demo" if demo_paid and demo_paid.lower() == "true" else "payment_response"
-    return orchestrator.execute(
-        pipeline_id=pipeline_id,
-        query=payload.query,
-        settlement_mode=settlement_mode,
-        definition_override=payload.definition_override(),
-    )
+    try:
+        return orchestrator.execute(
+            pipeline_id=pipeline_id,
+            query=payload.query,
+            settlement_mode=settlement_mode,
+            definition_override=payload.definition_override(),
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=400, detail=str(error))

@@ -29,6 +29,8 @@ export interface PipelineNodeData extends Record<string, unknown> {
   status?: "draft" | "live";
   executionState?: "idle" | "running" | "done" | "error";
   executionNote?: string;
+  executionMessage?: string;
+  executionOutput?: string;
   onFundWallet?: (nodeId: string) => void;
   onCopyWallet?: (nodeId: string) => void;
   onTriggerTestChange?: (nodeId: string, value: string) => void;
@@ -59,6 +61,8 @@ export interface DeployRequest {
       | "status"
       | "executionState"
       | "executionNote"
+      | "executionMessage"
+      | "executionOutput"
       | "onFundWallet"
       | "onCopyWallet"
       | "onTriggerTestChange"

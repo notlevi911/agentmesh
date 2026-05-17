@@ -81,7 +81,9 @@ export function TriggerNode({ data, id }: NodeProps) {
         placeholder={'{"prompt":"Email me the latest ALGO price at founder@example.com"}'}
         value={payload.testRequestBody ?? ""}
       />
-      {payload.executionNote ? <div className="node-output-preview">{payload.executionNote}</div> : null}
+      {payload.executionOutput || payload.executionMessage || payload.executionNote ? (
+        <div className="node-output-preview">{payload.executionOutput ?? payload.executionMessage ?? payload.executionNote}</div>
+      ) : null}
     </div>
   );
 }

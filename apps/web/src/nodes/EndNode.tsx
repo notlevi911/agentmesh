@@ -30,7 +30,9 @@ export function EndNode({ data }: NodeProps) {
       <h3>{payload.label}</h3>
       <p>{payload.description}</p>
       <div className="node-inline">Returns the final HTTP response.</div>
-      {payload.executionNote ? <div className="node-output-preview">{payload.executionNote}</div> : null}
+      {payload.executionOutput || payload.executionMessage || payload.executionNote ? (
+        <div className="node-output-preview">{payload.executionOutput ?? payload.executionMessage ?? payload.executionNote}</div>
+      ) : null}
     </div>
   );
 }
