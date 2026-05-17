@@ -319,6 +319,46 @@ class RuntimeExecutor:
             )
 
         final_result = self._compose_result(query, tool_results, responder, analyzer)
+        workflow_payload = final_result
+
+        for service_node in self._workflow_service_nodes(record.definition, set(selected_tools)):
+            workflow_query = self._workflow_service_query(
+                original_query=query,
+                current_payload=workflow_payload,
+                node=service_node,
+            )
+            self._append_log(
+                logs,
+                level="start",
+                message="Workflow moved into {label}.".format(label=service_node.data.label),
+                node_id=service_node.id,
+            )
+            try:
+                result = self.tools.call_api_node_direct(service_node, workflow_query)
+                self._append_log(
+                    logs,
+                    level="output",
+                    message="{label} returned output.".format(label=service_node.data.label),
+                    node_id=service_node.id,
+                    output=result.summary,
+                )
+                self._append_log(
+                    logs,
+                    level="done",
+                    message="{label} completed successfully.".format(label=service_node.data.label),
+                    node_id=service_node.id,
+                )
+                if service_node.data.serviceKind != "gmail":
+                    workflow_payload = result.summary
+                    final_result = result.summary
+            except Exception as error:
+                self._append_log(
+                    logs,
+                    level="error",
+                    message="{label} failed during workflow execution.".format(label=service_node.data.label),
+                    node_id=service_node.id,
+                    output=str(error),
+                )
 
         if responder:
             self._append_log(
@@ -468,7 +508,11 @@ class RuntimeExecutor:
                 continue
 
             is_incoming_tool_link = edge.target == source_node_id and edge.targetHandle == "tools"
-            is_legacy_outgoing_tool_link = edge.source == source_node_id
+            is_legacy_outgoing_tool_link = (
+                edge.source == source_node_id
+                and edge.sourceHandle == "agent-tools"
+                and edge.targetHandle in {"agent-tool", "tools"}
+            )
 
             if not is_incoming_tool_link and not is_legacy_outgoing_tool_link:
                 continue
@@ -517,6 +561,45 @@ class RuntimeExecutor:
             if node.type == "end":
                 return node
         return None
+
+    def _workflow_service_nodes(
+        self,
+        definition: DeployPipelineRequest,
+        selected_tool_ids: set[str],
+    ) -> List[PipelineNode]:
+        workflow_service_ids: set[str] = set()
+        node_map = {node.id: node for node in definition.nodes}
+
+        for edge in definition.edges:
+            if edge.targetHandle in {"tools", "model"}:
+                continue
+            target_node = node_map.get(edge.target)
+            if target_node and target_node.type in {"service", "api"}:
+                workflow_service_ids.add(target_node.id)
+
+        ordered_nodes = self._topological_nodes(definition)
+        return [
+            node
+            for node in ordered_nodes
+            if node.id in workflow_service_ids
+            and node.id not in selected_tool_ids
+            and (node.data.serviceKind or "custom") not in {"gemini", "openai", "claude", "mistral"}
+        ]
+
+    def _workflow_service_query(
+        self,
+        original_query: str,
+        current_payload: str,
+        node: PipelineNode,
+    ) -> str:
+        if node.data.serviceKind == "gmail":
+            return (
+                "Send or draft an email using this final workflow output.\n\n"
+                f"Original request: {original_query}\n\n"
+                f"Final response:\n{current_payload}"
+            )
+
+        return current_payload or original_query
 
     def _compose_result(
         self,

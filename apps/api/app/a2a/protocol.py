@@ -60,7 +60,11 @@ def build_runtime_config(record: PipelineRecord) -> PipelineRuntimeConfig:
                 continue
 
             is_incoming_tool_link = edge.target == node.id and edge.targetHandle == "tools"
-            is_legacy_outgoing_tool_link = edge.source == node.id and edge.targetHandle in {"agent-tool", "tools"}
+            is_legacy_outgoing_tool_link = (
+                edge.source == node.id
+                and edge.sourceHandle == "agent-tools"
+                and edge.targetHandle in {"agent-tool", "tools"}
+            )
 
             if not is_incoming_tool_link and not is_legacy_outgoing_tool_link:
                 continue

@@ -81,6 +81,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -105,6 +106,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -131,6 +133,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -157,6 +160,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -183,6 +187,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -207,6 +212,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -231,6 +237,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -255,6 +262,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -279,6 +287,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Compose and optionally send an email from the agent workflow.",
               "enabledTools": [],
@@ -416,6 +425,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -440,6 +450,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -466,6 +477,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -492,6 +504,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -518,6 +531,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Turns specialist outputs into a polished final note before Gmail sends it.",
               "enabledTools": [
@@ -544,6 +558,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -568,6 +583,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Sends the final trade note by email.",
               "enabledTools": [],
@@ -592,6 +608,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -616,6 +633,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -640,6 +658,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -1891,6 +1910,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -1915,6 +1935,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -1939,6 +1960,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Autonomous AI node with a live Algorand wallet.",
               "enabledTools": [
@@ -1966,6 +1988,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
               "enabledTools": [],
@@ -1990,6 +2013,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free live weather lookup via Open-Meteo.",
               "enabledTools": [],
@@ -2014,6 +2038,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
               "enabledTools": [],
@@ -2038,6 +2063,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Compose and optionally send an email from the agent workflow.",
               "enabledTools": [],
@@ -2396,6 +2422,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -2420,6 +2447,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -2446,6 +2474,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -2472,6 +2501,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -2498,6 +2528,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Turns specialist outputs into a polished final note before Gmail sends it.",
               "enabledTools": [
@@ -2524,6 +2555,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -2548,6 +2580,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Sends the final trade note by email.",
               "enabledTools": [],
@@ -2572,6 +2605,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -2596,6 +2630,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -2620,6 +2655,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -4602,6 +4638,1296 @@
         }
       }
     },
+    "pm_64dda29a": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trigger-agent",
+            "label": "Start",
+            "source": "trigger-1",
+            "sourceHandle": null,
+            "target": "agent-main",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-agent-gmail",
+            "label": "Next workflow step",
+            "source": "agent-main",
+            "sourceHandle": null,
+            "target": "tool-gmail",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-gemini-agent",
+            "label": "Model connection",
+            "source": "tool-gemini",
+            "sourceHandle": "model-out",
+            "target": "agent-main",
+            "targetHandle": "model",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-search-agent",
+            "label": "Agent tool access",
+            "source": "tool-search",
+            "sourceHandle": "tool-out",
+            "target": "agent-main",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-weather-agent",
+            "label": "Agent tool access",
+            "source": "tool-weather",
+            "sourceHandle": "tool-out",
+            "target": "agent-main",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-tool-gmail-end-1-1779014150694",
+            "label": "A2A message",
+            "source": "tool-gmail",
+            "sourceHandle": "workflow-out",
+            "target": "end-1",
+            "targetHandle": null,
+            "wireType": "a2a"
+          }
+        ],
+        "name": "Trade Signal Desk",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Incoming HTTP request kicks off the workflow.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Manual Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": "POST",
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": "{ \"propmt\": \"weather in kolkata\" }",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1",
+            "position": {
+              "x": 70.0,
+              "y": 250.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Autonomous AI node with a live Algorand wallet.",
+              "enabledTools": [
+                "search",
+                "weather"
+              ],
+              "gmailTo": null,
+              "label": "AI Agent",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": "operator",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Choose the best available tool, then summarize the result for the next node.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-main",
+            "position": {
+              "x": 470.0,
+              "y": 170.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Compose and optionally send an email from the workflow.",
+              "enabledTools": [],
+              "gmailTo": "soubhagyasadhukhan@gmail.com",
+              "label": "Gmail",
+              "priceAlgo": 0.02,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gmail",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-gmail",
+            "position": {
+              "x": 940.0,
+              "y": 84.58654838748566
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Returns the final HTTP response.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1460.7610914528507,
+              "y": 159.6194542735746
+            },
+            "type": "end"
+          },
+          {
+            "data": {
+              "apiKey": "",
+              "cryptoSymbols": null,
+              "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Gemini",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gemini",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-gemini",
+            "position": {
+              "x": 184.35478849392803,
+              "y": 737.350504821665
+            },
+            "type": "service"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-search",
+            "position": {
+              "x": 518.6924146993442,
+              "y": 923.3104502819843
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-weather",
+            "position": {
+              "x": 941.9370532091505,
+              "y": 683.7911323576113
+            },
+            "type": "api"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_64dda29a/run",
+      "payment_wallet": "NQCIPJZOQVQGLT2WDVCMVCSEAQL7MNRS5AJV3N6NT7ENAPNGYQJOM4JKIU",
+      "pipeline_id": "pm_64dda29a",
+      "price_algo": 0.0,
+      "runs": {
+        "run_4de52ba969": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T10:36:28.584860",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-main",
+              "output": "{ \"propmt\": \"weather in kolkata\" }",
+              "timestamp": "2026-05-17T10:36:28.584898",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-main",
+              "output": "Fallback router selected: Open-Meteo Weather.",
+              "timestamp": "2026-05-17T10:36:28.584940",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "{ \"propmt\": \"weather in kolkata\" }"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:28.584951",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:28.584962",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "tool-weather",
+              "output": "Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:36:30.016739",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:30.016782",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-main",
+              "output": "Fallback router selected: Open-Meteo Weather.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T10:36:30.016799",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:30.016896",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Gmail returned output.",
+              "nodeId": "tool-gmail",
+              "output": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Send or draft an email using this final workflow outp...'.",
+              "timestamp": "2026-05-17T10:36:33.336647",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Gmail completed successfully.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:33.336764",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "AI Agent response for '{ \"propmt\": \"weather in kolkata\" }': weather: Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:36:33.336850",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_64dda29a",
+          "result": "AI Agent response for '{ \"propmt\": \"weather in kolkata\" }': weather: Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+          "runId": "run_4de52ba969",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-main": {
+          "address": "NQCIPJZOQVQGLT2WDVCMVCSEAQL7MNRS5AJV3N6NT7ENAPNGYQJOM4JKIU",
+          "node_id": "agent-main",
+          "private_key": "Igq89mZo1DvXktmEE1IJddGCpX1BFxdgKoWsPMeMBVVsBIenLoVgZc9WHUTKikQEF/Y2MugTXbfNn8jQPabEEg=="
+        }
+      }
+    },
+    "pm_709cfebe": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-trigger-agent",
+            "label": "Start",
+            "source": "trigger-1",
+            "sourceHandle": null,
+            "target": "agent-main",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-agent-gmail",
+            "label": "Next workflow step",
+            "source": "agent-main",
+            "sourceHandle": null,
+            "target": "tool-gmail",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-gmail-end",
+            "label": "Final response",
+            "source": "tool-gmail",
+            "sourceHandle": null,
+            "target": "end-1",
+            "targetHandle": null,
+            "wireType": "a2a"
+          },
+          {
+            "id": "edge-gemini-agent",
+            "label": "Model connection",
+            "source": "tool-gemini",
+            "sourceHandle": "model-out",
+            "target": "agent-main",
+            "targetHandle": "model",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-search-agent",
+            "label": "Agent tool access",
+            "source": "tool-search",
+            "sourceHandle": "tool-out",
+            "target": "agent-main",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-weather-agent",
+            "label": "Agent tool access",
+            "source": "tool-weather",
+            "sourceHandle": "tool-out",
+            "target": "agent-main",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          }
+        ],
+        "name": "Trade Signal Desk",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Incoming HTTP request kicks off the workflow.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Manual Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": "POST",
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": "{ \"token\": \"what do u mean by a water bottle\" }",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1",
+            "position": {
+              "x": 70.0,
+              "y": 250.0
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "cryptoSymbols": null,
+              "description": "Autonomous AI node with a live Algorand wallet.",
+              "enabledTools": [
+                "search",
+                "weather"
+              ],
+              "gmailTo": null,
+              "label": "AI Agent",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": "operator",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Choose the best available tool, then summarize the result for the next node.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-main",
+            "position": {
+              "x": 470.0,
+              "y": 170.0
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Compose and optionally send an email from the workflow.",
+              "enabledTools": [],
+              "gmailTo": "",
+              "label": "Gmail",
+              "priceAlgo": 0.02,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gmail",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-gmail",
+            "position": {
+              "x": 940.0,
+              "y": 84.58654838748566
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Returns the final HTTP response.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1460.7610914528507,
+              "y": 159.6194542735746
+            },
+            "type": "end"
+          },
+          {
+            "data": {
+              "apiKey": "AIzaSyBBgoe3j36x_AUtAr5tTSDlTJtqduOCONk",
+              "cryptoSymbols": null,
+              "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Gemini",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gemini",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-gemini",
+            "position": {
+              "x": 242.33476122408774,
+              "y": 674.2546521447265
+            },
+            "type": "service"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-search",
+            "position": {
+              "x": 518.6924146993442,
+              "y": 923.3104502819843
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "apiKey": null,
+              "cryptoSymbols": null,
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "tool-weather",
+            "position": {
+              "x": 941.9370532091505,
+              "y": 683.7911323576113
+            },
+            "type": "api"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_709cfebe/run",
+      "payment_wallet": "KN5RLYRC5FPSCL5MKHY7GMVCO3JYBSSBJCOKT2QGTSPKFGNA27L4LU2V3Y",
+      "pipeline_id": "pm_709cfebe",
+      "price_algo": 0.0,
+      "runs": {
+        "run_17b979bb6b": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T10:34:10.249170",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-main",
+              "output": "{ \"propmt\": \"weather in kolkata\" }",
+              "timestamp": "2026-05-17T10:34:10.249232",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for weather information. The 'Open-Meteo Weather' tool is specifically designed for this purpose.",
+              "timestamp": "2026-05-17T10:34:12.743847",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "{ \"propmt\": \"weather in kolkata\" }"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:12.743878",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:12.743892",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "tool-weather",
+              "output": "Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:34:14.394962",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:14.394996",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for weather information. The 'Open-Meteo Weather' tool is specifically designed for this purpose.\n\nCall the weather tool to get the current weather for Kolkata.",
+              "timestamp": "2026-05-17T10:34:14.395013",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:16.172276",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "error",
+              "level": "error",
+              "message": "Gmail failed during workflow execution.",
+              "nodeId": "tool-gmail",
+              "output": "No email recipient found. Put an email address in the prompt or set a fallback Gmail recipient in the node.",
+              "timestamp": "2026-05-17T10:34:16.172329",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "In Kolkata, the current weather is 32.0\u00b0C, feeling like 37.2\u00b0C, with a thunderstorm and wind at 13.9 km/h.",
+              "timestamp": "2026-05-17T10:34:16.172338",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_709cfebe",
+          "result": "In Kolkata, the current weather is 32.0\u00b0C, feeling like 37.2\u00b0C, with a thunderstorm and wind at 13.9 km/h.",
+          "runId": "run_17b979bb6b",
+          "settlementMode": "demo"
+        },
+        "run_2c3ff57c98": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T10:36:01.534775",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-main",
+              "output": "{ \"propmt\": \"weather in kolkata\" }",
+              "timestamp": "2026-05-17T10:36:01.534833",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-main",
+              "output": "Fallback router selected: Open-Meteo Weather.",
+              "timestamp": "2026-05-17T10:36:01.534957",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "{ \"propmt\": \"weather in kolkata\" }"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:01.534986",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:01.535009",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "tool-weather",
+              "output": "Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:36:03.040369",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:03.040389",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-main",
+              "output": "Fallback router selected: Open-Meteo Weather.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T10:36:03.040398",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:03.040449",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Gmail returned output.",
+              "nodeId": "tool-gmail",
+              "output": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Send or draft an email using this final workflow outp...'.",
+              "timestamp": "2026-05-17T10:36:06.396498",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Gmail completed successfully.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:36:06.396531",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "AI Agent response for '{ \"propmt\": \"weather in kolkata\" }': weather: Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:36:06.396555",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_709cfebe",
+          "result": "AI Agent response for '{ \"propmt\": \"weather in kolkata\" }': weather: Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+          "runId": "run_2c3ff57c98",
+          "settlementMode": "demo"
+        },
+        "run_35e15892c3": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T10:34:24.965776",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-main",
+              "output": "{ \"propmt\": \"weather in kolkata\" }",
+              "timestamp": "2026-05-17T10:34:24.965851",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for weather information, so the specialized weather tool is the most direct and efficient choice.",
+              "timestamp": "2026-05-17T10:34:27.632721",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "{ \"propmt\": \"weather in kolkata\" }"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:27.632771",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:27.632793",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "tool-weather",
+              "output": "Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:34:29.065646",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:29.065722",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for weather information, so the specialized weather tool is the most direct and efficient choice.\n\nCall the weather tool to get the current weather for Kolkata.",
+              "timestamp": "2026-05-17T10:34:29.065745",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:31.593761",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "error",
+              "level": "error",
+              "message": "Gmail failed during workflow execution.",
+              "nodeId": "tool-gmail",
+              "output": "No email recipient found. Put an email address in the prompt or set a fallback Gmail recipient in the node.",
+              "timestamp": "2026-05-17T10:34:31.593831",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "The current weather in Kolkata is 32.0\u00b0C, feeling like 37.2\u00b0C, with a wind of 13.9 km/h and a thunderstorm.",
+              "timestamp": "2026-05-17T10:34:31.593840",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_709cfebe",
+          "result": "The current weather in Kolkata is 32.0\u00b0C, feeling like 37.2\u00b0C, with a wind of 13.9 km/h and a thunderstorm.",
+          "runId": "run_35e15892c3",
+          "settlementMode": "demo"
+        },
+        "run_9f1d5681ce": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T10:33:30.220367",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-main",
+              "output": "what do u mean by a water bottle",
+              "timestamp": "2026-05-17T10:33:30.220421",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for the definition of 'water bottle'. A search tool is best suited to provide this information.",
+              "timestamp": "2026-05-17T10:33:32.193764",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "what do u mean by a water bottle"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-05-17T10:33:32.193799",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling DuckDuckGo Search as a free API.",
+              "nodeId": "tool-search",
+              "output": null,
+              "timestamp": "2026-05-17T10:33:32.193822",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "DuckDuckGo Search returned output.",
+              "nodeId": "tool-search",
+              "output": "DuckDuckGo returned no direct instant answer, but the search request completed.",
+              "timestamp": "2026-05-17T10:33:32.462390",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "DuckDuckGo Search completed successfully.",
+              "nodeId": "tool-search",
+              "output": null,
+              "timestamp": "2026-05-17T10:33:32.462415",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for the definition of 'water bottle'. A search tool is best suited to provide this information.\n\nSearching for the definition of 'water bottle' to clarify its meaning for the user.",
+              "timestamp": "2026-05-17T10:33:32.462425",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:33:34.612901",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "error",
+              "level": "error",
+              "message": "Gmail failed during workflow execution.",
+              "nodeId": "tool-gmail",
+              "output": "No email recipient found. Put an email address in the prompt or set a fallback Gmail recipient in the node.",
+              "timestamp": "2026-05-17T10:33:34.613691",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "A water bottle is a portable container designed to hold and carry water for drinking. They are typically reusable and come in various materials like plastic, metal, or glass.",
+              "timestamp": "2026-05-17T10:33:34.613706",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_709cfebe",
+          "result": "A water bottle is a portable container designed to hold and carry water for drinking. They are typically reusable and come in various materials like plastic, metal, or glass.",
+          "runId": "run_9f1d5681ce",
+          "settlementMode": "demo"
+        },
+        "run_fa017cdc92": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T10:34:53.183943",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-main",
+              "output": "{ \"propmt\": \"weather in kolkata\" }",
+              "timestamp": "2026-05-17T10:34:53.184011",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for weather information, and the 'tool-weather' is specifically designed for this purpose.",
+              "timestamp": "2026-05-17T10:34:55.394650",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "{ \"propmt\": \"weather in kolkata\" }"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:55.394694",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:55.394728",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "tool-weather",
+              "output": "Kolkata: 32.0\u00b0C, feels like 37.2\u00b0C, wind 13.9 km/h, weather code 95.",
+              "timestamp": "2026-05-17T10:34:56.851567",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "tool-weather",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:56.851611",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-main",
+              "output": "The user is asking for weather information, and the 'tool-weather' is specifically designed for this purpose.\n\nUse the weather tool to get the current weather and forecast for Kolkata.",
+              "timestamp": "2026-05-17T10:34:56.851631",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Workflow moved into Gmail.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:34:59.795231",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Gmail returned output.",
+              "nodeId": "tool-gmail",
+              "output": "Email sent to soubhagyasadhukhan@gmail.com with subject 'AgentMesh update: Send or draft an email using this final workflow outp...'.",
+              "timestamp": "2026-05-17T10:35:03.595676",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Gmail completed successfully.",
+              "nodeId": "tool-gmail",
+              "output": null,
+              "timestamp": "2026-05-17T10:35:03.595720",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "The current weather in Kolkata is 32.0\u00b0C, feels like 37.2\u00b0C, with wind at 13.9 km/h.",
+              "timestamp": "2026-05-17T10:35:03.595742",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_709cfebe",
+          "result": "The current weather in Kolkata is 32.0\u00b0C, feels like 37.2\u00b0C, with wind at 13.9 km/h.",
+          "runId": "run_fa017cdc92",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-main": {
+          "address": "KN5RLYRC5FPSCL5MKHY7GMVCO3JYBSSBJCOKT2QGTSPKFGNA27L4LU2V3Y",
+          "node_id": "agent-main",
+          "private_key": "7o8Gnj89e/S4OaWWqdAkSJTJDky6GPRTsx2C+WzRWclTexXiIulfIS+sUfHzMqJ204DKQUicqeoGnJ6imaDX1w=="
+        }
+      }
+    },
     "pm_9626804a": {
       "definition": {
         "edges": [
@@ -4674,6 +6000,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -4698,6 +6025,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -4724,6 +6052,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -4750,6 +6079,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -4776,6 +6106,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -4800,6 +6131,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -4824,6 +6156,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -4848,6 +6181,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -4964,6 +6298,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the workflow.",
               "enabledTools": [],
@@ -4988,6 +6323,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Chooses the right connected API tool for the incoming prompt.",
               "enabledTools": [
@@ -5016,6 +6352,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free live weather lookup via Open-Meteo.",
               "enabledTools": [],
@@ -5040,6 +6377,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
               "enabledTools": [],
@@ -5064,6 +6402,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Formats the final HTTP response for the caller.",
               "enabledTools": [],
@@ -5088,6 +6427,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Shows and returns the final API output to the caller.",
               "enabledTools": [],
@@ -6763,6 +8103,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -6787,6 +8128,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -6813,6 +8155,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -6839,6 +8182,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -6865,6 +8209,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -6889,6 +8234,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -6913,6 +8259,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -6937,6 +8284,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -7080,6 +8428,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -7104,6 +8453,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -7130,6 +8480,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -7156,6 +8507,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -7182,6 +8534,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -7206,6 +8559,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -7230,6 +8584,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -7254,6 +8609,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],
@@ -7278,6 +8634,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Compose and optionally send an email from the agent workflow.",
               "enabledTools": [],
@@ -7671,6 +9028,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the workflow.",
               "enabledTools": [],
@@ -7695,6 +9053,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Chooses the right connected API tool for the incoming prompt.",
               "enabledTools": [
@@ -7723,6 +9082,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free live weather lookup via Open-Meteo.",
               "enabledTools": [],
@@ -7747,6 +9107,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
               "enabledTools": [],
@@ -7771,6 +9132,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Formats the final HTTP response for the caller.",
               "enabledTools": [],
@@ -7795,6 +9157,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Shows and returns the final API output to the caller.",
               "enabledTools": [],
@@ -7892,6 +9255,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "start",
               "enabledTools": [],
@@ -7916,6 +9280,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": null,
               "enabledTools": [],
@@ -7940,6 +9305,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": null,
               "enabledTools": [],
@@ -7964,6 +9330,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": null,
               "enabledTools": [],
@@ -7988,6 +9355,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": null,
               "enabledTools": [],
@@ -8228,6 +9596,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the workflow.",
               "enabledTools": [],
@@ -8252,6 +9621,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Chooses the right connected API tool for the incoming prompt.",
               "enabledTools": [
@@ -8280,6 +9650,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free live weather lookup via Open-Meteo.",
               "enabledTools": [],
@@ -8304,6 +9675,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
               "enabledTools": [],
@@ -8328,6 +9700,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Formats the final HTTP response for the caller.",
               "enabledTools": [],
@@ -8352,6 +9725,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Shows and returns the final API output to the caller.",
               "enabledTools": [],
@@ -8607,6 +9981,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the workflow.",
               "enabledTools": [],
@@ -8631,6 +10006,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Chooses the right connected API tool for the incoming prompt.",
               "enabledTools": [
@@ -8659,6 +10035,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free live weather lookup via Open-Meteo.",
               "enabledTools": [],
@@ -8683,6 +10060,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
               "enabledTools": [],
@@ -8707,6 +10085,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Formats the final HTTP response for the caller.",
               "enabledTools": [],
@@ -8731,6 +10110,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Shows and returns the final API output to the caller.",
               "enabledTools": [],
@@ -9319,6 +10699,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the workflow.",
               "enabledTools": [],
@@ -9343,6 +10724,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Routes each request to the right connected tool set.",
               "enabledTools": [
@@ -9373,6 +10755,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free live weather lookup via Open-Meteo.",
               "enabledTools": [],
@@ -9397,6 +10780,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
               "enabledTools": [],
@@ -9421,6 +10805,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -9445,6 +10830,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Draft or send email updates from the workflow.",
               "enabledTools": [],
@@ -9469,6 +10855,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Formats the final HTTP response for the caller.",
               "enabledTools": [],
@@ -9493,6 +10880,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Shows and returns the final API output to the caller.",
               "enabledTools": [],
@@ -10176,6 +11564,7 @@
         "nodes": [
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Incoming HTTP request kicks off the trade-signal workflow.",
               "enabledTools": [],
@@ -10200,6 +11589,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Coordinates the desk, gathers specialist inputs, and returns the final trade call.",
               "enabledTools": [
@@ -10226,6 +11616,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Reads short-term price structure and momentum.",
               "enabledTools": [
@@ -10252,6 +11643,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Checks volatility, risk, and sizing constraints.",
               "enabledTools": [
@@ -10278,6 +11670,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Live crypto price lookup via CoinGecko.",
               "enabledTools": [],
@@ -10302,6 +11695,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Computes a simple technical read from recent market data.",
               "enabledTools": [],
@@ -10326,6 +11720,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": "BTC,ETH,ALGO,SOL",
               "description": "Estimates volatility, risk level, and position sizing.",
               "enabledTools": [],
@@ -10350,6 +11745,7 @@
           },
           {
             "data": {
+              "apiKey": null,
               "cryptoSymbols": null,
               "description": "Returns BUY / SELL / HOLD with trade parameters.",
               "enabledTools": [],

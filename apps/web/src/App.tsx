@@ -48,7 +48,7 @@ import type {
   WireKind,
 } from "./types/pipeline";
 
-const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v6";
+const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v7";
 
 interface StoredWorkflowDraft {
   pipelineName: string;
@@ -790,7 +790,7 @@ function BuilderApp() {
     setNodes(initialNodes);
     setEdges(initialEdges);
     setPipelineName("Trade Signal Desk");
-    setRuntimeQuery('{ "token": "ALGO" }');
+    setRuntimeQuery('{ "token": "what do u mean by a water bottle" }');
     setSelectedNodeId(initialNodes[1]?.id ?? null);
     setSelectedEdgeId(null);
     setDeployment(null);
