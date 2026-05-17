@@ -50,10 +50,12 @@ class RuntimeExecutor:
         analyzer_wallet = record.wallets.get(analyzer.id) if analyzer else None
         connected_tools = self._connected_tool_nodes(record.definition, analyzer.id if analyzer else None)
         allowed_tools = analyzer.data.enabledTools if analyzer and analyzer.data.enabledTools else []
+        analyzer_api_key = self._node_api_key(analyzer)
 
         selected_tools: List[str] = []
         analyzer_analysis = ""
         handoff_text = ""
+        llm_plan_completed = False
 
         if analyzer:
             self._append_log(
@@ -64,7 +66,7 @@ class RuntimeExecutor:
                 output=query,
             )
 
-        if analyzer and self.gemini.enabled:
+        if analyzer and analyzer_api_key:
             try:
                 plan = self.gemini.choose_tools(
                     query=query,
@@ -79,10 +81,21 @@ class RuntimeExecutor:
                         for node in connected_tools
                     ],
                     allowed_tools=allowed_tools,
+                    api_key=analyzer_api_key,
+                    allow_env_fallback=False,
                 )
+                llm_plan_completed = True
                 selected_tools = plan["selected_tools"]
-                analyzer_analysis = plan["analysis"] or "Gemini planned the best tool path for the request."
-                handoff_text = plan["handoff"] or "Analyzer prepared a concise handoff for the next node."
+                analyzer_analysis = plan["analysis"] or (
+                    "Gemini planned the best tool path for the request."
+                    if selected_tools
+                    else "Gemini determined that no connected tool is needed for this request."
+                )
+                handoff_text = plan["handoff"] or (
+                    "Analyzer prepared a concise handoff for the next node."
+                    if selected_tools
+                    else "Analyzer can answer directly without calling any connected tool."
+                )
                 self._append_log(
                     logs,
                     level="output",
@@ -98,7 +111,7 @@ class RuntimeExecutor:
                     output=str(error),
                 )
 
-        if not selected_tools:
+        if not selected_tools and not llm_plan_completed:
             selected_tools = self.tools.choose_tools(
                 query,
                 [
@@ -451,16 +464,33 @@ class RuntimeExecutor:
         node_map = {node.id: node for node in definition.nodes}
         connected: List[PipelineNode] = []
         for edge in definition.edges:
-            if edge.source != source_node_id:
+            if edge.wireType not in {"x402", "connection"}:
                 continue
-            target = node_map.get(edge.target)
-            if target and target.type in {"service", "api"}:
+
+            is_incoming_tool_link = edge.target == source_node_id and edge.targetHandle == "tools"
+            is_legacy_outgoing_tool_link = edge.source == source_node_id
+
+            if not is_incoming_tool_link and not is_legacy_outgoing_tool_link:
+                continue
+
+            tool_node_id = edge.source if is_incoming_tool_link else edge.target
+            target = node_map.get(tool_node_id)
+            if (
+                target
+                and target.type in {"service", "api"}
+                and (target.data.serviceKind or "custom") not in {"gemini", "openai", "claude", "mistral"}
+            ):
                 connected.append(target)
 
-        return connected or self._tool_nodes(definition)
+        return connected
 
     def _tool_nodes(self, definition: DeployPipelineRequest) -> List[PipelineNode]:
-        return [node for node in definition.nodes if node.type in {"service", "api"}]
+        return [
+            node
+            for node in definition.nodes
+            if node.type in {"service", "api"}
+            and (node.data.serviceKind or "custom") not in {"gemini", "openai", "claude", "mistral"}
+        ]
 
     def _sort_tools_for_execution(
         self,
@@ -495,22 +525,26 @@ class RuntimeExecutor:
         responder: Optional[PipelineNode],
         analyzer: Optional[PipelineNode],
     ) -> str:
-        if not tool_results:
-            return (
-                "AgentMesh ran the workflow for '{query}', but none of the configured tools returned "
-                "usable data."
-            ).format(query=query)
+        response_api_key = self._node_api_key(responder) or self._node_api_key(analyzer)
 
-        if self.gemini.enabled:
+        if response_api_key:
             try:
                 return self.gemini.summarize_final(
                     query=query,
                     analyzer_prompt=analyzer.data.systemPrompt if analyzer else "",
                     responder_prompt=responder.data.systemPrompt if responder else "",
                     tool_results=tool_results,
+                    api_key=response_api_key,
+                    allow_env_fallback=False,
                 )
             except Exception:
                 pass
+
+        if not tool_results:
+            return (
+                "AgentMesh ran the workflow for '{query}', but none of the configured tools returned "
+                "usable data."
+            ).format(query=query)
 
         tool_lines = [f"{result.tool}: {result.summary}" for result in tool_results]
         agent_prefix = responder.data.label if responder else analyzer.data.label if analyzer else "Agent"
@@ -519,3 +553,14 @@ class RuntimeExecutor:
             query=query,
             body=" ".join(tool_lines),
         )
+
+    def _node_api_key(self, node: Optional[PipelineNode]) -> Optional[str]:
+        if node is None:
+            return None
+
+        api_key = getattr(node.data, "apiKey", None)
+        if not isinstance(api_key, str):
+            return None
+
+        normalized = api_key.strip()
+        return normalized or None

@@ -8,10 +8,6 @@ interface InspectorPanelProps {
   onNodeChange: (nodeId: string, updates: Partial<PipelineNodeData>) => void;
 }
 
-function toolChecked(node: BuilderNode, tool: string) {
-  return (node.data.enabledTools ?? []).includes(tool);
-}
-
 export function InspectorPanel({
   selectedNode,
   deployment,
@@ -92,25 +88,10 @@ export function InspectorPanel({
                 />
               </label>
               <div className="field">
-                <span>Tools</span>
-                <div className="checkbox-grid">
-                  {["crypto", "chart", "risk", "search", "gmail", "custom"].map((tool) => (
-                    <label key={tool} className="checkbox-pill">
-                      <input
-                        checked={toolChecked(selectedNode, tool)}
-                        onChange={(event) => {
-                          const current = selectedNode.data.enabledTools ?? [];
-                          const next = event.target.checked
-                            ? [...new Set([...current, tool])]
-                            : current.filter((item) => item !== tool);
-                          onNodeChange(selectedNode.id, { enabledTools: next });
-                        }}
-                        type="checkbox"
-                      />
-                      <span>{tool}</span>
-                    </label>
-                  ))}
-                </div>
+                <span>Tool access</span>
+                <p className="empty-state">
+                  Connect tools from the canvas using the agent&apos;s top dot. Side dots stay reserved for workflow routing.
+                </p>
               </div>
               <div className="wallet-summary">
                 <span>Wallet</span>

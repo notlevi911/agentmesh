@@ -222,20 +222,20 @@ class AgentServiceRuntime:
             for tool in self.agent_config.tools
         ]
         allowed_tools = [tool.service_kind for tool in self.agent_config.tools]
+        agent_api_key = (self.agent_config.api_key or "").strip() or None
 
-        if self.gemini.enabled or self.agent_config.api_key:
+        if agent_api_key:
             try:
                 plan = self.gemini.choose_tools(
                     query=message,
                     agent_prompt=self.agent_config.system_prompt,
                     available_tools=available_tools,
                     allowed_tools=allowed_tools,
-                    api_key=self.agent_config.api_key,
+                    api_key=agent_api_key,
+                    allow_env_fallback=False,
                 )
                 selected_ids = set(plan.get("selected_tools", []))
-                selected = [tool for tool in self.agent_config.tools if tool.node_id in selected_ids]
-                if selected:
-                    return selected
+                return [tool for tool in self.agent_config.tools if tool.node_id in selected_ids]
             except Exception as error:
                 self._log("warning", "Gemini tool planning failed, falling back to heuristic router.", {"error": str(error)})
 
@@ -257,7 +257,8 @@ class AgentServiceRuntime:
         if self._is_trade_signal_agent():
             return self._compose_trade_signal(message, tool_results, agent_results)
 
-        if (self.gemini.enabled or self.agent_config.api_key) and (tool_results or agent_results):
+        agent_api_key = (self.agent_config.api_key or "").strip() or None
+        if agent_api_key:
             synthetic_tools = list(tool_results)
             for agent_id, result in agent_results.items():
                 synthetic_tools.append(
@@ -274,7 +275,8 @@ class AgentServiceRuntime:
                     analyzer_prompt=self.agent_config.system_prompt,
                     responder_prompt=self.agent_config.system_prompt,
                     tool_results=synthetic_tools,
-                    api_key=self.agent_config.api_key,
+                    api_key=agent_api_key,
+                    allow_env_fallback=False,
                 )
             except Exception as error:
                 self._log("warning", "Gemini synthesis failed, falling back to string synthesis.", {"error": str(error)})

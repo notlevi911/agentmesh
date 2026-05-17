@@ -308,7 +308,17 @@ class ToolRuntime:
             for token in ["search", "news", "find", "look up", "sentiment", "research"]
         ) or any(
             phrase in lowered
-            for phrase in ["who is", "what is", "when did", "why did", "tell me about", "explain"]
+            for phrase in [
+                "who is",
+                "when did",
+                "why did",
+                "tell me about",
+                "explain",
+                "definition of",
+                "meaning of",
+                "what do you mean by",
+                "what do u mean by",
+            ]
         )
         crypto_intent = any(
             token in lowered
@@ -339,6 +349,8 @@ class ToolRuntime:
             token in lowered
             for token in ["email", "mail", "gmail", "send", "message", "@", "draft"]
         )
+        if "what is" in lowered and not any([weather_intent, crypto_intent, chart_intent, risk_intent, gmail_intent]):
+            search_intent = True
 
         candidates = [
             tool
@@ -366,29 +378,6 @@ class ToolRuntime:
             elif kind == "custom":
                 if any(token in lowered for token in self._keywords_for_tool(label, url)):
                     chosen.append(tool["id"])
-
-        if not chosen:
-            crypto_like = next((tool["id"] for tool in candidates if tool.get("kind") == "crypto"), None)
-            chart_like = next((tool["id"] for tool in candidates if tool.get("kind") == "chart"), None)
-            risk_like = next((tool["id"] for tool in candidates if tool.get("kind") == "risk"), None)
-            gmail_like = next((tool["id"] for tool in candidates if tool.get("kind") == "gmail"), None)
-            search_like = next((tool["id"] for tool in candidates if tool.get("kind") == "search"), None)
-            custom_like = next((tool["id"] for tool in candidates if tool.get("kind") == "custom"), None)
-            weather_like = next((tool["id"] for tool in candidates if tool.get("kind") == "weather"), None)
-            if gmail_like and gmail_intent:
-                chosen.append(gmail_like)
-            elif chart_like and chart_intent:
-                chosen.append(chart_like)
-            elif risk_like and risk_intent:
-                chosen.append(risk_like)
-            elif crypto_like and crypto_intent:
-                chosen.append(crypto_like)
-            elif search_like:
-                chosen.append(search_like)
-            elif custom_like:
-                chosen.append(custom_like)
-            elif weather_like:
-                chosen.append(weather_like)
 
         return list(dict.fromkeys(chosen))
 

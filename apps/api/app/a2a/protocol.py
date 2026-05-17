@@ -56,10 +56,20 @@ def build_runtime_config(record: PipelineRecord) -> PipelineRuntimeConfig:
 
         connected_tools = []
         for edge in record.definition.edges:
-            if edge.source != node.id or edge.wireType != "x402":
+            if edge.wireType not in {"x402", "connection"}:
                 continue
-            target_node = next((candidate for candidate in record.definition.nodes if candidate.id == edge.target), None)
+
+            is_incoming_tool_link = edge.target == node.id and edge.targetHandle == "tools"
+            is_legacy_outgoing_tool_link = edge.source == node.id and edge.targetHandle in {"agent-tool", "tools"}
+
+            if not is_incoming_tool_link and not is_legacy_outgoing_tool_link:
+                continue
+
+            tool_node_id = edge.source if is_incoming_tool_link else edge.target
+            target_node = next((candidate for candidate in record.definition.nodes if candidate.id == tool_node_id), None)
             if target_node is None or target_node.type not in {"service", "api"}:
+                continue
+            if (target_node.data.serviceKind or "custom") in {"gemini", "openai", "claude", "mistral"}:
                 continue
             connected_tools.append(
                 AgentToolConfig(

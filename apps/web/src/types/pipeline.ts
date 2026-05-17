@@ -1,7 +1,7 @@
 import type { Edge, Node } from "@xyflow/react";
 
 export type NodeKind = "agent" | "api" | "service" | "trigger" | "end";
-export type WireKind = "a2a" | "x402" | "algo_transfer";
+export type WireKind = "a2a" | "x402" | "algo_transfer" | "connection";
 export type LogLevel = "info" | "success" | "warning" | "error";
 
 export interface PipelineNodeData extends Record<string, unknown> {
@@ -69,6 +69,8 @@ export interface DeployRequest {
     id: string;
     source: string;
     target: string;
+    sourceHandle?: string;
+    targetHandle?: string;
     wireType: WireKind;
     label?: string;
   }>;

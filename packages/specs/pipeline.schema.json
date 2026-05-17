@@ -50,6 +50,7 @@
           "type": "string",
           "enum": [
             "agent",
+            "api",
             "service",
             "trigger",
             "end"
@@ -106,8 +107,19 @@
               "enum": [
                 "weather",
                 "search",
-                "custom"
+                "custom",
+                "gmail",
+                "crypto",
+                "chart",
+                "risk",
+                "gemini",
+                "openai",
+                "claude",
+                "mistral"
               ]
+            },
+            "apiKey": {
+              "type": "string"
             }
           }
         }
@@ -131,12 +143,19 @@
         "target": {
           "type": "string"
         },
+        "sourceHandle": {
+          "type": "string"
+        },
+        "targetHandle": {
+          "type": "string"
+        },
         "wireType": {
           "type": "string",
           "enum": [
             "a2a",
             "x402",
-            "algo_transfer"
+            "algo_transfer",
+            "connection"
           ]
         },
         "label": {

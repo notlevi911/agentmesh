@@ -4,7 +4,7 @@ from typing import Any, Dict, List, Literal, Optional
 from pydantic import BaseModel, Field
 
 NodeKind = Literal["agent", "api", "service", "trigger", "end"]
-WireKind = Literal["a2a", "x402", "algo_transfer"]
+WireKind = Literal["a2a", "x402", "algo_transfer", "connection"]
 LogLevel = Literal["info", "success", "warning", "error"]
 
 
@@ -23,11 +23,26 @@ class NodeData(BaseModel):
     enabledTools: List[str] = Field(default_factory=list)
     priceAlgo: float = 0
     serviceUrl: Optional[str] = None
-    serviceKind: Optional[Literal["weather", "search", "custom", "gmail", "crypto", "chart", "risk"]] = None
+    serviceKind: Optional[
+        Literal[
+            "weather",
+            "search",
+            "custom",
+            "gmail",
+            "crypto",
+            "chart",
+            "risk",
+            "gemini",
+            "openai",
+            "claude",
+            "mistral",
+        ]
+    ] = None
     upstreamX402: bool = False
     treasuryAddress: Optional[str] = None
     gmailTo: Optional[str] = None
     cryptoSymbols: Optional[str] = None
+    apiKey: Optional[str] = None
 
 
 class PipelineNode(BaseModel):
@@ -41,6 +56,8 @@ class PipelineEdge(BaseModel):
     id: str
     source: str
     target: str
+    sourceHandle: Optional[str] = None
+    targetHandle: Optional[str] = None
     wireType: WireKind
     label: Optional[str] = None
 

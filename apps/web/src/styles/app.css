@@ -802,7 +802,6 @@ a {
   color: #f5f3ff;
   font-family: "Outfit", sans-serif;
   font-size: 20px;
-}
   font-weight: 700;
   letter-spacing: -0.04em;
 }
@@ -915,15 +914,15 @@ a {
 }
 
 .react-flow__handle.node-handle {
-  width: 18px;
-  height: 18px;
-  border: 3px solid #08040f;
+  width: 16px;
+  height: 16px;
+  border: 2px solid #17121f;
   border-radius: 999px;
-  background: #8b5cf6;
+  background: #7f6cf3;
   z-index: 5;
   box-shadow:
-    0 0 0 4px rgba(139, 92, 246, 0.14),
-    0 8px 18px rgba(0, 0, 0, 0.28);
+    0 0 0 3px rgba(127, 108, 243, 0.12),
+    0 4px 10px rgba(0, 0, 0, 0.24);
   transition:
     transform 140ms ease,
     box-shadow 140ms ease,
@@ -933,11 +932,11 @@ a {
 .react-flow__handle.node-handle:hover,
 .react-flow__handle.node-handle-connecting,
 .react-flow__handle.node-handle-valid {
-  transform: scale(1.08);
-  background: #c4b5fd;
+  transform: scale(1.05);
+  background: #a89cff;
   box-shadow:
-    0 0 0 6px rgba(139, 92, 246, 0.2),
-    0 10px 20px rgba(0, 0, 0, 0.3);
+    0 0 0 5px rgba(127, 108, 243, 0.16),
+    0 6px 14px rgba(0, 0, 0, 0.26);
 }
 
 .react-flow__handle-left.node-handle {
@@ -948,18 +947,50 @@ a {
   right: -11px;
 }
 
+.react-flow__handle-top.node-handle {
+  top: -11px;
+}
+
+.react-flow__handle-bottom.node-handle {
+  bottom: -11px;
+}
+
+.node-handle-model,
+.node-handle-model-out {
+  background: #38bdf8;
+  box-shadow:
+    0 0 0 4px rgba(56, 189, 248, 0.16),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.node-handle-model {
+  left: 25%;
+}
+
+.node-handle-tools,
+.node-handle-agent-attach {
+  background: #10b981;
+  box-shadow:
+    0 0 0 4px rgba(16, 185, 129, 0.16),
+    0 8px 18px rgba(0, 0, 0, 0.28);
+}
+
+.node-handle-tools {
+  left: 72%;
+}
+
 .node-shell {
   position: relative;
   overflow: visible;
-  width: 246px;
+  width: 258px;
   padding: 14px;
-  border: 1px solid rgba(109, 40, 217, 0.24);
-  border-radius: 18px;
+  border: 1px solid rgba(102, 85, 134, 0.42);
+  border-radius: 14px;
   background:
-    linear-gradient(180deg, rgba(16, 8, 32, 0.98), rgba(10, 5, 20, 0.98));
+    linear-gradient(180deg, rgba(23, 18, 33, 0.98), rgba(16, 12, 24, 0.98));
   box-shadow:
-    inset 0 1px 0 rgba(167, 139, 250, 0.05),
-    0 14px 28px rgba(0, 0, 0, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 10px 24px rgba(0, 0, 0, 0.22);
   transition:
     transform 180ms ease,
     border-color 180ms ease,
@@ -967,18 +998,18 @@ a {
 }
 
 .react-flow__node:hover .node-shell {
-  transform: translateY(-3px);
-  border-color: rgba(139, 92, 246, 0.44);
+  transform: translateY(-2px);
+  border-color: rgba(145, 122, 186, 0.65);
   box-shadow:
-    inset 0 1px 0 rgba(167, 139, 250, 0.07),
-    0 20px 36px rgba(0, 0, 0, 0.32);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 14px 28px rgba(0, 0, 0, 0.26);
 }
 
 .react-flow__node.selected .node-shell {
-  border-color: #8b5cf6;
+  border-color: #9c8cf7;
   box-shadow:
-    0 0 0 2px rgba(139, 92, 246, 0.16),
-    0 18px 32px rgba(0, 0, 0, 0.3);
+    0 0 0 1px rgba(156, 140, 247, 0.28),
+    0 14px 30px rgba(0, 0, 0, 0.28);
 }
 
 .node-shell::before {
@@ -987,8 +1018,8 @@ a {
   top: 0;
   left: 0;
   right: 0;
-  height: 4px;
-  border-radius: 18px 18px 0 0;
+  height: 3px;
+  border-radius: 14px 14px 0 0;
   background: linear-gradient(
     120deg,
     rgba(139, 92, 246, 0),
@@ -1052,35 +1083,37 @@ a {
 .node-chip {
   display: inline-flex;
   align-items: center;
-  padding: 5px 9px;
-  border-radius: 999px;
+  padding: 4px 8px;
+  border-radius: 8px;
   font-size: 10px;
   font-weight: 700;
 }
 
 .node-badge {
-  background: rgba(76, 29, 149, 0.22);
-  color: #c4b5fd;
+  background: rgba(255, 255, 255, 0.06);
+  color: #cfc7f8;
   font-family: "JetBrains Mono", monospace;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
 }
 
 .node-chip {
-  background: #150e28;
-  color: #8b7eb8;
+  background: rgba(9, 7, 14, 0.6);
+  color: #9488bc;
 }
 
 .node-shell h3 {
   margin: 12px 0 6px;
-  color: #f5f3ff;
+  color: #f3f0ff;
   font-family: "Outfit", sans-serif;
-  font-size: 15px;
+  font-size: 16px;
   font-weight: 700;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
 }
 
 .node-shell p {
   margin: 0;
-  color: #7c6fa8;
+  color: #8e86ad;
   font-size: 12px;
   line-height: 1.5;
 }
@@ -1089,6 +1122,10 @@ a {
   display: grid;
   gap: 8px;
   margin: 14px 0;
+  padding: 10px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  background: rgba(8, 7, 12, 0.45);
 }
 
 .node-metrics div {
@@ -1098,13 +1135,13 @@ a {
 }
 
 .node-metrics dt {
-  color: #739787;
+  color: #8d97a5;
   font-size: 11px;
 }
 
 .node-metrics dd {
   margin: 0;
-  color: #edfff5;
+  color: #f4f4ff;
   font-size: 11px;
   font-weight: 700;
 }
@@ -1148,19 +1185,19 @@ a {
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
   font-weight: 700;
-  background: #102019;
-  color: #7f9c8d;
+  background: rgba(255, 255, 255, 0.06);
+  color: #9488bc;
 }
 
 .node-status-running {
-  background: rgba(139, 92, 246, 0.14);
-  color: #c4b5fd;
-  box-shadow: 0 0 0 4px rgba(139, 92, 246, 0.1);
+  background: rgba(127, 108, 243, 0.16);
+  color: #ded8ff;
+  box-shadow: 0 0 0 3px rgba(127, 108, 243, 0.1);
 }
 
 .node-status-done {
-  background: rgba(139, 92, 246, 0.22);
-  color: #ddd6fe;
+  background: rgba(16, 185, 129, 0.18);
+  color: #d9fff0;
 }
 
 .node-status-error {
@@ -1169,8 +1206,8 @@ a {
 }
 
 .node-status-idle {
-  background: #150e28;
-  color: #6b5fa8;
+  background: rgba(255, 255, 255, 0.05);
+  color: #8377ac;
 }
 
 .node-inline,
@@ -1178,24 +1215,25 @@ a {
   width: 100%;
   padding: 9px 10px;
   border-radius: 12px;
-  background: linear-gradient(180deg, #1e0d3c, #150e28);
-  color: #ddd6fe;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(12, 9, 18, 0.7);
+  color: #e4dfff;
   font-size: 11px;
 }
 
 .muted-inline {
   margin-bottom: 8px;
   text-align: left;
-  color: #80a392;
+  color: #9a93b7;
 }
 
 .node-output-preview {
   margin-bottom: 8px;
   padding: 10px;
-  border: 1px solid rgba(109, 40, 217, 0.22);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 12px;
-  background: rgba(10, 5, 20, 0.9);
-  color: #c4b5fd;
+  background: rgba(10, 9, 15, 0.76);
+  color: #d8d2ff;
   font-size: 11px;
   line-height: 1.45;
 }
@@ -1221,8 +1259,8 @@ a {
   align-items: center;
   padding: 4px 8px;
   border: 1px solid;
-  border-radius: 999px;
-  background: rgba(10, 5, 20, 0.96);
+  border-radius: 10px;
+  background: rgba(18, 14, 26, 0.96);
   color: #f0eeff;
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
@@ -1238,12 +1276,12 @@ a {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 10px;
+  padding: 9px 10px;
   margin: 6px 0;
   border-radius: 10px;
-  background: rgba(76, 29, 149, 0.15);
-  border: 1px solid rgba(109, 40, 217, 0.2);
-  color: #c4b5fd;
+  background: rgba(8, 7, 12, 0.58);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  color: #ddd7ff;
   font-size: 11px;
   font-weight: 600;
 }
@@ -1255,9 +1293,9 @@ a {
 .node-section-badge {
   margin-left: auto;
   padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(139, 92, 246, 0.22);
-  color: #a78bfa;
+  border-radius: 8px;
+  background: rgba(127, 108, 243, 0.18);
+  color: #c7bcff;
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
   font-weight: 700;
@@ -1266,23 +1304,24 @@ a {
 .node-section-badge-count {
   margin-left: auto;
   padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(109, 40, 217, 0.18);
-  color: #8b7eb8;
+  border-radius: 8px;
+  background: rgba(16, 185, 129, 0.16);
+  color: #b7ffe3;
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
 }
 
 .node-section-empty {
   margin-left: auto;
-  color: #5b4f80;
+  color: #7d739e;
   font-size: 10px;
   font-style: italic;
 }
 
 .node-handle-labels {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 12px;
   margin-top: 10px;
   padding: 0 4px;
   color: #6b5fa8;
@@ -1291,6 +1330,11 @@ a {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
+}
+
+.node-handle-labels-agent {
+  justify-content: space-between;
+  padding: 0 24px 0 12px;
 }
 
 /* ── n8n-style TriggerNode additions ── */
@@ -1384,17 +1428,43 @@ a {
   margin-top: 10px;
   padding: 7px 10px;
   border-radius: 10px;
-  border: 1px dashed rgba(139, 92, 246, 0.3);
-  background: rgba(76, 29, 149, 0.1);
-  color: #7c6fa8;
+  border: 1px dashed rgba(56, 189, 248, 0.34);
+  background: rgba(8, 40, 58, 0.22);
+  color: #8dcde8;
   font-size: 10px;
   text-align: center;
   line-height: 1.4;
 }
 
 .node-model-hint strong {
-  color: #a78bfa;
+  color: #c6efff;
   font-size: 10px;
+}
+
+.node-connection-banner {
+  margin: 10px 0 8px;
+  padding: 8px 10px;
+  border: 1px solid rgba(16, 185, 129, 0.24);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(4, 51, 34, 0.7), rgba(4, 25, 19, 0.9));
+  color: #c5f7e5;
+  font-size: 10px;
+  text-align: center;
+}
+
+.node-connection-banner span {
+  color: #6dd6b0;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-right: 6px;
+}
+
+.node-connection-banner strong {
+  color: #effff7;
+  font-size: 11px;
 }
 
 

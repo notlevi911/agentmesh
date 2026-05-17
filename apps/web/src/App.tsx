@@ -48,7 +48,7 @@ import type {
   WireKind,
 } from "./types/pipeline";
 
-const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v5";
+const WORKFLOW_STORAGE_KEY = "agentmesh.workflow.v6";
 
 interface StoredWorkflowDraft {
   pipelineName: string;
@@ -72,6 +72,107 @@ const nodeTypes = {
 const edgeTypes = {
   wire: WireEdge,
 };
+
+const MODEL_SERVICE_KINDS = new Set(["gemini", "openai", "claude", "mistral"]);
+
+function isModelServiceNode(node?: BuilderNode | null) {
+  return Boolean(node && MODEL_SERVICE_KINDS.has(String(node.data.serviceKind ?? "").toLowerCase()));
+}
+
+function isToolNode(node?: BuilderNode | null) {
+  return Boolean(node && (node.type === "service" || node.type === "api") && !isModelServiceNode(node));
+}
+
+function normalizeConnectionEdge(edge: BuilderEdge): BuilderEdge {
+  const sourceHandle = edge.sourceHandle ?? undefined;
+  const targetHandle = edge.targetHandle ?? undefined;
+  const wireType = edge.data?.wireType;
+
+  if (
+    (wireType === "connection" || wireType === "x402") &&
+    sourceHandle === "agent-tools" &&
+    targetHandle === "agent-tool"
+  ) {
+    return {
+      ...edge,
+      source: edge.target,
+      target: edge.source,
+      sourceHandle: "tool-out",
+      targetHandle: "tools",
+    };
+  }
+
+  if (
+    wireType === "x402" &&
+    !sourceHandle &&
+    targetHandle === "tools"
+  ) {
+    return {
+      ...edge,
+      source: edge.target,
+      target: edge.source,
+      sourceHandle: "tool-out",
+      targetHandle: "tools",
+      data: {
+        ...(edge.data ?? {}),
+        wireType: "connection",
+        label: edge.data?.label ?? "Agent tool access",
+      },
+    };
+  }
+
+  return edge;
+}
+
+function normalizeConnectionEdges(edges: BuilderEdge[]): BuilderEdge[] {
+  return edges.map(normalizeConnectionEdge);
+}
+
+function resolveWireMeta(
+  connection: Connection,
+  nodes: BuilderNode[],
+  activeWireType: WireKind,
+): { wireType: WireKind; label: string } | null {
+  const sourceNode = nodes.find((node) => node.id === connection.source);
+  const targetNode = nodes.find((node) => node.id === connection.target);
+
+  if (!sourceNode || !targetNode) {
+    return null;
+  }
+
+  const sourceHandle = connection.sourceHandle ?? undefined;
+  const targetHandle = connection.targetHandle ?? undefined;
+
+  if (sourceHandle === "model-out" || targetHandle === "model") {
+    if (isModelServiceNode(sourceNode) && targetNode.type === "agent" && targetHandle === "model") {
+      return { wireType: "connection", label: "Model connection" };
+    }
+    return null;
+  }
+
+  if (sourceHandle === "tool-out" || targetHandle === "tools") {
+    if (isToolNode(sourceNode) && targetNode.type === "agent" && targetHandle === "tools") {
+      return { wireType: "connection", label: "Agent tool access" };
+    }
+    return null;
+  }
+
+  if (activeWireType === "connection") {
+    return null;
+  }
+
+  const labelMap: Record<WireKind, string> = {
+    a2a: "A2A message",
+    x402: "Tool/payment call",
+    algo_transfer: "ALGO transfer",
+    connection: "Connection",
+  };
+
+  return {
+    wireType: activeWireType,
+    label: labelMap[activeWireType],
+  };
+}
 
 function sleep(ms: number) {
   return new Promise((resolve) => window.setTimeout(resolve, ms));
@@ -138,7 +239,10 @@ function loadStoredWorkflow(): StoredWorkflowDraft | null {
       return null;
     }
 
-    return parsed;
+    return {
+      ...parsed,
+      edges: normalizeConnectionEdges(parsed.edges),
+    };
   } catch {
     return null;
   }
@@ -149,7 +253,7 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
   const presetTitle = title ?? data.label;
 
   // AI Model nodes (Gemini, OpenAI, Claude, Mistral)
-  const AI_MODEL_MAP: Record<string, string> = {
+  const AI_MODEL_MAP: Record<string, NonNullable<PipelineNodeData["serviceKind"]>> = {
     gemini: "gemini",
     openai: "openai",
     claude: "claude",
@@ -293,7 +397,7 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
       data: {
         ...data,
         label: presetTitle,
-        enabledTools: ["crypto", "chart", "risk", "search", "gmail", "custom"],
+        enabledTools: [],
       },
     };
   }
@@ -584,11 +688,18 @@ function BuilderApp() {
 
         if (node.type === "agent") {
           const connectedToolNodes = edges
-            .filter((edge) => edge.source === node.id && edge.targetHandle === "tools")
-            .map((edge) => nodes.find((n) => n.id === edge.target))
+            .filter(
+              (edge) =>
+                edge.target === node.id &&
+                edge.targetHandle === "tools" &&
+                (edge.data?.wireType === "connection" || edge.data?.wireType === "x402"),
+            )
+            .map((edge) => nodes.find((n) => n.id === edge.source))
             .filter(Boolean);
 
-          const modelEdge = edges.find((edge) => edge.target === node.id && edge.targetHandle === "model");
+          const modelEdge = edges.find(
+            (edge) => edge.target === node.id && edge.targetHandle === "model",
+          );
           const modelNode = modelEdge ? nodes.find((n) => n.id === modelEdge.source) : null;
 
           const activeTools = [
@@ -631,6 +742,8 @@ function BuilderApp() {
         id: edge.id,
         source: edge.source,
         target: edge.target,
+        sourceHandle: edge.sourceHandle ?? undefined,
+        targetHandle: edge.targetHandle ?? undefined,
         wireType: edge.data?.wireType ?? "a2a",
         label: edge.data?.label,
       })),
@@ -730,16 +843,20 @@ function BuilderApp() {
           };
         });
 
-        const hydratedEdges: BuilderEdge[] = detail.definition.edges.map((edge) => ({
-          id: edge.id,
-          source: edge.source,
-          target: edge.target,
-          type: "wire",
-          data: {
-            wireType: edge.wireType,
-            label: edge.label,
-          },
-        }));
+        const hydratedEdges: BuilderEdge[] = normalizeConnectionEdges(
+          detail.definition.edges.map((edge) => ({
+            id: edge.id,
+            source: edge.source,
+            target: edge.target,
+            sourceHandle: edge.sourceHandle,
+            targetHandle: edge.targetHandle,
+            type: "wire",
+            data: {
+              wireType: edge.wireType,
+              label: edge.label,
+            },
+          })),
+        );
 
         setNodes(hydratedNodes);
         setEdges(hydratedEdges);
@@ -962,34 +1079,54 @@ function BuilderApp() {
         return;
       }
 
-      const labelMap: Record<WireKind, string> = {
-        a2a: "A2A message",
-        x402: "Tool/payment call",
-        algo_transfer: "ALGO transfer",
-      };
+      const wireMeta = resolveWireMeta(connection, nodes, activeWireType);
+      if (!wireMeta) {
+        setError("That connection is not valid. Use a node's top dot for AI links and the agent's bottom model/tools dots as targets. Side dots are for workflow wires.");
+        return;
+      }
 
       const wire = createWire(
         `edge-${connection.source}-${connection.target}-${Date.now()}`,
         connection.source,
         connection.target,
-        activeWireType,
-        labelMap[activeWireType],
+        wireMeta.wireType,
+        wireMeta.label,
         connection.sourceHandle ?? undefined,
         connection.targetHandle ?? undefined,
       );
 
-      setEdges((currentEdges) => [
-        ...currentEdges,
-        {
-          ...wire,
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
+      setEdges((currentEdges) => {
+        const dedupedEdges = currentEdges.filter((edge) => {
+          if (
+            edge.source === wire.source &&
+            edge.target === wire.target &&
+            edge.sourceHandle === wire.sourceHandle &&
+            edge.targetHandle === wire.targetHandle
+          ) {
+            return false;
+          }
+
+          if (wire.targetHandle === "model" && edge.target === wire.target && edge.targetHandle === "model") {
+            return false;
+          }
+
+          return true;
+        });
+
+        return [
+          ...dedupedEdges,
+          {
+            ...wire,
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+            },
           },
-        },
-      ]);
+        ];
+      });
+      setError(undefined);
       setSelectedEdgeId(null);
     },
-    [activeWireType, setEdges],
+    [activeWireType, nodes, setEdges],
   );
 
   const onNodeClick = useCallback<NodeMouseHandler<BuilderNode>>((_, node) => {
@@ -1195,14 +1332,20 @@ function BuilderApp() {
 
         <div className="studio-topbar-center">
           <div className="segmented-control">
-            {(["a2a", "x402", "algo_transfer"] as WireKind[]).map((wireType) => (
+            {(["a2a", "connection", "x402", "algo_transfer"] as WireKind[]).map((wireType) => (
               <button
                 key={wireType}
                 className={wireType === activeWireType ? "segment-button segment-active" : "segment-button"}
                 onClick={() => setActiveWireType(wireType)}
                 type="button"
               >
-                {wireType === "a2a" ? "A2A Wire" : wireType === "x402" ? "x402 Tool" : "ALGO Transfer"}
+                {wireType === "a2a"
+                  ? "A2A Wire"
+                  : wireType === "connection"
+                    ? "Connection"
+                    : wireType === "x402"
+                      ? "x402 Wire"
+                      : "ALGO Transfer"}
               </button>
             ))}
           </div>

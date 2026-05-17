@@ -27,7 +27,7 @@ const TOOL_CONFIGS: Record<string, { icon: string; color: string }> = {
   custom:  { icon: "⚙",  color: "#94a3b8" },
 };
 
-export function ServiceNode({ data, type }: NodeProps) {
+export function ServiceNode({ id, data, type }: NodeProps) {
   const payload = data as unknown as PipelineNodeData;
   const isApi = type === "api";
   const executionState = payload.executionState ?? "idle";
@@ -66,21 +66,10 @@ export function ServiceNode({ data, type }: NodeProps) {
         className={`node-shell node-service node-service-model node-state-${executionState}`}
         style={{ borderTopColor: cfg.color, borderLeftColor: cfg.color }}
       >
-        {/*
-          TOP handle = source → drag this UP to the Agent's "AI Model" bottom handle.
-          The Agent's AI Model handle is at bottom-left (id="model").
-        */}
         <Handle
-          className="node-handle"
+          className="node-handle node-handle-model-out"
           id="model-out"
           position={Position.Top}
-          style={{
-            background: cfg.color,
-            width: 16,
-            height: 16,
-            border: `3px solid #08040f`,
-            boxShadow: `0 0 0 4px ${cfg.color}33`,
-          }}
           type="source"
         />
 
@@ -102,7 +91,7 @@ export function ServiceNode({ data, type }: NodeProps) {
         </div>
 
         <p style={{ marginBottom: 10 }}>
-          {payload.description ?? `${modelCfg.name} LLM. Connect to Agent's AI Model handle above.`}
+          {payload.description ?? `${modelCfg.name} LLM. Connect it to an agent's model port.`}
         </p>
 
         {/* API Key field — the only config needed */}
@@ -118,7 +107,7 @@ export function ServiceNode({ data, type }: NodeProps) {
         </div>
 
         <div className="node-model-hint">
-          ↑ Connect top handle to Agent's <strong>AI MODEL</strong> dot
+          Connect the top dot to an agent's bottom-left AI Model port.
         </div>
 
         {payload.executionNote
@@ -134,8 +123,24 @@ export function ServiceNode({ data, type }: NodeProps) {
       className={`node-shell node-service node-state-${executionState}`}
       style={{ borderTopColor: cfg.color }}
     >
-      <Handle className="node-handle node-handle-target" position={Position.Left} type="target" />
-      <Handle className="node-handle node-handle-source" position={Position.Right} type="source" />
+      <Handle
+        className="node-handle node-handle-agent-attach"
+        id="tool-out"
+        position={Position.Top}
+        type="source"
+      />
+      <Handle
+        className="node-handle node-handle-target"
+        id="workflow-in"
+        position={Position.Left}
+        type="target"
+      />
+      <Handle
+        className="node-handle node-handle-source"
+        id="workflow-out"
+        position={Position.Right}
+        type="source"
+      />
 
       <div className="node-header-row">
         <div className="node-badge" style={{ background: `${cfg.color}22`, color: cfg.color }}>
@@ -167,10 +172,18 @@ export function ServiceNode({ data, type }: NodeProps) {
         </div>
       </dl>
 
+      <div className="node-connection-banner node-connection-banner-tool">
+        <span>Top dot</span>
+        <strong>Connect this to an agent's bottom-right Tools port</strong>
+      </div>
       <div className="node-inline muted-inline">{helperText}</div>
       {payload.executionNote
         ? <div className="node-output-preview">{payload.executionNote}</div>
         : null}
+      <div className="node-handle-labels">
+        <span>AI Link</span>
+        <span>Workflow</span>
+      </div>
     </div>
   );
 }

@@ -19,6 +19,10 @@ const wireStyles = {
     color: "#2563eb",
     label: "ALGO",
   },
+  connection: {
+    color: "#f59e0b",
+    label: "LINK",
+  },
 } as const;
 
 export function WireEdge({

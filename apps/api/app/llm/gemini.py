@@ -1,7 +1,7 @@
 import json
 import os
 import re
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 from google import genai
 
@@ -25,11 +25,9 @@ class GeminiPlanner:
         available_tools: List[Dict[str, str]],
         allowed_tools: List[str],
         api_key: Optional[str] = None,
+        allow_env_fallback: bool = True,
     ) -> dict:
-        key = api_key or self.api_key
-        client = genai.Client(api_key=key) if key else self._client
-        if not client:
-            raise RuntimeError("Gemini planner is not configured.")
+        client = self._resolve_client(api_key=api_key, allow_env_fallback=allow_env_fallback)
 
         prompt = """
 You are planning tool usage for an autonomous Algorand agent workflow.
@@ -94,11 +92,9 @@ Rules:
         responder_prompt: str,
         tool_results: List[ToolResult],
         api_key: Optional[str] = None,
+        allow_env_fallback: bool = True,
     ) -> str:
-        key = api_key or self.api_key
-        client = genai.Client(api_key=key) if key else self._client
-        if not client:
-            raise RuntimeError("Gemini planner is not configured.")
+        client = self._resolve_client(api_key=api_key, allow_env_fallback=allow_env_fallback)
 
         tool_lines = "\n".join(
             [
@@ -132,6 +128,22 @@ Return only the final user-facing answer. Keep it concise but useful.
 
         response = client.models.generate_content(model=self.model, contents=prompt)
         return (response.text or "").strip()
+
+    def _resolve_client(
+        self,
+        api_key: Optional[str] = None,
+        allow_env_fallback: bool = True,
+    ):
+        if api_key is not None:
+            normalized = api_key.strip()
+            if not normalized:
+                raise RuntimeError("Gemini planner is not configured on the connected model node.")
+            return genai.Client(api_key=normalized)
+
+        if allow_env_fallback and self._client is not None:
+            return self._client
+
+        raise RuntimeError("Gemini planner is not configured.")
 
     def _extract_json(self, text: str) -> dict:
         stripped = text.strip()

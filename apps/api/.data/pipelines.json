@@ -7,56 +7,72 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-lead-end",
             "label": "Final signal",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-agent-lead-api-1775317447703-8-1775317479836",
             "label": "A2A message",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "api-1775317447703-8",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -317,63 +333,81 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-report",
             "label": "Draft final report",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-report",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-report-gmail",
             "label": "Send trade note",
             "source": "agent-report",
+            "sourceHandle": null,
             "target": "tool-gmail",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-report-end",
             "label": "Final signal",
             "source": "agent-report",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -1785,6 +1819,493 @@
         }
       }
     },
+    "pm_24bccdd5": {
+      "definition": {
+        "edges": [
+          {
+            "id": "edge-service-1779007032295-3-agent-1779007019945-2-1779007037812",
+            "label": "Model connection",
+            "source": "service-1779007032295-3",
+            "sourceHandle": "model-out",
+            "target": "agent-1779007019945-2",
+            "targetHandle": "model",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-agent-1779007019945-2-api-1779007044312-4-1779007051278",
+            "label": "Agent tool access",
+            "source": "agent-1779007019945-2",
+            "sourceHandle": "model",
+            "target": "api-1779007044312-4",
+            "targetHandle": "agent-tool",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-api-1779007044312-4-agent-1779007019945-2-1779007378610",
+            "label": "Agent tool access",
+            "source": "api-1779007044312-4",
+            "sourceHandle": "tool-out",
+            "target": "agent-1779007019945-2",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-api-1779007386760-5-agent-1779007019945-2-1779007400960",
+            "label": "Agent tool access",
+            "source": "api-1779007386760-5",
+            "sourceHandle": "tool-out",
+            "target": "agent-1779007019945-2",
+            "targetHandle": "tools",
+            "wireType": "connection"
+          },
+          {
+            "id": "edge-agent-1779007019945-2-api-1779007406877-6-1779007417460",
+            "label": "Tool/payment call",
+            "source": "agent-1779007019945-2",
+            "sourceHandle": "workflow-out",
+            "target": "api-1779007406877-6",
+            "targetHandle": "workflow-in",
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-api-1779007406877-6-end-1-1779007423143",
+            "label": "Tool/payment call",
+            "source": "api-1779007406877-6",
+            "sourceHandle": "workflow-out",
+            "target": "end-1",
+            "targetHandle": null,
+            "wireType": "x402"
+          },
+          {
+            "id": "edge-trigger-1779007011698-1-agent-1779007019945-2-1779007445760",
+            "label": "Tool/payment call",
+            "source": "trigger-1779007011698-1",
+            "sourceHandle": null,
+            "target": "agent-1779007019945-2",
+            "targetHandle": "workflow-in",
+            "wireType": "x402"
+          }
+        ],
+        "name": "Trade Signal Desk",
+        "network": "algorand-testnet",
+        "nodes": [
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Returns BUY / SELL / HOLD with trade parameters.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "HTTP Response",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "end-1",
+            "position": {
+              "x": 1564.2838391748091,
+              "y": 38.17883296412175
+            },
+            "type": "end"
+          },
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Incoming HTTP request kicks off the trade-signal workflow.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Manual Trigger",
+              "priceAlgo": 0.0,
+              "requestMethod": "POST",
+              "role": null,
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": null,
+              "testRequestBody": "{ \"token\": \"ALGO\" }",
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "trigger-1779007011698-1",
+            "position": {
+              "x": 294.74711854317667,
+              "y": -184.2412472798373
+            },
+            "type": "trigger"
+          },
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Autonomous AI node with a live Algorand wallet.",
+              "enabledTools": [
+                "weather",
+                "search"
+              ],
+              "gmailTo": null,
+              "label": "AI Agent",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": "operator",
+              "serviceKind": null,
+              "serviceUrl": null,
+              "systemPrompt": "Choose the best available tool, then summarize the result for the next node.",
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "agent-1779007019945-2",
+            "position": {
+              "x": 789.009446745724,
+              "y": -96.22401180388943
+            },
+            "type": "agent"
+          },
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Gemini LLM \u2014 connect to the Agent's AI Model handle.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Gemini",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gemini",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "service-1779007032295-3",
+            "position": {
+              "x": 576.696349090089,
+              "y": 446.9797514618088
+            },
+            "type": "service"
+          },
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Free live weather lookup via Open-Meteo.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "Open-Meteo Weather",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "weather",
+              "serviceUrl": "https://api.open-meteo.com/v1/forecast",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "api-1779007044312-4",
+            "position": {
+              "x": 1201.2263957277805,
+              "y": 405.2411319386056
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Free instant-answer/search-style lookup via DuckDuckGo.",
+              "enabledTools": [],
+              "gmailTo": null,
+              "label": "DuckDuckGo Search",
+              "priceAlgo": 0.0,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "search",
+              "serviceUrl": "https://api.duckduckgo.com/",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "api-1779007386760-5",
+            "position": {
+              "x": 900.28712444453,
+              "y": 472.02625155267185
+            },
+            "type": "api"
+          },
+          {
+            "data": {
+              "cryptoSymbols": null,
+              "description": "Compose and optionally send an email from the agent workflow.",
+              "enabledTools": [],
+              "gmailTo": "soubhagyasadhukhan@gmail.com",
+              "label": "Gmail",
+              "priceAlgo": 0.02,
+              "requestMethod": null,
+              "role": null,
+              "serviceKind": "gmail",
+              "serviceUrl": "",
+              "systemPrompt": null,
+              "testRequestBody": null,
+              "treasuryAddress": null,
+              "upstreamX402": false
+            },
+            "id": "api-1779007406877-6",
+            "position": {
+              "x": 1217.7604660587797,
+              "y": -89.99180212824515
+            },
+            "type": "api"
+          }
+        ]
+      },
+      "endpoint": "http://localhost:8000/pm_24bccdd5/run",
+      "payment_wallet": "V5BQSSUVOBZEA2U3ASM5A2GAQZMW3AJML26DZVT547BODGVJQDJFG5K7JM",
+      "pipeline_id": "pm_24bccdd5",
+      "price_algo": 0.0,
+      "runs": {
+        "run_3daa1624f9": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T08:44:44.151493",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "ALGO",
+              "timestamp": "2026-05-17T08:44:44.151543",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "The user task 'ALGO' likely refers to Algorand, which is not supported by the available weather or Gmail tools. No relevant tool can be selected.",
+              "timestamp": "2026-05-17T08:44:46.644241",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "Fallback router selected: Open-Meteo Weather.",
+              "timestamp": "2026-05-17T08:44:46.644549",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "ALGO"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1779007011698-1",
+              "output": null,
+              "timestamp": "2026-05-17T08:44:46.644576",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "api-1779007044312-4",
+              "output": null,
+              "timestamp": "2026-05-17T08:44:46.644625",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "api-1779007044312-4",
+              "output": "Bengaluru: 34.2\u00b0C, feels like 35.3\u00b0C, wind 11.4 km/h, weather code 1.",
+              "timestamp": "2026-05-17T08:44:48.652443",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "api-1779007044312-4",
+              "output": null,
+              "timestamp": "2026-05-17T08:44:48.652473",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "Fallback router selected: Open-Meteo Weather.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T08:44:48.652483",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "Bengaluru: 34.2\u00b0C, feels like 35.3\u00b0C, wind 11.4 km/h.",
+              "timestamp": "2026-05-17T08:44:50.892239",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_24bccdd5",
+          "result": "Bengaluru: 34.2\u00b0C, feels like 35.3\u00b0C, wind 11.4 km/h.",
+          "runId": "run_3daa1624f9",
+          "settlementMode": "demo"
+        },
+        "run_67b3fd95f5": {
+          "logs": [
+            {
+              "details": {
+                "entrypoint": "pipeline run endpoint",
+                "mode": "demo",
+                "studio_test": true,
+                "x402_bypassed": true
+              },
+              "eventType": "progress",
+              "level": "warning",
+              "message": "Studio test mode bypassed the outer payment gate after a 402 preflight.",
+              "nodeId": null,
+              "output": null,
+              "timestamp": "2026-05-17T08:45:43.425352",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "AI Agent received the workflow task.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "what do u mean by a water bottle",
+              "timestamp": "2026-05-17T08:45:43.425407",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "The user is asking for a definition of 'water bottle'. The available tools (weather, Gmail) are not suitable for this task. The allowed 'search' tool is not available.",
+              "timestamp": "2026-05-17T08:45:45.690952",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "AI Agent planned the workflow path.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "Fallback router selected: Open-Meteo Weather.",
+              "timestamp": "2026-05-17T08:45:45.691064",
+              "txId": null
+            },
+            {
+              "details": {
+                "request_query": "what do u mean by a water bottle"
+              },
+              "eventType": "done",
+              "level": "success",
+              "message": "Trigger node activated from incoming API request.",
+              "nodeId": "trigger-1779007011698-1",
+              "output": null,
+              "timestamp": "2026-05-17T08:45:45.691091",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "start",
+              "level": "info",
+              "message": "Calling Open-Meteo Weather as a free API.",
+              "nodeId": "api-1779007044312-4",
+              "output": null,
+              "timestamp": "2026-05-17T08:45:45.691112",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "output",
+              "level": "info",
+              "message": "Open-Meteo Weather returned output.",
+              "nodeId": "api-1779007044312-4",
+              "output": "Bengaluru: 34.3\u00b0C, feels like 35.3\u00b0C, wind 11.2 km/h, weather code 1.",
+              "timestamp": "2026-05-17T08:45:47.300273",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Open-Meteo Weather completed successfully.",
+              "nodeId": "api-1779007044312-4",
+              "output": null,
+              "timestamp": "2026-05-17T08:45:47.300300",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "AI Agent finished analysis.",
+              "nodeId": "agent-1779007019945-2",
+              "output": "Fallback router selected: Open-Meteo Weather.\n\nAnalyzer gathered tool results and prepared context for the next node.",
+              "timestamp": "2026-05-17T08:45:47.300309",
+              "txId": null
+            },
+            {
+              "details": {},
+              "eventType": "done",
+              "level": "success",
+              "message": "Pipeline reached the End node and returned an HTTP response.",
+              "nodeId": "end-1",
+              "output": "A water bottle is a container used to hold water for drinking, often designed for portability and reuse.",
+              "timestamp": "2026-05-17T08:45:49.016896",
+              "txId": null
+            }
+          ],
+          "pipelineId": "pm_24bccdd5",
+          "result": "A water bottle is a container used to hold water for drinking, often designed for portability and reuse.",
+          "runId": "run_67b3fd95f5",
+          "settlementMode": "demo"
+        }
+      },
+      "wallets": {
+        "agent-1779007019945-2": {
+          "address": "V5BQSSUVOBZEA2U3ASM5A2GAQZMW3AJML26DZVT547BODGVJQDJFG5K7JM",
+          "node_id": "agent-1779007019945-2",
+          "private_key": "vRSnuerZVKztjVJ3j+WG7YaDM6sJtCt/GE+Tqh1e+sevQwlKlXByQGqbBJnQaMCGWW2BLF68PNZ958LhmqmA0g=="
+        }
+      }
+    },
     "pm_492dceea": {
       "definition": {
         "edges": [
@@ -1792,63 +2313,81 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-report",
             "label": "Draft final report",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-report",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-report-gmail",
             "label": "Send trade note",
             "source": "agent-report",
+            "sourceHandle": null,
             "target": "tool-gmail",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-report-end",
             "label": "Final signal",
             "source": "agent-report",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -4070,49 +4609,63 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-lead-end",
             "label": "Final signal",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -4364,35 +4917,45 @@
             "id": "edge-trigger-analyzer",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-analyzer",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-analyzer-weather",
             "label": "Weather tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-weather",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-search",
             "label": "Search tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-search",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-responder",
             "label": "Analysis context",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "agent-responder",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-responder-end",
             "label": "Final output",
             "source": "agent-responder",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -6135,49 +6698,63 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-lead-end",
             "label": "Final signal",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -6429,56 +7006,72 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-lead-end",
             "label": "Final signal",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-agent-lead-api-1775317447703-8-1775317479836",
             "label": "A2A message",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "api-1775317447703-8",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -7031,35 +7624,45 @@
             "id": "edge-trigger-analyzer",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-analyzer",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-analyzer-weather",
             "label": "Weather tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-weather",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-search",
             "label": "Search tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-search",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-responder",
             "label": "Analysis context",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "agent-responder",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-responder-end",
             "label": "Final output",
             "source": "agent-responder",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -7251,28 +7854,36 @@
             "id": "e1",
             "label": null,
             "source": "trigger_1",
+            "sourceHandle": null,
             "target": "agent_1",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "e2",
             "label": null,
             "source": "agent_1",
+            "sourceHandle": null,
             "target": "service_1",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "e3",
             "label": null,
             "source": "service_1",
+            "sourceHandle": null,
             "target": "agent_2",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "e4",
             "label": null,
             "source": "agent_2",
+            "sourceHandle": null,
             "target": "end_1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -7570,35 +8181,45 @@
             "id": "edge-trigger-analyzer",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-analyzer",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-analyzer-weather",
             "label": "Weather tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-weather",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-search",
             "label": "Search tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-search",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-responder",
             "label": "Analysis context",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "agent-responder",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-responder-end",
             "label": "Final output",
             "source": "agent-responder",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -7939,35 +8560,45 @@
             "id": "edge-trigger-analyzer",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-analyzer",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-analyzer-weather",
             "label": "Weather tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-weather",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-search",
             "label": "Search tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-search",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-responder",
             "label": "Analysis context",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "agent-responder",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-responder-end",
             "label": "Final output",
             "source": "agent-responder",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -8623,49 +9254,63 @@
             "id": "edge-trigger-analyzer",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-analyzer",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-analyzer-weather",
             "label": "Weather tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-weather",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-search",
             "label": "Search tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-search",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-crypto",
             "label": "Crypto tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-gmail",
             "label": "Gmail tool",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "service-gmail",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-analyzer-responder",
             "label": "Analysis context",
             "source": "agent-analyzer",
+            "sourceHandle": null,
             "target": "agent-responder",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-responder-end",
             "label": "Final output",
             "source": "agent-responder",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
@@ -9466,49 +10111,63 @@
             "id": "edge-trigger-lead",
             "label": "Start",
             "source": "trigger-1",
+            "sourceHandle": null,
             "target": "agent-lead",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-tech",
             "label": "Request technical view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-tech",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-risk",
             "label": "Request risk view",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "agent-risk",
+            "targetHandle": null,
             "wireType": "a2a"
           },
           {
             "id": "edge-lead-crypto",
             "label": "Fetch live price",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "tool-crypto",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-tech-chart",
             "label": "Read chart",
             "source": "agent-tech",
+            "sourceHandle": null,
             "target": "tool-chart",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-risk-model",
             "label": "Assess risk",
             "source": "agent-risk",
+            "sourceHandle": null,
             "target": "tool-risk",
+            "targetHandle": null,
             "wireType": "x402"
           },
           {
             "id": "edge-lead-end",
             "label": "Final signal",
             "source": "agent-lead",
+            "sourceHandle": null,
             "target": "end-1",
+            "targetHandle": null,
             "wireType": "a2a"
           }
         ],
