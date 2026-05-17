@@ -20,11 +20,11 @@ const MODEL_CONFIGS: Record<string, { icon: string; color: string; name: string 
 const TOOL_CONFIGS: Record<string, { icon: string; color: string }> = {
   gmail:   { icon: "✉",  color: "#fb923c" },
   crypto:  { icon: "₿",  color: "#f59e0b" },
-  weather: { icon: "⛅", color: "#38bdf8" },
-  search:  { icon: "🔍", color: "#a3e635" },
-  chart:   { icon: "📈", color: "#34d399" },
-  risk:    { icon: "⚠",  color: "#f87171" },
-  custom:  { icon: "⚙",  color: "#94a3b8" },
+  weather: { icon: "◔", color: "#38bdf8" },
+  search:  { icon: "⌕", color: "#a3e635" },
+  chart:   { icon: "↗", color: "#34d399" },
+  risk:    { icon: "!",  color: "#f87171" },
+  custom:  { icon: "⋯",  color: "#94a3b8" },
 };
 
 export function ServiceNode({ id, data, type }: NodeProps) {
@@ -96,7 +96,7 @@ export function ServiceNode({ id, data, type }: NodeProps) {
 
         {/* API Key field — the only config needed */}
         <div className="model-apikey-field">
-          <span className="model-apikey-label">🔑 API Key</span>
+          <span className="model-apikey-label">API Key</span>
           <input
             className="prop-input model-apikey-input"
             onChange={(e) => payload.onApiKeyChange?.(id, e.target.value)}

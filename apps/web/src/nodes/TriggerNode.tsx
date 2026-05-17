@@ -4,22 +4,22 @@ import type { PipelineNodeData } from "../types/pipeline";
 // Trigger type configuration — n8n style
 const TRIGGER_TYPES: Record<string, { icon: string; label: string; description: string }> = {
   webhook: {
-    icon: "🌐",
+    icon: "◉",
     label: "Webhook",
     description: "Triggered by an incoming HTTP request",
   },
   manual: {
-    icon: "▶",
+    icon: "▷",
     label: "Manual",
     description: "Triggered manually from the studio",
   },
   schedule: {
-    icon: "🕐",
+    icon: "◷",
     label: "Schedule",
     description: "Triggered on a cron schedule",
   },
   chat: {
-    icon: "💬",
+    icon: "◌",
     label: "Chat Message",
     description: "Triggered by an incoming chat message",
   },

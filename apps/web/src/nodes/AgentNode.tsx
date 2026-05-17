@@ -92,7 +92,7 @@ export function AgentNode({ id, data }: NodeProps) {
       <p>{payload.description}</p>
 
       <div className="node-section-label">
-        <span className="node-section-icon">🤖</span>
+        <span className="node-section-icon">◈</span>
         AI Model
         {connectedModel ? (
           <span className="node-section-badge">{connectedModel}</span>
@@ -102,7 +102,7 @@ export function AgentNode({ id, data }: NodeProps) {
       </div>
 
       <div className="node-section-label">
-        <span className="node-section-icon">🔧</span>
+        <span className="node-section-icon">◎</span>
         Tools
         <span className="node-section-badge-count">{toolCount}</span>
       </div>

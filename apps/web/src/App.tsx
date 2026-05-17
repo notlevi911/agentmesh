@@ -1396,7 +1396,7 @@ function BuilderApp() {
         <div className="studio-topbar-left">
           <div className="studio-brand">
             <span className="brand-mark small-mark">AM</span>
-            <div>
+            <div className="studio-brand-copy">
               <span className="eyebrow">Studio</span>
               <input
                 className="studio-title-input"
@@ -1417,12 +1417,12 @@ function BuilderApp() {
                 type="button"
               >
                 {wireType === "a2a"
-                  ? "A2A Wire"
+                  ? "A2A"
                   : wireType === "connection"
                     ? "Connection"
                     : wireType === "x402"
-                      ? "x402 Wire"
-                      : "ALGO Transfer"}
+                      ? "x402"
+                      : "Transfer"}
               </button>
             ))}
           </div>
@@ -1459,30 +1459,36 @@ function BuilderApp() {
               Flows
             </button>
           </div>
-          <label className="example-picker" htmlFor="workflow-example">
-            <span className="sr-only">Sample workflow</span>
-            <select
-              className="example-select"
-              id="workflow-example"
-              onChange={(event) => setSelectedExampleId(event.target.value)}
-              value={selectedExampleId}
-            >
-              {workflowTemplates.map((template) => (
-                <option key={template.id} value={template.id}>
-                  {template.name}
-                </option>
-              ))}
-            </select>
-          </label>
-          <button className="ghost-button compact-button" onClick={handleLoadExample} type="button">
-            Load Example
-          </button>
-          <button className="ghost-button compact-button" disabled={runPending} onClick={handleRunDemo} type="button">
-            {runPending ? "Running..." : "Run"}
-          </button>
-          <button className="primary-button compact-button" disabled={pending} onClick={handleDeploy} type="button">
-            {pending ? "Deploying..." : "Deploy"}
-          </button>
+
+          <div className="toolbar-example-row">
+            <label className="example-picker" htmlFor="workflow-example">
+              <span className="sr-only">Sample workflow</span>
+              <select
+                className="example-select"
+                id="workflow-example"
+                onChange={(event) => setSelectedExampleId(event.target.value)}
+                value={selectedExampleId}
+              >
+                {workflowTemplates.map((template) => (
+                  <option key={template.id} value={template.id}>
+                    {template.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button className="ghost-button compact-button toolbar-inline-action" onClick={handleLoadExample} type="button">
+              Load
+            </button>
+          </div>
+
+          <div className="toolbar-actions">
+            <button className="ghost-button compact-button toolbar-run-button" disabled={runPending} onClick={handleRunDemo} type="button">
+              {runPending ? "Running..." : "Run"}
+            </button>
+            <button className="primary-button compact-button toolbar-deploy-button" disabled={pending} onClick={handleDeploy} type="button">
+              {pending ? "Deploying..." : "Deploy"}
+            </button>
+          </div>
         </div>
       </header>
 

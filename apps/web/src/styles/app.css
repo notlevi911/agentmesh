@@ -65,6 +65,31 @@
   }
 }
 
+@keyframes nodeReveal {
+  0% {
+    opacity: 0;
+    transform: translateY(12px) scale(0.985);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes buttonGlow {
+  0%,
+  100% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.14),
+      0 10px 24px rgba(72, 47, 184, 0.24);
+  }
+  50% {
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.18),
+      0 14px 30px rgba(109, 40, 217, 0.3);
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -219,10 +244,11 @@ a {
   border: none;
   cursor: pointer;
   transition:
-    transform 150ms ease,
-    background 150ms ease,
-    border-color 150ms ease,
-    box-shadow 150ms ease;
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background 220ms ease,
+    border-color 220ms ease,
+    box-shadow 220ms ease,
+    color 220ms ease;
 }
 
 .primary-button,
@@ -237,13 +263,16 @@ a {
 
 .primary-button {
   padding: 12px 18px;
-  border: 1px solid rgba(126, 96, 255, 0.72);
-  background: linear-gradient(180deg, #7b61ff 0%, #6947ff 100%);
+  border: 1px solid rgba(151, 130, 230, 0.52);
+  background:
+    radial-gradient(circle at top, rgba(255, 255, 255, 0.14), transparent 55%),
+    linear-gradient(180deg, rgba(142, 112, 255, 0.98), rgba(109, 40, 217, 0.98));
   color: #ffffff;
   letter-spacing: -0.01em;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.16),
-    0 10px 24px rgba(72, 47, 184, 0.28);
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    0 10px 24px rgba(72, 47, 184, 0.24);
+  animation: buttonGlow 4.6s ease-in-out infinite;
 }
 
 .primary-button::after,
@@ -267,12 +296,13 @@ a {
 .prompt-suggestion,
 .segment-button,
 .rail-button {
-  border: 1px solid rgba(110, 95, 156, 0.32);
-  background: rgba(22, 17, 34, 0.92);
-  color: #e7e2ff;
+  border: 1px solid rgba(120, 104, 168, 0.28);
+  background:
+    linear-gradient(180deg, rgba(26, 20, 41, 0.96), rgba(18, 13, 30, 0.98));
+  color: #ece7ff;
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 6px 18px rgba(0, 0, 0, 0.14);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 6px 18px rgba(0, 0, 0, 0.12);
 }
 
 .primary-button:hover,
@@ -282,9 +312,23 @@ a {
 .segment-button:hover,
 .rail-button:hover,
 .edge-toggle:hover {
-  transform: translateY(-1px);
-  border-color: rgba(151, 130, 230, 0.52);
-  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18);
+  transform: translateY(-2px);
+  border-color: rgba(167, 139, 250, 0.54);
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.18),
+    0 0 0 1px rgba(139, 92, 246, 0.12);
+}
+
+.primary-button:active,
+.ghost-button:active,
+.compact-button:active,
+.segment-button:active,
+.rail-button:active,
+.prompt-suggestion:active {
+  transform: translateY(0);
+  box-shadow:
+    inset 0 2px 8px rgba(0, 0, 0, 0.18),
+    0 6px 14px rgba(0, 0, 0, 0.14);
 }
 
 .primary-button:hover::after,
@@ -545,21 +589,27 @@ a {
   display: grid;
   grid-template-columns: auto 1fr auto;
   align-items: center;
-  gap: 14px;
-  padding: 14px 16px;
-  border-radius: 20px;
-  border-color: rgba(95, 78, 138, 0.32);
+  gap: 16px;
+  padding: 12px 18px;
+  border-radius: 18px;
+  border-color: rgba(95, 78, 138, 0.18);
   background:
-    linear-gradient(180deg, rgba(16, 12, 24, 0.98), rgba(12, 9, 18, 0.98));
+    linear-gradient(180deg, rgba(12, 9, 19, 0.96), rgba(10, 7, 16, 0.98));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 12px 30px rgba(0, 0, 0, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.02),
+    0 10px 24px rgba(0, 0, 0, 0.16);
 }
 
 .studio-brand {
   display: flex;
   align-items: center;
   gap: 10px;
+}
+
+.studio-brand-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
 .studio-title-input {
@@ -570,42 +620,53 @@ a {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.03em;
-  min-width: 220px;
+  min-width: 180px;
+  padding: 0;
 }
 
 .studio-title-input:focus {
   outline: none;
 }
 
+.studio-topbar-center {
+  justify-content: center;
+}
+
+.studio-topbar-right {
+  justify-content: flex-end;
+}
+
 .segmented-control {
   display: inline-flex;
-  gap: 6px;
-  padding: 4px;
-  border-radius: 16px;
-  background: rgba(10, 8, 16, 0.82);
-  border: 1px solid rgba(96, 82, 136, 0.26);
+  gap: 4px;
+  padding: 3px;
+  border-radius: 13px;
+  background: rgba(9, 7, 15, 0.7);
+  border: 1px solid rgba(96, 82, 136, 0.16);
 }
 
 .segment-button {
-  padding: 10px 14px;
-  border-radius: 12px;
-  color: #9d95b8;
-  font-size: 12px;
+  min-width: 84px;
+  padding: 9px 13px;
+  border-radius: 10px;
+  color: #aaa1ca;
+  font-size: 11px;
   font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .segment-active {
-  background: rgba(115, 82, 255, 0.18);
+  background: rgba(104, 76, 201, 0.22);
   color: #fbfaff;
-  border-color: rgba(126, 96, 255, 0.62);
+  border-color: rgba(126, 96, 255, 0.32);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 0 0 1px rgba(126, 96, 255, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
 
 .compact-button {
-  padding: 10px 14px;
-  min-height: 44px;
+  padding: 9px 14px;
+  min-height: 40px;
 }
 
 .sr-only {
@@ -625,40 +686,70 @@ a {
   align-items: center;
 }
 
+.toolbar-example-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .example-select {
   min-width: 220px;
+  height: 40px;
   padding: 10px 36px 10px 14px;
-  border: 1px solid rgba(110, 95, 156, 0.32);
-  border-radius: 14px;
-  background: rgba(22, 17, 34, 0.92);
+  border: 1px solid rgba(110, 95, 156, 0.18);
+  border-radius: 12px;
+  background: rgba(14, 10, 23, 0.82);
   color: #ebe7ff;
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 6px 18px rgba(0, 0, 0, 0.14);
+  box-shadow: none;
 }
 
 .example-select:focus {
-  outline: 1px solid rgba(167, 139, 250, 0.5);
+  outline: 1px solid rgba(167, 139, 250, 0.36);
   outline-offset: 0;
 }
 
 .toolbar-panel-group {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
 }
 
 .toolbar-panel-button {
-  background: rgba(22, 17, 34, 0.92);
+  background: rgba(14, 10, 23, 0.7);
+  min-width: 80px;
 }
 
 .toolbar-panel-active {
-  background: rgba(115, 82, 255, 0.18);
+  background: rgba(104, 76, 201, 0.22);
   color: #fbfaff;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.toolbar-inline-action {
+  min-width: 68px;
+}
+
+.toolbar-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-left: 4px;
+}
+
+.toolbar-run-button,
+.toolbar-deploy-button {
+  min-width: 88px;
+}
+
+.toolbar-run-button {
+  background: rgba(14, 10, 23, 0.78);
+}
+
+.toolbar-deploy-button {
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.05),
-    0 0 0 1px rgba(126, 96, 255, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 8px 16px rgba(72, 47, 184, 0.14);
 }
 
 .playground-stage {
@@ -960,8 +1051,8 @@ a {
 }
 
 .react-flow__handle.node-handle {
-  width: 16px;
-  height: 16px;
+  width: 14px;
+  height: 14px;
   border: 2px solid #17121f;
   border-radius: 999px;
   background: #7f6cf3;
@@ -1028,34 +1119,47 @@ a {
 .node-shell {
   position: relative;
   overflow: visible;
-  width: 258px;
-  padding: 14px;
-  border: 1px solid rgba(83, 72, 112, 0.44);
-  border-radius: 16px;
+  width: 272px;
+  padding: 16px;
+  border: 1px solid rgba(96, 84, 134, 0.34);
+  border-radius: 18px;
   background:
-    linear-gradient(180deg, rgba(25, 20, 36, 0.98), rgba(16, 13, 24, 0.98));
+    radial-gradient(circle at top right, rgba(167, 139, 250, 0.08), transparent 30%),
+    linear-gradient(180deg, rgba(24, 19, 36, 0.98), rgba(16, 13, 24, 0.98));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.03),
-    0 10px 24px rgba(0, 0, 0, 0.18);
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 12px 30px rgba(0, 0, 0, 0.16);
   transition:
-    transform 180ms ease,
-    border-color 180ms ease,
-    box-shadow 180ms ease;
+    transform 240ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+  animation: nodeReveal 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.node-shell::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent 30%, transparent 70%, rgba(255, 255, 255, 0.02));
+  pointer-events: none;
+  opacity: 0.8;
 }
 
 .react-flow__node:hover .node-shell {
-  transform: translateY(-2px);
-  border-color: rgba(151, 132, 193, 0.56);
+  transform: translateY(-3px) scale(1.01);
+  border-color: rgba(167, 139, 250, 0.42);
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 14px 30px rgba(0, 0, 0, 0.22);
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 18px 34px rgba(0, 0, 0, 0.2);
 }
 
 .react-flow__node.selected .node-shell {
-  border-color: #9382ec;
+  border-color: #a78bfa;
   box-shadow:
-    0 0 0 1px rgba(147, 130, 236, 0.22),
-    0 14px 30px rgba(0, 0, 0, 0.24);
+    0 0 0 1px rgba(167, 139, 250, 0.2),
+    0 16px 32px rgba(0, 0, 0, 0.22);
 }
 
 .node-shell::before {
@@ -1129,49 +1233,52 @@ a {
 .node-chip {
   display: inline-flex;
   align-items: center;
-  padding: 4px 8px;
-  border-radius: 8px;
+  padding: 5px 9px;
+  border-radius: 999px;
   font-size: 10px;
   font-weight: 700;
 }
 
 .node-badge {
-  background: rgba(255, 255, 255, 0.05);
-  color: #c9c2ea;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.04);
+  color: #d8d0f8;
   font-family: "JetBrains Mono", monospace;
   letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
 .node-chip {
-  background: rgba(11, 9, 18, 0.72);
-  color: #9f95c4;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  background: rgba(10, 8, 16, 0.82);
+  color: #a79dca;
 }
 
 .node-shell h3 {
-  margin: 12px 0 6px;
+  margin: 13px 0 6px;
   color: #f3f0ff;
   font-family: "Outfit", sans-serif;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.015em;
 }
 
 .node-shell p {
   margin: 0;
   color: #938baa;
-  font-size: 12px;
-  line-height: 1.5;
+  font-size: 11.5px;
+  line-height: 1.55;
 }
 
 .node-metrics {
   display: grid;
-  gap: 8px;
+  gap: 9px;
   margin: 14px 0;
-  padding: 10px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.04);
-  border-radius: 12px;
-  background: rgba(10, 8, 14, 0.58);
+  padding: 11px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(12, 10, 19, 0.84), rgba(8, 7, 13, 0.76));
 }
 
 .node-metrics div {
@@ -1199,9 +1306,9 @@ a {
 }
 
 .wallet-copy-button {
-  border: 1px solid rgba(89, 103, 95, 0.42);
+  border: 1px solid rgba(141, 123, 187, 0.26);
   border-radius: 10px;
-  background: rgba(16, 16, 18, 0.92);
+  background: rgba(20, 16, 31, 0.94);
   color: #d7d2ec;
   font-family: "JetBrains Mono", monospace;
   font-size: 10px;
@@ -1262,7 +1369,8 @@ a {
   padding: 10px 11px;
   border-radius: 12px;
   border: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(12, 10, 18, 0.78);
+  background:
+    linear-gradient(180deg, rgba(16, 13, 24, 0.84), rgba(11, 9, 17, 0.82));
   color: #ece7ff;
   font-size: 11px;
 }
@@ -1275,10 +1383,11 @@ a {
 
 .node-output-preview {
   margin-bottom: 8px;
-  padding: 10px;
+  padding: 11px 12px;
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 12px;
-  background: rgba(11, 10, 16, 0.82);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(12, 10, 19, 0.88), rgba(8, 7, 13, 0.86));
   color: #dbd6ee;
   font-size: 11px;
   line-height: 1.45;
@@ -1292,7 +1401,7 @@ a {
   margin: 8px 0;
   padding: 10px;
   border: 1px solid rgba(109, 40, 217, 0.26);
-  border-radius: 12px;
+  border-radius: 14px;
   background: rgba(8, 4, 16, 0.95);
   color: #ddd6fe;
   font-size: 11px;
@@ -1326,8 +1435,9 @@ a {
   gap: 6px;
   padding: 9px 10px;
   margin: 6px 0;
-  border-radius: 10px;
-  background: rgba(10, 9, 16, 0.62);
+  border-radius: 12px;
+  background:
+    linear-gradient(180deg, rgba(14, 12, 21, 0.84), rgba(10, 9, 16, 0.78));
   border: 1px solid rgba(255, 255, 255, 0.05);
   color: #ddd7ff;
   font-size: 11px;
@@ -1335,7 +1445,15 @@ a {
 }
 
 .node-section-icon {
-  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #c8bfff;
+  font-size: 10px;
 }
 
 .node-section-badge {
@@ -1398,33 +1516,47 @@ a {
   align-items: center;
   gap: 5px;
   padding: 6px 8px;
-  border-radius: 10px;
-  border: 1px solid rgba(109, 40, 217, 0.2);
-  background: rgba(76, 29, 149, 0.12);
+  border-radius: 12px;
+  border: 1px solid rgba(109, 40, 217, 0.16);
+  background:
+    linear-gradient(180deg, rgba(16, 13, 24, 0.82), rgba(10, 9, 16, 0.76));
   color: #8b7eb8;
   font-size: 10px;
   font-weight: 600;
   cursor: default;
-  transition: all 140ms ease;
+  transition:
+    transform 180ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 180ms ease,
+    background 180ms ease;
 }
 
 .trigger-type-active {
   border-color: rgba(139, 92, 246, 0.48);
-  background: rgba(109, 40, 217, 0.24);
+  background:
+    linear-gradient(180deg, rgba(109, 40, 217, 0.24), rgba(76, 29, 149, 0.18));
   color: #c4b5fd;
+  transform: translateY(-1px);
 }
 
 /* ── n8n-style ServiceNode additions ── */
 .service-icon-row {
   display: flex;
   align-items: center;
-  gap: 8px;
-  margin: 8px 0 4px;
+  gap: 10px;
+  margin: 10px 0 4px;
 }
 
 .service-icon {
-  font-size: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 15px;
   line-height: 1;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
 .node-service-model {
@@ -1452,8 +1584,9 @@ a {
   width: 100%;
   padding: 9px 11px;
   border: 1px solid rgba(139, 92, 246, 0.36);
-  border-radius: 12px;
-  background: rgba(76, 29, 149, 0.12);
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(14, 12, 21, 0.84), rgba(10, 9, 16, 0.78));
   color: #ddd6fe;
   font-family: "JetBrains Mono", monospace;
   font-size: 11px;
@@ -1474,10 +1607,10 @@ a {
 /* Connection hint arrow at bottom of model node */
 .node-model-hint {
   margin-top: 10px;
-  padding: 7px 10px;
-  border-radius: 10px;
-  border: 1px dashed rgba(56, 189, 248, 0.34);
-  background: rgba(8, 40, 58, 0.22);
+  padding: 8px 10px;
+  border-radius: 12px;
+  border: 1px dashed rgba(167, 139, 250, 0.34);
+  background: rgba(18, 14, 28, 0.6);
   color: #8dcde8;
   font-size: 10px;
   text-align: center;
@@ -1491,10 +1624,11 @@ a {
 
 .node-connection-banner {
   margin: 10px 0 8px;
-  padding: 8px 10px;
+  padding: 9px 10px;
   border: 1px solid rgba(102, 112, 128, 0.26);
-  border-radius: 12px;
-  background: linear-gradient(180deg, rgba(20, 23, 32, 0.82), rgba(12, 14, 20, 0.92));
+  border-radius: 14px;
+  background:
+    linear-gradient(180deg, rgba(18, 20, 29, 0.82), rgba(10, 11, 17, 0.92));
   color: #dbdff0;
   font-size: 10px;
   text-align: center;
@@ -1520,9 +1654,10 @@ a {
   gap: 8px;
   margin-bottom: 10px;
   padding: 12px;
-  border: 1px solid rgba(119, 104, 165, 0.2);
-  border-radius: 14px;
-  background: linear-gradient(180deg, rgba(14, 12, 20, 0.9), rgba(10, 9, 15, 0.96));
+  border: 1px solid rgba(119, 104, 165, 0.16);
+  border-radius: 15px;
+  background:
+    linear-gradient(180deg, rgba(16, 13, 24, 0.92), rgba(10, 9, 15, 0.98));
 }
 
 .node-runtime-header {
@@ -1592,13 +1727,14 @@ a {
   gap: 12px;
   padding: 12px;
   text-align: left;
-  border-radius: 16px;
-  border: 1px solid rgba(109, 40, 217, 0.24);
-  background: linear-gradient(180deg, rgba(16, 8, 32, 0.96), rgba(10, 5, 20, 0.98));
+  border-radius: 18px;
+  border: 1px solid rgba(109, 40, 217, 0.18);
+  background:
+    linear-gradient(180deg, rgba(18, 12, 36, 0.96), rgba(10, 7, 20, 0.98));
   transition:
-    transform 170ms ease,
-    border-color 170ms ease,
-    box-shadow 170ms ease;
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
 }
 
 .compact-palette-item:hover {
