@@ -96,6 +96,7 @@ def build_runtime_config(record: PipelineRecord) -> PipelineRuntimeConfig:
                 price_algo=node.data.priceAlgo or 0,
                 connected_agents=connected_agents,
                 tools=connected_tools,
+                api_key=node.data.apiKey,
             )
         )
 

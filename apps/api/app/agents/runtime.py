@@ -223,13 +223,14 @@ class AgentServiceRuntime:
         ]
         allowed_tools = [tool.service_kind for tool in self.agent_config.tools]
 
-        if self.gemini.enabled and available_tools:
+        if self.gemini.enabled or self.agent_config.api_key:
             try:
                 plan = self.gemini.choose_tools(
                     query=message,
                     agent_prompt=self.agent_config.system_prompt,
                     available_tools=available_tools,
                     allowed_tools=allowed_tools,
+                    api_key=self.agent_config.api_key,
                 )
                 selected_ids = set(plan.get("selected_tools", []))
                 selected = [tool for tool in self.agent_config.tools if tool.node_id in selected_ids]
@@ -256,7 +257,7 @@ class AgentServiceRuntime:
         if self._is_trade_signal_agent():
             return self._compose_trade_signal(message, tool_results, agent_results)
 
-        if self.gemini.enabled and (tool_results or agent_results):
+        if (self.gemini.enabled or self.agent_config.api_key) and (tool_results or agent_results):
             synthetic_tools = list(tool_results)
             for agent_id, result in agent_results.items():
                 synthetic_tools.append(
@@ -273,6 +274,7 @@ class AgentServiceRuntime:
                     analyzer_prompt=self.agent_config.system_prompt,
                     responder_prompt=self.agent_config.system_prompt,
                     tool_results=synthetic_tools,
+                    api_key=self.agent_config.api_key,
                 )
             except Exception as error:
                 self._log("warning", "Gemini synthesis failed, falling back to string synthesis.", {"error": str(error)})

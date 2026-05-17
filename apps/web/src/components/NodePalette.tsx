@@ -16,25 +16,66 @@ const sections: PaletteSection[] = [
     items: [
       {
         kind: "trigger",
-        title: "Agent Request",
-        subtitle: "Kick off a run from an incoming API call.",
+        title: "Webhook Trigger",
+        subtitle: "Kick off a run from an incoming HTTP call.",
+        dotClass: "dot-trigger",
+      },
+      {
+        kind: "trigger",
+        title: "Manual Trigger",
+        subtitle: "Test your workflow from the studio.",
+        dotClass: "dot-trigger",
+      },
+      {
+        kind: "trigger",
+        title: "Chat Trigger",
+        subtitle: "Start a run from an incoming chat message.",
         dotClass: "dot-trigger",
       },
     ],
   },
   {
-    title: "Agents",
+    title: "AI Agents",
     items: [
       {
         kind: "agent",
         title: "AI Agent",
-        subtitle: "Wallet-backed autonomous operator.",
+        subtitle: "Wallet-backed autonomous operator on Algorand.",
         dotClass: "dot-agent",
       },
     ],
   },
   {
-    title: "APIs",
+    title: "AI Models",
+    items: [
+      {
+        kind: "service",
+        title: "Gemini",
+        subtitle: "Connect Google Gemini as the agent's LLM.",
+        dotClass: "dot-agent",
+      },
+      {
+        kind: "service",
+        title: "OpenAI",
+        subtitle: "Connect OpenAI GPT as the agent's LLM.",
+        dotClass: "dot-agent",
+      },
+      {
+        kind: "service",
+        title: "Claude",
+        subtitle: "Connect Anthropic Claude as the agent's LLM.",
+        dotClass: "dot-agent",
+      },
+      {
+        kind: "service",
+        title: "Mistral",
+        subtitle: "Connect Mistral as the agent's LLM.",
+        dotClass: "dot-agent",
+      },
+    ],
+  },
+  {
+    title: "Tools & APIs",
     items: [
       {
         kind: "api",
@@ -92,6 +133,7 @@ const sections: PaletteSection[] = [
     ],
   },
 ];
+
 
 interface NodePaletteProps {
   onQuickAdd: (kind: NodeKind, presetTitle?: string) => void;

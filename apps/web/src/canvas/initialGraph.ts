@@ -170,6 +170,19 @@ export const initialNodes: BuilderNode[] = [
     },
   },
   {
+    id: "tool-gemini",
+    type: "service",
+    position: { x: 330, y: 550 },
+    data: {
+      ...getDefaultNodeData("service"),
+      label: "Gemini",
+      description: "Gemini LLM — connect to the Agent's AI Model handle.",
+      serviceKind: "gemini",
+      apiKey: "",
+      priceAlgo: 0,
+    },
+  },
+  {
     id: "end-1",
     type: "end",
     position: { x: 1760, y: 250 },
@@ -186,11 +199,12 @@ export const initialEdges: BuilderEdge[] = [
   createWire("edge-lead-tech", "agent-lead", "agent-tech", "a2a", "Request technical view"),
   createWire("edge-lead-risk", "agent-lead", "agent-risk", "a2a", "Request risk view"),
   createWire("edge-lead-report", "agent-lead", "agent-report", "a2a", "Draft final report"),
-  createWire("edge-lead-crypto", "agent-lead", "tool-crypto", "x402", "Fetch live price"),
-  createWire("edge-report-gmail", "agent-report", "tool-gmail", "x402", "Send trade note"),
-  createWire("edge-tech-chart", "agent-tech", "tool-chart", "x402", "Read chart"),
-  createWire("edge-risk-model", "agent-risk", "tool-risk", "x402", "Assess risk"),
+  createWire("edge-lead-crypto", "agent-lead", "tool-crypto", "x402", "Fetch live price", undefined, "tools"),
+  createWire("edge-report-gmail", "agent-report", "tool-gmail", "x402", "Send trade note", undefined, "tools"),
+  createWire("edge-tech-chart", "agent-tech", "tool-chart", "x402", "Read chart", undefined, "tools"),
+  createWire("edge-risk-model", "agent-risk", "tool-risk", "x402", "Assess risk", undefined, "tools"),
   createWire("edge-report-end", "agent-report", "end-1", "a2a", "Final signal"),
+  createWire("edge-model-lead", "tool-gemini", "agent-lead", "x402", "Tool/payment call", "model-out", "model"),
 ];
 
 export function createWire(
@@ -199,11 +213,15 @@ export function createWire(
   target: string,
   wireType: WireKind,
   label?: string,
+  sourceHandle?: string,
+  targetHandle?: string,
 ): BuilderEdge {
   return {
     id,
     source,
     target,
+    sourceHandle,
+    targetHandle,
     type: "wire",
     data: {
       wireType,

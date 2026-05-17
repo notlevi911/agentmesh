@@ -24,8 +24,11 @@ class GeminiPlanner:
         agent_prompt: str,
         available_tools: List[Dict[str, str]],
         allowed_tools: List[str],
+        api_key: Optional[str] = None,
     ) -> dict:
-        if not self._client:
+        key = api_key or self.api_key
+        client = genai.Client(api_key=key) if key else self._client
+        if not client:
             raise RuntimeError("Gemini planner is not configured.")
 
         prompt = """
@@ -73,7 +76,7 @@ Rules:
             allowed_tools=", ".join(allowed_tools) or "all available tools",
         )
 
-        response = self._client.models.generate_content(model=self.model, contents=prompt)
+        response = client.models.generate_content(model=self.model, contents=prompt)
         payload = self._extract_json(response.text or "")
         available_ids = {tool["id"] for tool in available_tools}
         selected = [tool for tool in payload.get("selected_tools", []) if tool in available_ids]
@@ -90,8 +93,11 @@ Rules:
         analyzer_prompt: str,
         responder_prompt: str,
         tool_results: List[ToolResult],
+        api_key: Optional[str] = None,
     ) -> str:
-        if not self._client:
+        key = api_key or self.api_key
+        client = genai.Client(api_key=key) if key else self._client
+        if not client:
             raise RuntimeError("Gemini planner is not configured.")
 
         tool_lines = "\n".join(
@@ -124,7 +130,7 @@ Return only the final user-facing answer. Keep it concise but useful.
             tool_lines=tool_lines or "- No tool output available.",
         )
 
-        response = self._client.models.generate_content(model=self.model, contents=prompt)
+        response = client.models.generate_content(model=self.model, contents=prompt)
         return (response.text or "").strip()
 
     def _extract_json(self, text: str) -> dict:

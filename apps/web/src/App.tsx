@@ -148,6 +148,30 @@ function createNodeFromKind(kind: NodeKind, title?: string, index = 0): BuilderN
   const data = getDefaultNodeData(kind);
   const presetTitle = title ?? data.label;
 
+  // AI Model nodes (Gemini, OpenAI, Claude, Mistral)
+  const AI_MODEL_MAP: Record<string, string> = {
+    gemini: "gemini",
+    openai: "openai",
+    claude: "claude",
+    mistral: "mistral",
+  };
+  const titleLower = (title ?? "").toLowerCase();
+  const matchedModel = Object.keys(AI_MODEL_MAP).find((m) => titleLower.includes(m));
+  if ((kind === "service" || kind === "api") && matchedModel) {
+    return {
+      id: `${kind}-${Date.now()}-${index}`,
+      type: "service",
+      position: { x: 320 + index * 40, y: 220 + index * 40 },
+      data: {
+        ...data,
+        label: title ?? matchedModel.charAt(0).toUpperCase() + matchedModel.slice(1),
+        description: `${title ?? matchedModel} LLM — connect to the Agent's AI Model handle.`,
+        serviceKind: AI_MODEL_MAP[matchedModel],
+        priceAlgo: 0,
+      },
+    };
+  }
+
   if ((kind === "service" || kind === "api") && title?.toLowerCase().includes("weather")) {
     return {
       id: `${kind}-${Date.now()}-${index}`,
@@ -484,6 +508,25 @@ function BuilderApp() {
     [setNodes],
   );
 
+  const handleApiKeyChange = useCallback(
+    (nodeId: string, value: string) => {
+      setNodes((currentNodes) =>
+        currentNodes.map((node) =>
+          node.id === nodeId
+            ? {
+                ...node,
+                data: {
+                  ...node.data,
+                  apiKey: value,
+                },
+              }
+            : node,
+        ),
+      );
+    },
+    [setNodes],
+  );
+
   const handleRuntimeQueryChange = useCallback(
     (value: string) => {
       setRuntimeQuery(value);
@@ -521,36 +564,69 @@ function BuilderApp() {
                   ...node.data,
                   onTriggerTestChange: handleTriggerTestChange,
                 }
-            : node.data,
+            : node.type === "service" || node.type === "api"
+              ? {
+                  ...node.data,
+                  onApiKeyChange: handleApiKeyChange,
+                }
+              : node.data,
       })),
-    [handleCopyWallet, handleOpenFunding, handleTriggerTestChange, nodes, selectedNodeId],
+    [handleCopyWallet, handleOpenFunding, handleTriggerTestChange, handleApiKeyChange, nodes, selectedNodeId],
   );
 
   const serializePipeline = useCallback((): DeployRequest => {
     return {
       name: pipelineName,
       network: "algorand-testnet",
-      nodes: nodes.map((node) => ({
-        id: node.id,
-        type: node.type as NodeKind,
-        position: node.position,
-        data: {
-          requestMethod: node.data.requestMethod,
-          testRequestBody: node.data.testRequestBody,
-          label: node.data.label,
-          role: node.data.role,
-          description: node.data.description,
-          systemPrompt: node.data.systemPrompt,
-          enabledTools: node.data.enabledTools,
-          priceAlgo: node.data.priceAlgo,
-          serviceUrl: node.data.serviceUrl,
-          serviceKind: node.data.serviceKind,
-          upstreamX402: node.data.upstreamX402,
-          treasuryAddress: node.data.treasuryAddress,
-          gmailTo: node.data.gmailTo,
-          cryptoSymbols: node.data.cryptoSymbols,
-        },
-      })),
+      nodes: nodes.map((node) => {
+        let computedEnabledTools = node.data.enabledTools;
+        let computedApiKey = node.data.apiKey;
+
+        if (node.type === "agent") {
+          const connectedToolNodes = edges
+            .filter((edge) => edge.source === node.id && edge.targetHandle === "tools")
+            .map((edge) => nodes.find((n) => n.id === edge.target))
+            .filter(Boolean);
+
+          const modelEdge = edges.find((edge) => edge.target === node.id && edge.targetHandle === "model");
+          const modelNode = modelEdge ? nodes.find((n) => n.id === modelEdge.source) : null;
+
+          const activeTools = [
+            ...new Set([
+              ...(node.data.enabledTools ?? []),
+              ...connectedToolNodes.map((t) => t?.data?.serviceKind).filter(Boolean) as string[],
+            ]),
+          ];
+
+          computedEnabledTools = activeTools;
+          if (modelNode?.data?.apiKey) {
+            computedApiKey = modelNode.data.apiKey;
+          }
+        }
+
+        return {
+          id: node.id,
+          type: node.type as NodeKind,
+          position: node.position,
+          data: {
+            requestMethod: node.data.requestMethod,
+            testRequestBody: node.data.testRequestBody,
+            label: node.data.label,
+            role: node.data.role,
+            description: node.data.description,
+            systemPrompt: node.data.systemPrompt,
+            enabledTools: computedEnabledTools,
+            priceAlgo: node.data.priceAlgo,
+            serviceUrl: node.data.serviceUrl,
+            serviceKind: node.data.serviceKind,
+            upstreamX402: node.data.upstreamX402,
+            treasuryAddress: node.data.treasuryAddress,
+            gmailTo: node.data.gmailTo,
+            cryptoSymbols: node.data.cryptoSymbols,
+            apiKey: computedApiKey,
+          },
+        };
+      }),
       edges: edges.map((edge) => ({
         id: edge.id,
         source: edge.source,
@@ -898,6 +974,8 @@ function BuilderApp() {
         connection.target,
         activeWireType,
         labelMap[activeWireType],
+        connection.sourceHandle ?? undefined,
+        connection.targetHandle ?? undefined,
       );
 
       setEdges((currentEdges) => [
@@ -1124,7 +1202,7 @@ function BuilderApp() {
                 onClick={() => setActiveWireType(wireType)}
                 type="button"
               >
-                {wireType === "a2a" ? "Purple Wire" : wireType === "x402" ? "Green Wire" : "Blue Wire"}
+                {wireType === "a2a" ? "A2A Wire" : wireType === "x402" ? "x402 Tool" : "ALGO Transfer"}
               </button>
             ))}
           </div>
@@ -1197,7 +1275,7 @@ function BuilderApp() {
             onDrop={handleDrop}
           >
             <ReactFlow<BuilderNode, BuilderEdge>
-              connectionLineStyle={{ stroke: "#2ddb76", strokeWidth: 2.5 }}
+              connectionLineStyle={{ stroke: "#8b5cf6", strokeWidth: 2.5 }}
               connectionMode={ConnectionMode.Loose}
               connectionRadius={32}
               edgeTypes={edgeTypes}
@@ -1223,10 +1301,10 @@ function BuilderApp() {
                 setRightOpen(false);
               }}
             >
-              <Background color="#113023" gap={28} />
+              <Background color="#2a1358" gap={28} />
               <MiniMap
                 pannable
-                style={{ background: "#08110d", border: "1px solid #183126" }}
+                style={{ background: "#0d0818", border: "1px solid #251048" }}
                 zoomable
               />
               <Controls />

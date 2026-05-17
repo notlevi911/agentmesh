@@ -155,91 +155,95 @@ export function InspectorPanel({
           ) : null}
 
           {selectedNode.type === "service" || selectedNode.type === "api" ? (
-            <>
-              <label className="field">
-                <span>API kind</span>
-                <select
-                  className="prop-input"
-                  onChange={(event) =>
-                    onNodeChange(selectedNode.id, {
-                      serviceKind: event.target.value as PipelineNodeData["serviceKind"],
-                    })
-                  }
-                  value={selectedNode.data.serviceKind ?? "custom"}
-                >
-                  <option value="weather">Weather</option>
-                  <option value="search">Search</option>
-                  <option value="crypto">Crypto</option>
-                  <option value="chart">Chart</option>
-                  <option value="risk">Risk</option>
-                  <option value="gmail">Gmail</option>
-                  <option value="custom">Custom</option>
-                </select>
-              </label>
-              <label className="field">
-                <span>API endpoint</span>
-                <input
-                  className="prop-input"
-                  onChange={(event) =>
-                    onNodeChange(selectedNode.id, { serviceUrl: event.target.value })
-                  }
-                  value={selectedNode.data.serviceUrl ?? ""}
-                />
-              </label>
-              <label className="field">
-                <span>Price per call (ALGO)</span>
-                <input
-                  className="prop-input"
-                  min="0"
-                  onChange={(event) =>
-                    onNodeChange(selectedNode.id, { priceAlgo: Number(event.target.value) || 0 })
-                  }
-                  step="0.001"
-                  type="number"
-                  value={selectedNode.data.priceAlgo ?? 0}
-                />
-              </label>
-              {selectedNode.data.serviceKind === "gmail" ? (
+            ["gemini", "openai", "claude", "mistral"].includes(selectedNode.data.serviceKind as string) ? (
+              <p className="empty-state">Configure your API key directly on the node block.</p>
+            ) : (
+              <>
                 <label className="field">
-                  <span>Fallback Gmail to</span>
+                  <span>API kind</span>
+                  <select
+                    className="prop-input"
+                    onChange={(event) =>
+                      onNodeChange(selectedNode.id, {
+                        serviceKind: event.target.value as PipelineNodeData["serviceKind"],
+                      })
+                    }
+                    value={selectedNode.data.serviceKind ?? "custom"}
+                  >
+                    <option value="weather">Weather</option>
+                    <option value="search">Search</option>
+                    <option value="crypto">Crypto</option>
+                    <option value="chart">Chart</option>
+                    <option value="risk">Risk</option>
+                    <option value="gmail">Gmail</option>
+                    <option value="custom">Custom</option>
+                  </select>
+                </label>
+                <label className="field">
+                  <span>API endpoint</span>
                   <input
                     className="prop-input"
                     onChange={(event) =>
-                      onNodeChange(selectedNode.id, { gmailTo: event.target.value })
+                      onNodeChange(selectedNode.id, { serviceUrl: event.target.value })
                     }
-                    placeholder="Optional fallback if prompt has no email address"
-                    value={selectedNode.data.gmailTo ?? ""}
+                    value={selectedNode.data.serviceUrl ?? ""}
                   />
                 </label>
-              ) : null}
-              {selectedNode.data.serviceKind === "crypto" ||
-              selectedNode.data.serviceKind === "chart" ||
-              selectedNode.data.serviceKind === "risk" ? (
                 <label className="field">
-                  <span>Symbols</span>
+                  <span>Price per call (ALGO)</span>
                   <input
                     className="prop-input"
+                    min="0"
                     onChange={(event) =>
-                      onNodeChange(selectedNode.id, { cryptoSymbols: event.target.value })
+                      onNodeChange(selectedNode.id, { priceAlgo: Number(event.target.value) || 0 })
                     }
-                    placeholder="BTC,ETH,ALGO"
-                    value={selectedNode.data.cryptoSymbols ?? ""}
+                    step="0.001"
+                    type="number"
+                    value={selectedNode.data.priceAlgo ?? 0}
                   />
                 </label>
-              ) : null}
-              <label className="field">
-                <span className="checkbox-label">
-                  <input
-                    checked={Boolean(selectedNode.data.upstreamX402)}
-                    onChange={(event) =>
-                      onNodeChange(selectedNode.id, { upstreamX402: event.target.checked })
-                    }
-                    type="checkbox"
-                  />
-                  <span>Already x402 paywalled upstream</span>
-                </span>
-              </label>
-            </>
+                {selectedNode.data.serviceKind === "gmail" ? (
+                  <label className="field">
+                    <span>Fallback Gmail to</span>
+                    <input
+                      className="prop-input"
+                      onChange={(event) =>
+                        onNodeChange(selectedNode.id, { gmailTo: event.target.value })
+                      }
+                      placeholder="Optional fallback if prompt has no email address"
+                      value={selectedNode.data.gmailTo ?? ""}
+                    />
+                  </label>
+                ) : null}
+                {selectedNode.data.serviceKind === "crypto" ||
+                selectedNode.data.serviceKind === "chart" ||
+                selectedNode.data.serviceKind === "risk" ? (
+                  <label className="field">
+                    <span>Symbols</span>
+                    <input
+                      className="prop-input"
+                      onChange={(event) =>
+                        onNodeChange(selectedNode.id, { cryptoSymbols: event.target.value })
+                      }
+                      placeholder="BTC,ETH,ALGO"
+                      value={selectedNode.data.cryptoSymbols ?? ""}
+                    />
+                  </label>
+                ) : null}
+                <label className="field">
+                  <span className="checkbox-label">
+                    <input
+                      checked={Boolean(selectedNode.data.upstreamX402)}
+                      onChange={(event) =>
+                        onNodeChange(selectedNode.id, { upstreamX402: event.target.checked })
+                      }
+                      type="checkbox"
+                    />
+                    <span>Already x402 paywalled upstream</span>
+                  </span>
+                </label>
+              </>
+            )
           ) : null}
         </div>
       ) : (

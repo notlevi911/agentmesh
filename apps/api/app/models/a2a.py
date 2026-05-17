@@ -27,6 +27,7 @@ class AgentRuntimeConfig(BaseModel):
     price_algo: float = 0
     connected_agents: List[str] = Field(default_factory=list)
     tools: List[AgentToolConfig] = Field(default_factory=list)
+    api_key: Optional[str] = None
 
 
 class RuntimeWireConfig(BaseModel):

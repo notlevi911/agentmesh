@@ -15,7 +15,10 @@ export interface PipelineNodeData extends Record<string, unknown> {
   enabledTools?: string[];
   priceAlgo?: number;
   serviceUrl?: string;
-  serviceKind?: "weather" | "search" | "custom" | "gmail" | "crypto" | "chart" | "risk";
+  serviceKind?: "weather" | "search" | "custom" | "gmail" | "crypto" | "chart" | "risk"
+    | "gemini" | "openai" | "claude" | "mistral";
+  triggerKind?: "webhook" | "manual" | "schedule" | "chat";
+  apiKey?: string;            // AI Model API key — stored client-side only
   upstreamX402?: boolean;
   treasuryAddress?: string;
   gmailTo?: string;
@@ -29,6 +32,7 @@ export interface PipelineNodeData extends Record<string, unknown> {
   onFundWallet?: (nodeId: string) => void;
   onCopyWallet?: (nodeId: string) => void;
   onTriggerTestChange?: (nodeId: string, value: string) => void;
+  onApiKeyChange?: (nodeId: string, value: string) => void;
 }
 
 export interface PipelineEdgeData extends Record<string, unknown> {
@@ -58,6 +62,7 @@ export interface DeployRequest {
       | "onFundWallet"
       | "onCopyWallet"
       | "onTriggerTestChange"
+      | "onApiKeyChange"
     >;
   }>;
   edges: Array<{
