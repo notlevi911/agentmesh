@@ -612,6 +612,22 @@ class ToolRuntime:
         return f"AgentMesh update: {cleaned or 'workflow result'}"
 
     def _gmail_body(self, query: str) -> str:
+        final_response_match = re.search(
+            r"Original request:\s*(.*?)\s*Final response:\s*(.*)",
+            query,
+            re.IGNORECASE | re.DOTALL,
+        )
+        if final_response_match:
+            original_request = final_response_match.group(1).strip() or "the workflow request"
+            final_response = final_response_match.group(2).strip() or "No final response was provided."
+            return (
+                "Hello,\n\n"
+                f"Here is the latest AgentMesh result for {original_request}.\n\n"
+                f"{final_response}\n\n"
+                "Regards,\n"
+                "AgentMesh"
+            )
+
         return (
             "Hello,\n\n"
             "The AgentMesh workflow generated this email based on the request below.\n\n"

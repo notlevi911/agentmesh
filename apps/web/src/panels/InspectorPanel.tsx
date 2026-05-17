@@ -14,6 +14,13 @@ export function InspectorPanel({
   onCopyEndpoint,
   onNodeChange,
 }: InspectorPanelProps) {
+  const executionState = selectedNode?.data.executionState ?? "idle";
+  const runtimeOutput =
+    selectedNode?.data.executionOutput ??
+    selectedNode?.data.executionMessage ??
+    selectedNode?.data.executionNote ??
+    "";
+
   return (
     <aside className="studio-panel panel-pad inspector-panel">
       <div className="panel-header-block">
@@ -226,6 +233,23 @@ export function InspectorPanel({
               </>
             )
           ) : null}
+
+          <div className="inspector-runtime-card">
+            <div className="inspector-runtime-header">
+              <span>Last run</span>
+              <strong className={`inspector-runtime-state inspector-runtime-state-${executionState}`}>
+                {executionState}
+              </strong>
+            </div>
+            {selectedNode.data.executionMessage ? (
+              <div className="inspector-runtime-message">{selectedNode.data.executionMessage}</div>
+            ) : (
+              <p className="empty-state">Run the workflow to see node-level updates here.</p>
+            )}
+            {runtimeOutput ? (
+              <pre className="inspector-runtime-output">{runtimeOutput}</pre>
+            ) : null}
+          </div>
         </div>
       ) : (
         <p className="empty-state">Select a node to edit prompts, tools, pricing, and service settings.</p>

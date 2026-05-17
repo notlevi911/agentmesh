@@ -1,4 +1,5 @@
 from collections import defaultdict, deque
+import re
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
@@ -147,6 +148,9 @@ class RuntimeExecutor:
                     node_id=analyzer.id,
                     output=analyzer_analysis,
                 )
+
+        if analyzer and self._is_trade_signal_agent(analyzer):
+            selected_tools = self._expand_trade_tool_selection(connected_tools, selected_tools)
 
         selected_tools = self._sort_tools_for_execution(record.definition, selected_tools)
 
@@ -303,23 +307,28 @@ class RuntimeExecutor:
                     output=str(error),
                 )
 
+        final_result = self._compose_result(query, tool_results, responder, analyzer)
+        workflow_payload = final_result
+
         if analyzer:
-            analyzer_output = handoff_text or "Analyzer is handing the tool context to the next node."
-            if tool_results:
+            analyzer_output = final_result
+            analyzer_message = "{label} synthesized the final response.".format(
+                label=analyzer.data.label
+            )
+            if responder:
+                analyzer_message = "{label} finished analysis.".format(label=analyzer.data.label)
                 analyzer_output = "{analysis}\n\n{handoff}".format(
                     analysis=analyzer_analysis or "Analyzer reviewed the external tool results.",
                     handoff=handoff_text or "Prepared handoff for the next agent.",
                 )
+
             self._append_log(
                 logs,
                 level="done",
-                message="{label} finished analysis.".format(label=analyzer.data.label),
+                message=analyzer_message,
                 node_id=analyzer.id,
                 output=analyzer_output,
             )
-
-        final_result = self._compose_result(query, tool_results, responder, analyzer)
-        workflow_payload = final_result
 
         for service_node in self._workflow_service_nodes(record.definition, set(selected_tools)):
             workflow_query = self._workflow_service_query(
@@ -614,14 +623,17 @@ class RuntimeExecutor:
             try:
                 return self.gemini.summarize_final(
                     query=query,
-                    analyzer_prompt=analyzer.data.systemPrompt if analyzer else "",
-                    responder_prompt=responder.data.systemPrompt if responder else "",
+                    analyzer_prompt=self._summary_analyzer_prompt(analyzer),
+                    responder_prompt=self._summary_responder_prompt(responder, analyzer),
                     tool_results=tool_results,
                     api_key=response_api_key,
                     allow_env_fallback=False,
                 )
             except Exception:
                 pass
+
+        if analyzer and self._is_trade_signal_agent(analyzer) and tool_results:
+            return self._compose_trade_signal(query, tool_results)
 
         if not tool_results:
             return (
@@ -647,3 +659,127 @@ class RuntimeExecutor:
 
         normalized = api_key.strip()
         return normalized or None
+
+    def _is_trade_signal_agent(self, node: PipelineNode) -> bool:
+        role = (node.data.role or "").lower()
+        prompt = (node.data.systemPrompt or "").lower()
+        label = (node.data.label or "").lower()
+        return any(
+            token in role or token in prompt or token in label
+            for token in ["lead_analyst", "lead analyst", "trade signal", "trade desk"]
+        )
+
+    def _expand_trade_tool_selection(
+        self,
+        connected_tools: List[PipelineNode],
+        selected_tools: List[str],
+    ) -> List[str]:
+        selected = set(selected_tools)
+        trade_tools = {
+            node.id
+            for node in connected_tools
+            if (node.data.serviceKind or "custom") in {"crypto", "chart", "risk"}
+        }
+        if trade_tools:
+            selected.update(trade_tools)
+        return list(selected)
+
+    def _compose_trade_signal(self, query: str, tool_results: List[ToolResult]) -> str:
+        symbol = self._extract_symbol(query)
+        combined_text = "\n".join(result.summary for result in tool_results).upper()
+
+        if "SELL" in combined_text:
+            signal = "SELL"
+        elif "BUY" in combined_text:
+            signal = "BUY"
+        else:
+            signal = "HOLD"
+
+        confidence = self._extract_number(combined_text, r"CONFIDENCE\s+(\d{1,3})") or 64
+        risk_payload = next((result.raw for result in tool_results if result.tool == "risk"), {})
+        chart_payload = next((result.raw for result in tool_results if result.tool == "chart"), {})
+        price_payload = next((result.raw for result in tool_results if result.tool == "crypto"), {})
+
+        if chart_payload:
+            signal = str(chart_payload.get("signal", signal)).upper()
+            confidence = int(chart_payload.get("confidence", confidence))
+
+        position_size = risk_payload.get("position_size") or "10%"
+        stop_loss = risk_payload.get("stop_loss") or ("4%" if signal != "SELL" else "5%")
+        take_profit = risk_payload.get("take_profit") or ("8%" if signal != "SELL" else "7%")
+        risk_level = str(risk_payload.get("risk_level", "MEDIUM")).upper()
+
+        thesis_parts: List[str] = []
+        if price_payload:
+            thesis_parts.append("Live pricing snapshot captured")
+        if chart_payload:
+            thesis_parts.append(
+                "Technicals lean {signal} with confidence {confidence}/100".format(
+                    signal=chart_payload.get("signal", signal),
+                    confidence=chart_payload.get("confidence", confidence),
+                )
+            )
+        if risk_payload:
+            thesis_parts.append("Risk is {risk}".format(risk=risk_level))
+
+        return (
+            "{signal} {symbol}\n"
+            "Confidence: {confidence}/100\n"
+            "Why: {thesis}\n"
+            "Plan: Position size {position_size}, stop loss {stop_loss}, take profit {take_profit}."
+        ).format(
+            signal=signal,
+            symbol=symbol,
+            confidence=confidence,
+            thesis="; ".join(thesis_parts) or "Signal synthesized from connected market tools.",
+            position_size=position_size,
+            stop_loss=stop_loss,
+            take_profit=take_profit,
+        )
+
+    def _extract_symbol(self, message: str) -> str:
+        match = re.search(r"\b(ALGO|BTC|ETH|SOL|USDC|XRP|DOGE|BITCOIN|ETHEREUM|ALGORAND)\b", message, re.IGNORECASE)
+        if not match:
+            return "ALGO"
+        token = match.group(1).upper()
+        return {
+            "BITCOIN": "BTC",
+            "ETHEREUM": "ETH",
+            "ALGORAND": "ALGO",
+        }.get(token, token)
+
+    def _extract_number(self, text: str, pattern: str) -> Optional[int]:
+        match = re.search(pattern, text)
+        if not match:
+            return None
+        try:
+            return int(match.group(1))
+        except Exception:
+            return None
+
+    def _summary_analyzer_prompt(self, analyzer: Optional[PipelineNode]) -> str:
+        if analyzer is None:
+            return ""
+        prompt = analyzer.data.systemPrompt or ""
+        if self._is_trade_signal_agent(analyzer):
+            return (
+                f"{prompt}\n\n"
+                "Use the connected tool results to produce your own final trade call. "
+                "Explicitly return BUY, SELL, or HOLD, include confidence, and briefly explain "
+                "how price, technicals, and risk influenced the conclusion."
+            ).strip()
+        return prompt
+
+    def _summary_responder_prompt(
+        self,
+        responder: Optional[PipelineNode],
+        analyzer: Optional[PipelineNode],
+    ) -> str:
+        if responder and responder.data.systemPrompt:
+            return responder.data.systemPrompt
+        if analyzer and self._is_trade_signal_agent(analyzer):
+            return (
+                "Return the final analyst answer directly. Do not list raw tool dumps. "
+                "Synthesize the market view into a concise recommendation."
+            )
+        return ""
